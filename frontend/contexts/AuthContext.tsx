@@ -52,8 +52,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       });
 
       if (response.ok) {
-        const userData = await response.json();
-        setUser(userData);
+        const responseText = await response.text();
+        if (responseText) {
+          try {
+            const userData = JSON.parse(responseText);
+            setUser(userData);
+          } catch (parseError) {
+            console.error('Failed to parse user data:', parseError);
+          }
+        }
       } else {
         // Token is invalid, clear it
         localStorage.removeItem('auth_token');
