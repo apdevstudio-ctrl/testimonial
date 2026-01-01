@@ -664,7 +664,7 @@ export default function VisualBuilder({ site, onUpdate }: VisualBuilderProps) {
                     label="Button Text"
                     value={previewConfig.button.text}
                     onChange={(e) => updatePreview({
-                      button: { text: e.target.value }
+                      button: { ...previewConfig.button, text: e.target.value }
                     })}
                   />
                   
@@ -672,7 +672,7 @@ export default function VisualBuilder({ site, onUpdate }: VisualBuilderProps) {
                     label="Position"
                     value={previewConfig.button.position}
                     onChange={(e) => updatePreview({
-                      button: { position: e.target.value as any }
+                      button: { ...previewConfig.button, position: e.target.value as any }
                     })}
                     options={[
                       { value: 'bottom-right', label: 'Bottom Right' },
@@ -690,14 +690,14 @@ export default function VisualBuilder({ site, onUpdate }: VisualBuilderProps) {
                           type="color"
                           value={previewConfig.button.backgroundColor}
                           onChange={(e) => updatePreview({
-                            button: { backgroundColor: e.target.value }
+                            button: { ...previewConfig.button, backgroundColor: e.target.value }
                           })}
                           className="h-10 w-16 border border-gray-300 rounded-lg cursor-pointer"
                         />
                         <Input
                           value={previewConfig.button.backgroundColor}
                           onChange={(e) => updatePreview({
-                            button: { backgroundColor: e.target.value }
+                            button: { ...previewConfig.button, backgroundColor: e.target.value }
                           })}
                           className="flex-1"
                         />
@@ -710,14 +710,14 @@ export default function VisualBuilder({ site, onUpdate }: VisualBuilderProps) {
                           type="color"
                           value={previewConfig.button.textColor}
                           onChange={(e) => updatePreview({
-                            button: { textColor: e.target.value }
+                            button: { ...previewConfig.button, textColor: e.target.value }
                           })}
                           className="h-10 w-16 border border-gray-300 rounded-lg cursor-pointer"
                         />
                         <Input
                           value={previewConfig.button.textColor}
                           onChange={(e) => updatePreview({
-                            button: { textColor: e.target.value }
+                            button: { ...previewConfig.button, textColor: e.target.value }
                           })}
                           className="flex-1"
                         />
@@ -729,7 +729,7 @@ export default function VisualBuilder({ site, onUpdate }: VisualBuilderProps) {
                     label="Shape"
                     value={previewConfig.button.shape}
                     onChange={(e) => updatePreview({
-                      button: { shape: e.target.value as any }
+                      button: { ...previewConfig.button, shape: e.target.value as any }
                     })}
                     options={[
                       { value: 'rounded', label: 'Rounded' },
@@ -742,7 +742,7 @@ export default function VisualBuilder({ site, onUpdate }: VisualBuilderProps) {
                     label="Size"
                     value={previewConfig.button.size}
                     onChange={(e) => updatePreview({
-                      button: { size: e.target.value as any }
+                      button: { ...previewConfig.button, size: e.target.value as any }
                     })}
                     options={[
                       { value: 'small', label: 'Small' },
@@ -756,7 +756,7 @@ export default function VisualBuilder({ site, onUpdate }: VisualBuilderProps) {
                       type="checkbox"
                       checked={previewConfig.button.enabled}
                       onChange={(e) => updatePreview({
-                        button: { enabled: e.target.checked }
+                        button: { ...previewConfig.button, enabled: e.target.checked }
                       })}
                       className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
                     />

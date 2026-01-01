@@ -736,7 +736,7 @@ function TestimonialsTab({ siteId }: { siteId: string }) {
                 <Button
                   onClick={() => handleTogglePublish(testimonial._id, testimonial.isPublished)}
                   disabled={updating === testimonial._id}
-                  variant={testimonial.isPublished ? 'outline' : 'default'}
+                  variant={testimonial.isPublished ? 'outline' : 'primary'}
                   className={testimonial.isPublished ? '' : 'bg-indigo-600 hover:bg-indigo-700'}
                 >
                   {updating === testimonial._id ? (
