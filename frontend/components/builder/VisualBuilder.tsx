@@ -881,7 +881,7 @@ export default function VisualBuilder({ site, onUpdate }: VisualBuilderProps) {
                         type="checkbox"
                         checked={previewConfig.enabledFeatures.textTestimonial}
                         onChange={(e) => updatePreview({
-                          enabledFeatures: { textTestimonial: e.target.checked }
+                          enabledFeatures: { ...previewConfig.enabledFeatures, textTestimonial: e.target.checked }
                         })}
                         className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
                       />
