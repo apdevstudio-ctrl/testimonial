@@ -988,9 +988,9 @@ export default function VisualBuilder({ site, onUpdate }: VisualBuilderProps) {
                             className="text-2xl font-bold mb-2"
                             style={{ color: previewConfig.theme.primaryColor }}
                           >
-                            {previewConfig.formDesign.headerText || 'Share Your Testimonial'}
+                            {previewConfig.formDesign?.headerText || 'Share Your Testimonial'}
                           </h4>
-                          {previewConfig.formDesign.headerSubtext && (
+                          {previewConfig.formDesign?.headerSubtext && (
                             <p className="text-gray-600">{previewConfig.formDesign.headerSubtext}</p>
                           )}
                         </div>
@@ -1031,7 +1031,7 @@ export default function VisualBuilder({ site, onUpdate }: VisualBuilderProps) {
                             .filter((f: any) => f.visible)
                             .sort((a: any, b: any) => a.order - b.order)
                             .map((field: any) => (
-                              <div key={field.id} className={previewConfig.formDesign.layout === 'single' ? 'w-full' : ''}>
+                              <div key={field.id} className={previewConfig.formDesign!.layout === 'single' ? 'w-full' : ''}>
                                 <label className="block text-sm font-medium text-gray-700 mb-1.5">
                                   {field.label}
                                   {field.required && <span className="text-red-500 ml-1">*</span>}
