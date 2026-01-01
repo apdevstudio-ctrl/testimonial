@@ -67,6 +67,10 @@ export class TestimonialsService {
     return this.testimonialModel.find({ siteId, isPublished: true }).exec();
   }
 
+  async findAllBySiteId(siteId: string): Promise<Testimonial[]> {
+    return this.testimonialModel.find({ siteId }).exec();
+  }
+
   async findOne(id: string): Promise<Testimonial> {
     const testimonial = await this.testimonialModel.findById(id).exec();
     if (!testimonial) {

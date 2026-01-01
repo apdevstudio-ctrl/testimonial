@@ -30,12 +30,36 @@ export class ConfigService {
     }
 
     // Return only public configuration (no sensitive data)
+    // Provide defaults for missing fields to ensure script works correctly
     return {
       siteId: site.siteId,
-      button: site.button,
-      theme: site.theme,
-      enabledFeatures: site.enabledFeatures,
-      flowType: site.flowType,
+      button: {
+        enabled: site.button?.enabled ?? true, // Default to true if missing
+        type: site.button?.type || 'floating',
+        position: site.button?.position || 'bottom-right',
+        text: site.button?.text || 'Give Testimonial',
+        backgroundColor: site.button?.backgroundColor || '#007bff',
+        textColor: site.button?.textColor || '#ffffff',
+        shape: site.button?.shape || 'rounded',
+        size: site.button?.size || 'medium',
+        visibility: site.button?.visibility || {
+          hideOnMobile: false,
+          hideOnDesktop: false,
+          hideAfterSubmission: false,
+        },
+      },
+      theme: site.theme || {
+        primaryColor: '#007bff',
+        secondaryColor: '#6c757d',
+        fontFamily: 'inherit',
+        borderRadius: '8px',
+        buttonStyle: 'filled',
+      },
+      enabledFeatures: {
+        videoTestimonial: site.enabledFeatures?.videoTestimonial ?? true, // Default to true
+        textTestimonial: site.enabledFeatures?.textTestimonial ?? true, // Default to true
+      },
+      flowType: site.flowType || 'modal',
       formDesign: site.formDesign, // Include custom form design
       pageDesign: site.pageDesign, // Include page design for testimonial page
       testimonialDisplay: site.testimonialDisplay, // Include testimonial display configuration

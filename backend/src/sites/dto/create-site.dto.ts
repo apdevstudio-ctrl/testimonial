@@ -1,8 +1,9 @@
 import { IsString, IsOptional, IsObject, IsBoolean } from 'class-validator';
 
 export class CreateSiteDto {
+  @IsOptional()
   @IsString()
-  siteId: string;
+  siteId?: string;
 
   @IsString()
   name: string;
@@ -31,15 +32,15 @@ export class CreateSiteDto {
   flowType?: 'modal' | 'drawer' | 'page';
 
   @IsOptional()
-  @IsString()
-  ownerId?: string;
-
-  @IsOptional()
   @IsObject()
   formDesign?: any;
 
   @IsOptional()
   @IsObject()
   pageDesign?: any;
+
+  @IsOptional()
+  @IsObject()
+  testimonialDisplay?: any;
 }
 

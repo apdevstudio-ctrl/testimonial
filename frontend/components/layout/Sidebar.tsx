@@ -6,8 +6,8 @@ import { LayoutDashboard, Settings, BarChart3, MessageSquare, Plus } from 'lucid
 import clsx from 'clsx';
 
 const navigation = [
-  { name: 'Dashboard', href: '/', icon: LayoutDashboard },
-  { name: 'Sites', href: '/', icon: Settings },
+  { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
+  { name: 'Pricing', href: '/pricing', icon: BarChart3 },
 ];
 
 export default function Sidebar() {

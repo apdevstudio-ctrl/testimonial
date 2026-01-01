@@ -15,10 +15,12 @@ export class CreateAnalyticsEventDto {
     'testimonial_type_selected',
     'video_recording_started',
     'video_recording_stopped',
+    'screen_recording_started',
     'video_uploaded',
     'text_submission_started',
     'testimonial_submitted',
     'testimonial_completed',
+    'testimonials_displayed',
   ])
   eventType:
     | 'button_view'
@@ -26,10 +28,12 @@ export class CreateAnalyticsEventDto {
     | 'testimonial_type_selected'
     | 'video_recording_started'
     | 'video_recording_stopped'
+    | 'screen_recording_started'
     | 'video_uploaded'
     | 'text_submission_started'
     | 'testimonial_submitted'
-    | 'testimonial_completed';
+    | 'testimonial_completed'
+    | 'testimonials_displayed';
 
   @IsOptional()
   @IsObject()

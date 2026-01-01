@@ -13,6 +13,11 @@ export class AnalyticsController {
     @Body() createEventDto: CreateAnalyticsEventDto,
     @Req() req: any,
   ) {
+    // Add CORS headers for script access
+    req.res?.setHeader('Access-Control-Allow-Origin', '*');
+    req.res?.setHeader('Access-Control-Allow-Methods', 'POST');
+    req.res?.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    
     return this.analyticsService.trackEvent(createEventDto, req);
   }
 

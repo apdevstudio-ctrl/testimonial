@@ -5,7 +5,10 @@ export type SiteDocument = Site & Document;
 
 @Schema({ timestamps: true })
 export class Site {
-  @Prop({ required: true, unique: true, index: true })
+  @Prop({ required: true, type: String, ref: 'User', index: true })
+  userId: string;
+
+  @Prop({ required: true, index: true })
   siteId: string;
 
   @Prop({ required: true })
@@ -135,9 +138,6 @@ export class Site {
       containerPadding: string;
     };
   };
-
-  @Prop()
-  ownerId?: string;
 
   @Prop({ default: true })
   isActive: boolean;

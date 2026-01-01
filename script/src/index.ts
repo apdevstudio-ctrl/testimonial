@@ -129,9 +129,17 @@ let TestimonialWidgetClass: any;
     private async init(): Promise<void> {
       try {
         await this.loadConfig();
-        if (this.config && this.config.button.enabled) {
+        // Default to true if enabled is not explicitly set to false
+        const buttonEnabled = this.config?.button?.enabled !== false;
+        if (this.config && buttonEnabled) {
           this.injectButton();
           this.trackEvent('button_view');
+        } else {
+          console.log('Button not injected. Config:', this.config ? {
+            hasConfig: true,
+            buttonEnabled: this.config.button?.enabled,
+            button: this.config.button
+          } : { hasConfig: false });
         }
       } catch (error) {
         console.error('Failed to initialize testimonial widget:', error);
@@ -140,28 +148,42 @@ let TestimonialWidgetClass: any;
 
     private async loadConfig(): Promise<void> {
       try {
-        const response = await fetch(`${this.apiUrl}/api/config/${this.siteId}`);
+        const configUrl = `${this.apiUrl}/api/config/${this.siteId}`;
+        console.log('Loading config from:', configUrl);
+        const response = await fetch(configUrl);
         if (!response.ok) {
-          throw new Error('Failed to load configuration');
+          console.error(`Failed to load configuration: ${response.status} ${response.statusText}`);
+          console.error('Config URL:', configUrl);
+          throw new Error(`Failed to load configuration: ${response.status}`);
         }
         this.config = await response.json();
+        console.log('Config loaded successfully:', this.config);
       } catch (error) {
         console.error('Failed to load configuration:', error);
+        console.error('API URL:', this.apiUrl);
+        console.error('Site ID:', this.siteId);
       }
     }
 
     private injectButton(): void {
-      if (!this.config) return;
+      if (!this.config) {
+        console.error('Config not available in injectButton');
+        return;
+      }
 
+      console.log('Injecting button...');
       // Create shadow DOM container
       const container = document.createElement('div');
       container.id = 'testimonial-widget-container';
       document.body.appendChild(container);
+      console.log('Button container created and appended to body');
 
       this.shadowRoot = container.attachShadow({ mode: 'closed' });
+      console.log('Shadow root created');
 
       const button = this.createButton();
       this.shadowRoot.appendChild(button);
+      console.log('Button appended to shadow root');
     }
 
     private createButton(): HTMLElement {
@@ -176,10 +198,14 @@ let TestimonialWidgetClass: any;
       button.setAttribute('style', styles);
 
       // Add click handler
-      button.addEventListener('click', () => {
+      button.addEventListener('click', (e) => {
+        console.log('Button clicked! Event:', e);
+        e.stopPropagation();
         this.trackEvent('button_click');
+        console.log('Opening testimonial flow...');
         this.openTestimonialFlow();
       });
+      console.log('Button click handler attached');
 
       return button;
     }
@@ -212,18 +238,29 @@ let TestimonialWidgetClass: any;
     }
 
     private async openTestimonialFlow(): Promise<void> {
-      if (!this.config) return;
+      console.log('openTestimonialFlow called, config:', this.config);
+      if (!this.config) {
+        console.error('Config not available in openTestimonialFlow');
+        return;
+      }
 
+      console.log('Flow type:', this.config.flowType);
       switch (this.config.flowType) {
         case 'modal':
+          console.log('Opening modal');
           this.openModal();
           break;
         case 'drawer':
+          console.log('Opening drawer');
           this.openDrawer();
           break;
         case 'page':
+          console.log('Opening page');
           this.openPage();
           break;
+        default:
+          console.log('Unknown flow type, defaulting to modal');
+          this.openModal();
       }
     }
 
@@ -236,12 +273,29 @@ let TestimonialWidgetClass: any;
         left: 0;
         width: 100%;
         height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
+        background: linear-gradient(135deg, rgba(102, 126, 234, 0.4) 0%, rgba(118, 75, 162, 0.4) 100%);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
         z-index: 1000000;
         display: flex;
         justify-content: center;
         align-items: center;
+        animation: fadeIn 0.3s ease-out;
       `;
+
+      // Add fade-in animation
+      const style = document.createElement('style');
+      style.textContent = `
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        @keyframes slideUp {
+          from { transform: translateY(20px); opacity: 0; }
+          to { transform: translateY(0); opacity: 1; }
+        }
+      `;
+      document.head.appendChild(style);
 
       const content = this.createTestimonialContent();
       modal.appendChild(content);
@@ -279,7 +333,12 @@ let TestimonialWidgetClass: any;
 
     private openPage(): void {
       const iframe = document.createElement('iframe');
-      iframe.src = `${this.apiUrl}/testimonial-form/${this.siteId}`;
+      // Testimonial form route is excluded from /api prefix for public access
+      const pageUrl = `${this.apiUrl}/testimonial-form/${this.siteId}`;
+      console.log('Opening testimonial page:', pageUrl);
+      iframe.src = pageUrl;
+      // Grant camera and microphone permissions to the iframe
+      iframe.setAttribute('allow', 'camera; microphone; autoplay');
       iframe.style.cssText = `
         position: fixed;
         top: 0;
@@ -289,59 +348,126 @@ let TestimonialWidgetClass: any;
         border: none;
         z-index: 1000000;
       `;
+      iframe.onerror = (error) => {
+        console.error('Failed to load testimonial page:', error);
+        console.error('Page URL:', pageUrl);
+      };
       document.body.appendChild(iframe);
     }
 
     private createTestimonialContent(): HTMLElement {
       if (!this.config) throw new Error('Config not loaded');
 
+      const primaryColor = this.config?.theme?.primaryColor || '#667eea';
+      const borderRadius = this.config?.theme?.borderRadius || '16px';
+
       const container = document.createElement('div');
       container.style.cssText = `
-        background: white;
-        padding: 32px;
-        border-radius: ${this.config?.theme?.borderRadius || '8px'};
+        background: linear-gradient(135deg, #ffffff 0%, #f8f9ff 100%);
+        padding: 0;
+        border-radius: ${borderRadius};
         max-width: 600px;
         width: 90%;
         max-height: 90vh;
-        overflow-y: auto;
+        overflow: hidden;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.1);
+        animation: slideUp 0.4s ease-out;
+        display: flex;
+        flex-direction: column;
+      `;
+
+      // Header with gradient
+      const header = document.createElement('div');
+      header.style.cssText = `
+        background: linear-gradient(135deg, ${primaryColor} 0%, ${this.config?.theme?.secondaryColor || '#764ba2'} 100%);
+        padding: 32px;
+        color: white;
+        position: relative;
       `;
 
       const closeButton = document.createElement('button');
-      closeButton.textContent = '×';
+      closeButton.innerHTML = '✕';
       closeButton.style.cssText = `
-        float: right;
-        background: none;
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        background: rgba(255, 255, 255, 0.2);
         border: none;
-        font-size: 32px;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        font-size: 20px;
         cursor: pointer;
-        color: #666;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+        font-weight: 300;
       `;
+      closeButton.onmouseover = () => {
+        closeButton.style.background = 'rgba(255, 255, 255, 0.3)';
+        closeButton.style.transform = 'scale(1.1)';
+      };
+      closeButton.onmouseout = () => {
+        closeButton.style.background = 'rgba(255, 255, 255, 0.2)';
+        closeButton.style.transform = 'scale(1)';
+      };
       closeButton.onclick = () => {
         const modal = document.getElementById('testimonial-modal');
         const drawer = document.getElementById('testimonial-drawer');
         if (modal) document.body.removeChild(modal);
         if (drawer) document.body.removeChild(drawer);
       };
-      container.appendChild(closeButton);
+      header.appendChild(closeButton);
 
       const title = document.createElement('h2');
       title.textContent = 'Share Your Testimonial';
-      title.style.cssText = `color: ${this.config?.theme?.primaryColor || '#007bff'}; margin-bottom: 24px;`;
-      container.appendChild(title);
+      title.style.cssText = `
+        color: white;
+        margin: 0;
+        font-size: 28px;
+        font-weight: 700;
+        letter-spacing: -0.5px;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      `;
+      header.appendChild(title);
+
+      const subtitle = document.createElement('p');
+      subtitle.textContent = 'We\'d love to hear about your experience!';
+      subtitle.style.cssText = `
+        color: rgba(255, 255, 255, 0.9);
+        margin: 8px 0 0 0;
+        font-size: 16px;
+        font-weight: 400;
+      `;
+      header.appendChild(subtitle);
+
+      container.appendChild(header);
+
+      // Content area
+      const contentArea = document.createElement('div');
+      contentArea.style.cssText = `
+        padding: 32px;
+        overflow-y: auto;
+        flex: 1;
+      `;
 
       const formContainer = document.createElement('div');
       formContainer.id = 'testimonial-form-container';
-      container.appendChild(formContainer);
+      contentArea.appendChild(formContainer);
+      container.appendChild(contentArea);
 
       // Check how many features are enabled
-      const hasVideo = this.config.enabledFeatures.videoTestimonial;
-      const hasText = this.config.enabledFeatures.textTestimonial;
+      // Default to true if not explicitly set to false
+      const hasVideo = this.config.enabledFeatures?.videoTestimonial !== false;
+      const hasText = this.config.enabledFeatures?.textTestimonial !== false;
       const bothEnabled = hasVideo && hasText;
 
       if (bothEnabled) {
         // Show selection buttons only if both are enabled
         const typeSelector = document.createElement('div');
-        typeSelector.style.cssText = 'display: flex; gap: 16px; margin-bottom: 24px;';
+        typeSelector.style.cssText = 'display: flex; gap: 16px; margin-bottom: 32px;';
 
         const videoButton = this.createTypeButton('Video Testimonial', 'video');
         typeSelector.appendChild(videoButton);
@@ -349,19 +475,40 @@ let TestimonialWidgetClass: any;
         const textButton = this.createTypeButton('Text Testimonial', 'text');
         typeSelector.appendChild(textButton);
 
-        container.insertBefore(typeSelector, formContainer);
+        contentArea.insertBefore(typeSelector, formContainer);
       } else {
         // If only one is enabled, show that form directly
+        // Pass the container directly to avoid DOM lookup issues
+        console.log('Only one testimonial type enabled. hasVideo:', hasVideo, 'hasText:', hasText);
         if (hasVideo) {
-          this.showForm('video');
+          console.log('Showing video form directly, formContainer:', formContainer);
+          // Ensure container is visible and has proper styling
+          formContainer.style.display = 'block';
+          formContainer.style.minHeight = '200px';
+          // Use setTimeout with a small delay to ensure DOM is ready
+          setTimeout(() => {
+            console.log('Clearing container and showing video form');
+            formContainer.innerHTML = '';
+            this.showVideoForm(formContainer);
+          }, 50);
         } else if (hasText) {
-          this.showForm('text');
+          console.log('Showing text form directly, formContainer:', formContainer);
+          // Ensure container is visible and has proper styling
+          formContainer.style.display = 'block';
+          formContainer.style.minHeight = '200px';
+          // Use setTimeout with a small delay to ensure DOM is ready
+          setTimeout(() => {
+            console.log('Clearing container and showing text form');
+            formContainer.innerHTML = '';
+            this.showTextForm(formContainer);
+          }, 50);
         } else {
           // Neither enabled - show message
           const message = document.createElement('p');
-          message.textContent = 'Testimonial submission is currently unavailable.';
+          message.textContent = 'Testimonial submission is currently unavailable. Please enable at least one testimonial type in your dashboard settings.';
           message.style.cssText = 'color: #666; text-align: center; padding: 20px;';
           formContainer.appendChild(message);
+          console.warn('Both videoTestimonial and textTestimonial are disabled. Enable at least one in dashboard.');
         }
       }
 
@@ -393,9 +540,34 @@ let TestimonialWidgetClass: any;
     }
 
     private showForm(type: 'video' | 'text'): void {
+      console.log('showForm called with type:', type);
       const container = document.getElementById('testimonial-form-container');
-      if (!container) return;
+      if (!container) {
+        console.error('Testimonial form container not found. Retrying...');
+        // Retry multiple times with increasing delays
+        let retries = 0;
+        const maxRetries = 5;
+        const retryInterval = setInterval(() => {
+          retries++;
+          const retryContainer = document.getElementById('testimonial-form-container');
+          if (retryContainer) {
+            console.log('Container found on retry', retries);
+            clearInterval(retryInterval);
+            retryContainer.innerHTML = '';
+            if (type === 'video') {
+              this.showVideoForm(retryContainer);
+            } else {
+              this.showTextForm(retryContainer);
+            }
+          } else if (retries >= maxRetries) {
+            console.error('Testimonial form container not found after', maxRetries, 'retries');
+            clearInterval(retryInterval);
+          }
+        }, 50);
+        return;
+      }
 
+      console.log('Container found, showing form');
       container.innerHTML = '';
 
       if (type === 'video') {
@@ -406,8 +578,13 @@ let TestimonialWidgetClass: any;
     }
 
     private showVideoForm(container: HTMLElement): void {
-      if (!this.config) return;
+      console.log('showVideoForm called, container:', container);
+      if (!this.config) {
+        console.error('Config not available in showVideoForm');
+        return;
+      }
 
+      console.log('Creating video form container');
       const videoContainer = document.createElement('div');
       videoContainer.innerHTML = `
         <div style="margin-bottom: 16px;">
@@ -469,10 +646,25 @@ let TestimonialWidgetClass: any;
 
       recordBtn.addEventListener('click', async () => {
         try {
+          // Check if mediaDevices API is available
+          if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+            const isSecure = window.location.protocol === 'https:' || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+            if (!isSecure) {
+              alert('Camera access requires HTTPS. Please access this page over HTTPS or use localhost.');
+              return;
+            }
+            alert('Your browser does not support camera access. Please use a modern browser like Chrome, Firefox, or Safari.');
+            return;
+          }
+
           let stream: MediaStream;
 
           if (recordingType === 'screen') {
             // Screen recording
+            if (!navigator.mediaDevices.getDisplayMedia) {
+              alert('Screen recording is not supported in your browser.');
+              return;
+            }
             stream = await navigator.mediaDevices.getDisplayMedia({ 
               video: { 
                 displaySurface: 'browser' as any
@@ -485,7 +677,20 @@ let TestimonialWidgetClass: any;
             this.trackEvent('screen_recording_started');
           } else {
             // Webcam recording
-            stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+            try {
+              stream = await navigator.mediaDevices.getUserMedia({ 
+                video: { 
+                  facingMode: 'user',
+                  width: { ideal: 1280 },
+                  height: { ideal: 720 }
+                }, 
+                audio: true 
+              });
+            } catch (getUserMediaError: any) {
+              // Try with simpler constraints if the first attempt fails
+              console.warn('Failed with ideal constraints, trying basic constraints:', getUserMediaError);
+              stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+            }
             preview.srcObject = stream;
             preview.style.display = 'block';
             screenPreview.style.display = 'none';
@@ -494,9 +699,18 @@ let TestimonialWidgetClass: any;
 
           currentStream = stream;
 
-          mediaRecorder = new MediaRecorder(stream, {
-            mimeType: 'video/webm;codecs=vp9,opus'
-          });
+          // Check if MediaRecorder is supported
+          if (!MediaRecorder.isTypeSupported('video/webm;codecs=vp9,opus')) {
+            console.warn('VP9 codec not supported, trying default codec');
+          }
+
+          const mimeType = MediaRecorder.isTypeSupported('video/webm;codecs=vp9,opus') 
+            ? 'video/webm;codecs=vp9,opus'
+            : MediaRecorder.isTypeSupported('video/webm') 
+            ? 'video/webm'
+            : '';
+
+          mediaRecorder = new MediaRecorder(stream, mimeType ? { mimeType } : undefined);
           recordedChunks = [];
 
           mediaRecorder.ondataavailable = (e) => {
@@ -519,23 +733,43 @@ let TestimonialWidgetClass: any;
           };
 
           // Handle when user stops sharing screen
-          stream.getVideoTracks()[0].addEventListener('ended', () => {
-            if (mediaRecorder && mediaRecorder.state !== 'inactive') {
-              mediaRecorder.stop();
-              recordBtn.removeAttribute('disabled');
-              stopBtn.setAttribute('disabled', 'true');
-            }
-          });
+          if (stream.getVideoTracks().length > 0) {
+            stream.getVideoTracks()[0].addEventListener('ended', () => {
+              if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+                mediaRecorder.stop();
+                recordBtn.removeAttribute('disabled');
+                stopBtn.setAttribute('disabled', 'true');
+              }
+            });
+          }
 
           mediaRecorder.start();
           recordBtn.setAttribute('disabled', 'true');
           stopBtn.removeAttribute('disabled');
         } catch (error: any) {
           console.error('Error accessing media:', error);
+          let errorMessage = 'Unable to access camera. ';
+          
+          if (error.name === 'NotAllowedError' || error.name === 'PermissionDeniedError') {
+            errorMessage += 'Please allow camera access in your browser settings and try again.';
+          } else if (error.name === 'NotFoundError' || error.name === 'DevicesNotFoundError') {
+            errorMessage += 'No camera found. Please connect a camera and try again.';
+          } else if (error.name === 'NotReadableError' || error.name === 'TrackStartError') {
+            errorMessage += 'Camera is already in use by another application. Please close other applications using the camera and try again.';
+          } else if (error.name === 'OverconstrainedError' || error.name === 'ConstraintNotSatisfiedError') {
+            errorMessage += 'Camera does not support the required settings. Please try again.';
+          } else if (error.name === 'NotSupportedError') {
+            errorMessage += 'Camera access is not supported in this browser. Please use a modern browser.';
+          } else if (error.name === 'SecurityError') {
+            errorMessage += 'Camera access is blocked for security reasons. Please use HTTPS or localhost.';
+          } else {
+            errorMessage += `Error: ${error.message || 'Unknown error'}. Please check permissions and try again.`;
+          }
+          
           if (recordingType === 'screen') {
             alert('Unable to access screen. Please check permissions and try again.');
           } else {
-            alert('Unable to access camera. Please check permissions.');
+            alert(errorMessage);
           }
         }
       });
@@ -585,11 +819,17 @@ let TestimonialWidgetClass: any;
 
       videoContainer.appendChild(submitButton);
       container.appendChild(videoContainer);
+      console.log('Video form appended to container, container children:', container.children.length);
     }
 
     private showTextForm(container: HTMLElement): void {
-      if (!this.config) return;
+      console.log('showTextForm called, container:', container);
+      if (!this.config) {
+        console.error('Config not available in showTextForm');
+        return;
+      }
 
+      console.log('Creating text form');
       this.trackEvent('text_submission_started');
 
       const form = document.createElement('form');
@@ -964,14 +1204,128 @@ let TestimonialWidgetClass: any;
 
           // Testimonial content
           if (testimonial.type === 'video' && testimonial.videoUrl) {
+            // Create video container with modern design
+            const videoContainer = document.createElement('div');
+            videoContainer.style.cssText = `
+              position: relative;
+              width: 100%;
+              margin-bottom: 16px;
+              border-radius: ${cardStyle.borderRadius || '12px'};
+              overflow: hidden;
+              background: #000;
+              aspect-ratio: 16 / 9;
+              cursor: pointer;
+            `;
+
             const video = document.createElement('video');
             video.src = testimonial.videoUrl;
-            video.controls = true;
-            video.style.cssText = 'width: 100%; border-radius: 8px; margin-bottom: 16px;';
+            video.controls = false; // We'll add custom controls
+            video.style.cssText = `
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+              display: block;
+            `;
             if (testimonial.videoThumbnail) {
               video.poster = testimonial.videoThumbnail;
             }
-            card.appendChild(video);
+
+            // Create play button overlay
+            const playOverlay = document.createElement('div');
+            playOverlay.style.cssText = `
+              position: absolute;
+              top: 0;
+              left: 0;
+              width: 100%;
+              height: 100%;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              background: rgba(0, 0, 0, 0.3);
+              transition: background 0.3s ease;
+              z-index: 1;
+            `;
+
+            const playButton = document.createElement('div');
+            playButton.style.cssText = `
+              width: 64px;
+              height: 64px;
+              border-radius: 50%;
+              background: rgba(255, 255, 255, 0.95);
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              cursor: pointer;
+              transition: transform 0.2s ease, background 0.2s ease;
+              box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            `;
+
+            // Play icon (triangle)
+            const playIcon = document.createElement('div');
+            playIcon.style.cssText = `
+              width: 0;
+              height: 0;
+              border-left: 20px solid ${this.config?.theme?.primaryColor || '#667eea'};
+              border-top: 12px solid transparent;
+              border-bottom: 12px solid transparent;
+              margin-left: 4px;
+            `;
+            playButton.appendChild(playIcon);
+
+            let isPlaying = false;
+            playButton.onmouseenter = () => {
+              if (!isPlaying) {
+                playButton.style.transform = 'scale(1.1)';
+                playButton.style.background = 'rgba(255, 255, 255, 1)';
+              }
+            };
+            playButton.onmouseleave = () => {
+              if (!isPlaying) {
+                playButton.style.transform = 'scale(1)';
+                playButton.style.background = 'rgba(255, 255, 255, 0.95)';
+              }
+            };
+
+            // Play button click handler
+            const handlePlay = () => {
+              if (video.paused) {
+                video.play();
+                playOverlay.style.display = 'none';
+                video.controls = true;
+                isPlaying = true;
+              } else {
+                video.pause();
+                playOverlay.style.display = 'flex';
+                video.controls = false;
+                isPlaying = false;
+              }
+            };
+
+            playButton.onclick = (e) => {
+              e.stopPropagation();
+              handlePlay();
+            };
+            videoContainer.onclick = handlePlay;
+
+            // Show overlay when video ends or pauses
+            video.addEventListener('pause', () => {
+              if (video.currentTime > 0) {
+                playOverlay.style.display = 'flex';
+                video.controls = false;
+                isPlaying = false;
+              }
+            });
+
+            video.addEventListener('ended', () => {
+              playOverlay.style.display = 'flex';
+              video.controls = false;
+              isPlaying = false;
+            });
+
+            playOverlay.appendChild(playButton);
+            videoContainer.appendChild(video);
+            videoContainer.appendChild(playOverlay);
+            card.appendChild(videoContainer);
           } else if (testimonial.text) {
             const text = document.createElement('p');
             text.textContent = testimonial.text;
@@ -1008,11 +1362,25 @@ let TestimonialWidgetClass: any;
   }
   
   // Auto-initialize if script tag has data-site-id attribute
+  // Handle both static and dynamically loaded scripts
   const scriptTag = document.currentScript as HTMLScriptElement;
   if (scriptTag && scriptTag.dataset.siteId) {
     const siteId = scriptTag.dataset.siteId;
     const apiUrl = scriptTag.dataset.apiUrl;
     new TestimonialWidget(siteId, apiUrl);
+  } else {
+    // Fallback: Check for script tags with data-site-id (for dynamically loaded scripts)
+    // This handles cases where document.currentScript is null
+    const scripts = document.querySelectorAll('script[data-site-id]');
+    scripts.forEach((script) => {
+      const scriptEl = script as HTMLScriptElement;
+      if (scriptEl.dataset.siteId && !scriptEl.dataset.initialized) {
+        scriptEl.dataset.initialized = 'true';
+        const siteId = scriptEl.dataset.siteId;
+        const apiUrl = scriptEl.dataset.apiUrl;
+        new TestimonialWidget(siteId, apiUrl);
+      }
+    });
   }
 
   // Helper function to display testimonials
@@ -1137,14 +1505,128 @@ let TestimonialWidgetClass: any;
 
         // Testimonial content
         if (testimonial.type === 'video' && testimonial.videoUrl) {
+          // Create video container with modern design
+          const videoContainer = document.createElement('div');
+          videoContainer.style.cssText = `
+            position: relative;
+            width: 100%;
+            margin-bottom: 16px;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #000;
+            aspect-ratio: 16 / 9;
+            cursor: pointer;
+          `;
+
           const video = document.createElement('video');
           video.src = testimonial.videoUrl;
-          video.controls = true;
-          video.style.cssText = 'width: 100%; border-radius: 8px; margin-bottom: 16px;';
+          video.controls = false; // We'll add custom controls
+          video.style.cssText = `
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+          `;
           if (testimonial.videoThumbnail) {
             video.poster = testimonial.videoThumbnail;
           }
-          card.appendChild(video);
+
+          // Create play button overlay
+          const playOverlay = document.createElement('div');
+          playOverlay.style.cssText = `
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.3);
+            transition: background 0.3s ease;
+            z-index: 1;
+          `;
+
+          const playButton = document.createElement('div');
+          playButton.style.cssText = `
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.95);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.2s ease, background 0.2s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+          `;
+
+          // Play icon (triangle)
+          const playIcon = document.createElement('div');
+          playIcon.style.cssText = `
+            width: 0;
+            height: 0;
+            border-left: 20px solid #667eea;
+            border-top: 12px solid transparent;
+            border-bottom: 12px solid transparent;
+            margin-left: 4px;
+          `;
+          playButton.appendChild(playIcon);
+
+          let isPlaying = false;
+          playButton.onmouseenter = () => {
+            if (!isPlaying) {
+              playButton.style.transform = 'scale(1.1)';
+              playButton.style.background = 'rgba(255, 255, 255, 1)';
+            }
+          };
+          playButton.onmouseleave = () => {
+            if (!isPlaying) {
+              playButton.style.transform = 'scale(1)';
+              playButton.style.background = 'rgba(255, 255, 255, 0.95)';
+            }
+          };
+
+          // Play button click handler
+          const handlePlay = () => {
+            if (video.paused) {
+              video.play();
+              playOverlay.style.display = 'none';
+              video.controls = true;
+              isPlaying = true;
+            } else {
+              video.pause();
+              playOverlay.style.display = 'flex';
+              video.controls = false;
+              isPlaying = false;
+            }
+          };
+
+          playButton.onclick = (e) => {
+            e.stopPropagation();
+            handlePlay();
+          };
+          videoContainer.onclick = handlePlay;
+
+          // Show overlay when video ends or pauses
+          video.addEventListener('pause', () => {
+            if (video.currentTime > 0) {
+              playOverlay.style.display = 'flex';
+              video.controls = false;
+              isPlaying = false;
+            }
+          });
+
+          video.addEventListener('ended', () => {
+            playOverlay.style.display = 'flex';
+            video.controls = false;
+            isPlaying = false;
+          });
+
+          playOverlay.appendChild(playButton);
+          videoContainer.appendChild(video);
+          videoContainer.appendChild(playOverlay);
+          card.appendChild(videoContainer);
         } else if (testimonial.text) {
           const text = document.createElement('p');
           text.textContent = testimonial.text;

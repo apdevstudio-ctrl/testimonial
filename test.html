@@ -203,8 +203,27 @@
                 const widget = new window.TestimonialWidget('1', 'http://localhost:3000');
                 console.log('Widget instance created');
                 
-                // Wait for config to load
-                await new Promise(resolve => setTimeout(resolve, 2000));
+                // Wait for config to load and button to appear
+                await new Promise(resolve => setTimeout(resolve, 3000));
+                
+                // Check if button appeared
+                const buttonContainer = document.getElementById('testimonial-widget-container');
+                if (buttonContainer) {
+                    console.log('✅ Button container found:', buttonContainer);
+                    // Try to access shadow DOM (might be closed, but container should exist)
+                    console.log('Shadow root exists:', buttonContainer.shadowRoot !== null);
+                } else {
+                    console.warn('⚠️ Button container not found. Checking config...');
+                    // Check config directly
+                    try {
+                        const configResponse = await fetch('http://localhost:3000/api/config/1');
+                        const config = await configResponse.json();
+                        console.log('Config button.enabled:', config.button?.enabled);
+                        console.log('Full button config:', config.button);
+                    } catch (e) {
+                        console.error('Failed to fetch config:', e);
+                    }
+                }
                 
                 console.log('Attempting to display testimonials...');
                 

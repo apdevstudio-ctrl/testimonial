@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowLeft, Copy, Check, Settings, Palette, BarChart3, MessageSquare, Video, FileText, Play, Star, Calendar, User, Globe, Wand2 } from 'lucide-react';
+import { ArrowLeft, Copy, Check, Settings, Palette, BarChart3, MessageSquare, Video, FileText, Play, Star, Calendar, User, Globe, Wand2, X } from 'lucide-react';
 import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
@@ -86,7 +86,12 @@ export default function SitePage() {
 
   const fetchSite = async () => {
     try {
-      const response = await fetch(`${API_URL}/api/sites/${siteId}`);
+      const token = localStorage.getItem('auth_token');
+      const response = await fetch(`${API_URL}/api/sites/${siteId}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
       if (!response.ok) throw new Error('Failed to fetch site');
       const data = await response.json();
       setSite(data);
@@ -105,10 +110,12 @@ export default function SitePage() {
     if (Object.keys(updates).length === 0) return;
 
     try {
+      const token = localStorage.getItem('auth_token');
       const response = await fetch(`${API_URL}/api/sites/${siteId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify(updates),
       });
@@ -573,6 +580,8 @@ function AnalyticsTab({ siteId, API_URL }: { siteId: string; API_URL: string }) 
 function TestimonialsTab({ siteId, API_URL }: { siteId: string; API_URL: string }) {
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [loading, setLoading] = useState(true);
+  const [updating, setUpdating] = useState<string | null>(null);
+  const { showToast } = useToast();
 
   useEffect(() => {
     fetchTestimonials();
@@ -580,14 +589,54 @@ function TestimonialsTab({ siteId, API_URL }: { siteId: string; API_URL: string 
 
   const fetchTestimonials = async () => {
     try {
-      const response = await fetch(`${API_URL}/api/testimonials?siteId=${siteId}`);
+      // Use ?all=true to get all testimonials (including unpublished) for admin
+      const response = await fetch(`${API_URL}/api/testimonials?siteId=${siteId}&all=true`);
       if (!response.ok) throw new Error('Failed to fetch testimonials');
       const data = await response.json();
       setTestimonials(data);
     } catch (error) {
       console.error('Error fetching testimonials:', error);
+      showToast('Failed to load testimonials', 'error');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleTogglePublish = async (testimonialId: string, currentStatus: boolean) => {
+    setUpdating(testimonialId);
+    try {
+      const response = await fetch(`${API_URL}/api/testimonials/${testimonialId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          isPublished: !currentStatus,
+        }),
+      });
+
+      if (!response.ok) throw new Error('Failed to update testimonial');
+
+      // Update local state
+      setTestimonials((prev) =>
+        prev.map((t) =>
+          t._id === testimonialId
+            ? { ...t, isPublished: !currentStatus }
+            : t
+        )
+      );
+
+      showToast(
+        currentStatus
+          ? 'Testimonial unpublished successfully'
+          : 'Testimonial published successfully',
+        'success'
+      );
+    } catch (error) {
+      console.error('Error updating testimonial:', error);
+      showToast('Failed to update testimonial', 'error');
+    } finally {
+      setUpdating(null);
     }
   };
 
@@ -598,9 +647,14 @@ function TestimonialsTab({ siteId, API_URL }: { siteId: string; API_URL: string 
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-lg font-semibold text-gray-900">
-          Testimonials ({testimonials.length})
-        </h3>
+        <div>
+          <h3 className="text-lg font-semibold text-gray-900">
+            Testimonials ({testimonials.length})
+          </h3>
+          <p className="text-sm text-gray-500 mt-1">
+            Review and publish testimonials to display them on your website
+          </p>
+        </div>
       </div>
       {testimonials.length === 0 ? (
         <Card className="text-center py-12">
@@ -632,12 +686,12 @@ function TestimonialsTab({ siteId, API_URL }: { siteId: string; API_URL: string 
                   </div>
                   <span
                     className={`px-2.5 py-1 rounded-full text-xs font-medium ${
-                      testimonial.isApproved
+                      testimonial.isPublished
                         ? 'bg-green-100 text-green-800'
-                        : 'bg-yellow-100 text-yellow-800'
+                        : 'bg-gray-100 text-gray-800'
                     }`}
                   >
-                    {testimonial.isApproved ? 'Approved' : 'Pending'}
+                    {testimonial.isPublished ? 'Published' : 'Draft'}
                   </span>
                 </div>
               </div>
@@ -660,12 +714,36 @@ function TestimonialsTab({ siteId, API_URL }: { siteId: string; API_URL: string 
               )}
 
               {testimonial.rating && (
-                <div className="flex items-center gap-1 text-sm">
+                <div className="flex items-center gap-1 text-sm mb-4">
                   <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
                   <span className="font-medium text-gray-900">{testimonial.rating}</span>
                   <span className="text-gray-500">/ 5</span>
                 </div>
               )}
+
+              {/* Publish/Unpublish Button */}
+              <div className="flex items-center justify-end gap-2 pt-4 border-t border-gray-200">
+                <Button
+                  onClick={() => handleTogglePublish(testimonial._id, testimonial.isPublished)}
+                  disabled={updating === testimonial._id}
+                  variant={testimonial.isPublished ? 'outline' : 'default'}
+                  className={testimonial.isPublished ? '' : 'bg-indigo-600 hover:bg-indigo-700'}
+                >
+                  {updating === testimonial._id ? (
+                    'Updating...'
+                  ) : testimonial.isPublished ? (
+                    <>
+                      <X className="h-4 w-4 mr-2" />
+                      Unpublish
+                    </>
+                  ) : (
+                    <>
+                      <Check className="h-4 w-4 mr-2" />
+                      Publish
+                    </>
+                  )}
+                </Button>
+              </div>
             </Card>
           ))}
         </div>
