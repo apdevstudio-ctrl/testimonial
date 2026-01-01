@@ -80,12 +80,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         body: JSON.stringify({ email, password }),
       });
 
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || 'Login failed');
+      const responseText = await response.text();
+      let data;
+      
+      try {
+        data = responseText ? JSON.parse(responseText) : {};
+      } catch (parseError) {
+        throw new Error('Invalid response from server');
       }
 
-      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || `Login failed: ${response.status} ${response.statusText}`);
+      }
+
       setToken(data.access_token);
       setUser(data.user);
       localStorage.setItem('auth_token', data.access_token);
@@ -105,12 +112,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         body: JSON.stringify({ name, email, password }),
       });
 
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || 'Registration failed');
+      const responseText = await response.text();
+      let data;
+      
+      try {
+        data = responseText ? JSON.parse(responseText) : {};
+      } catch (parseError) {
+        throw new Error('Invalid response from server');
       }
 
-      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data.message || `Registration failed: ${response.status} ${response.statusText}`);
+      }
+
       setToken(data.access_token);
       setUser(data.user);
       localStorage.setItem('auth_token', data.access_token);
