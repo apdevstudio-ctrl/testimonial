@@ -41,7 +41,7 @@ export default function Dashboard() {
   const fetchSites = async () => {
     try {
       const token = localStorage.getItem('auth_token');
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'}/api/sites`, {
+      const response = await fetch('/api/sites', {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
@@ -67,7 +67,7 @@ export default function Dashboard() {
     try {
       const token = localStorage.getItem('auth_token');
       // Backend will auto-generate UUID for siteId
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'}/api/sites`, {
+      const response = await fetch('/api/sites', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

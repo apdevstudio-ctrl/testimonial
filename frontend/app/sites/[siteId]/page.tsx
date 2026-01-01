@@ -78,7 +78,6 @@ export default function SitePage() {
   const [copied, setCopied] = useState(false);
   const { showToast } = useToast();
 
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
   useEffect(() => {
     fetchSite();
@@ -87,7 +86,7 @@ export default function SitePage() {
   const fetchSite = async () => {
     try {
       const token = localStorage.getItem('auth_token');
-      const response = await fetch(`${API_URL}/api/sites/${siteId}`, {
+      const response = await fetch(`/api/sites/${siteId}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
@@ -111,7 +110,7 @@ export default function SitePage() {
 
     try {
       const token = localStorage.getItem('auth_token');
-      const response = await fetch(`${API_URL}/api/sites/${siteId}`, {
+      const response = await fetch(`/api/sites/${siteId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -167,7 +166,7 @@ export default function SitePage() {
     );
   }
 
-  const scriptSnippet = `<script src="${API_URL}/script.js" data-site-id="${site.siteId}"></script>`;
+  const scriptSnippet = `<script src="${typeof window !== 'undefined' ? window.location.origin : ''}/script.js" data-site-id="${site.siteId}"></script>`;
 
   const tabs = [
     { id: 'builder', label: 'Builder', icon: Wand2 },
@@ -274,10 +273,10 @@ export default function SitePage() {
             <ThemeTab site={site} onUpdate={updateSite} />
           )}
           {activeTab === 'analytics' && (
-            <AnalyticsTab siteId={siteId} API_URL={API_URL} />
+            <AnalyticsTab siteId={siteId} />
           )}
           {activeTab === 'testimonials' && (
-            <TestimonialsTab siteId={siteId} API_URL={API_URL} />
+            <TestimonialsTab siteId={siteId} />
           )}
         </div>
       </Card>
@@ -495,7 +494,7 @@ function ThemeTab({ site, onUpdate }: { site: Site; onUpdate: (updates: Partial<
   );
 }
 
-function AnalyticsTab({ siteId, API_URL }: { siteId: string; API_URL: string }) {
+function AnalyticsTab({ siteId }: { siteId: string }) {
   const [stats, setStats] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
@@ -505,7 +504,12 @@ function AnalyticsTab({ siteId, API_URL }: { siteId: string; API_URL: string }) 
 
   const fetchStats = async () => {
     try {
-      const response = await fetch(`${API_URL}/api/analytics/stats?siteId=${siteId}`);
+      const token = localStorage.getItem('auth_token');
+      const response = await fetch(`/api/analytics/stats?siteId=${siteId}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
       if (!response.ok) throw new Error('Failed to fetch stats');
       const data = await response.json();
       setStats(data);
@@ -577,7 +581,7 @@ function AnalyticsTab({ siteId, API_URL }: { siteId: string; API_URL: string }) 
   );
 }
 
-function TestimonialsTab({ siteId, API_URL }: { siteId: string; API_URL: string }) {
+function TestimonialsTab({ siteId }: { siteId: string }) {
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState<string | null>(null);
@@ -590,7 +594,12 @@ function TestimonialsTab({ siteId, API_URL }: { siteId: string; API_URL: string 
   const fetchTestimonials = async () => {
     try {
       // Use ?all=true to get all testimonials (including unpublished) for admin
-      const response = await fetch(`${API_URL}/api/testimonials?siteId=${siteId}&all=true`);
+      const token = localStorage.getItem('auth_token');
+      const response = await fetch(`/api/testimonials?siteId=${siteId}&all=true`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
       if (!response.ok) throw new Error('Failed to fetch testimonials');
       const data = await response.json();
       setTestimonials(data);
@@ -605,7 +614,8 @@ function TestimonialsTab({ siteId, API_URL }: { siteId: string; API_URL: string 
   const handleTogglePublish = async (testimonialId: string, currentStatus: boolean) => {
     setUpdating(testimonialId);
     try {
-      const response = await fetch(`${API_URL}/api/testimonials/${testimonialId}`, {
+      const token = localStorage.getItem('auth_token');
+      const response = await fetch(`/api/testimonials/${testimonialId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

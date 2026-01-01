@@ -501,7 +501,7 @@ export default function TestimonialDisplayBuilder({ displayConfig, theme, onUpda
                 </div>
               )}
               <p style={{ color: localConfig.cardStyle.textColor, lineHeight: '1.6' }}>
-                "This is a sample testimonial text that demonstrates how the testimonial will look with your custom styling applied."
+                &quot;This is a sample testimonial text that demonstrates how the testimonial will look with your custom styling applied.&quot;
               </p>
             </div>
           </div>
