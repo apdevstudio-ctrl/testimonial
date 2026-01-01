@@ -4,6 +4,7 @@ import connectDB from '@/lib/db/mongoose';
 import User from '@/lib/models/User';
 import { signToken } from '@/lib/services/jwt';
 
+// Register route handler
 export async function POST(req: NextRequest) {
   try {
     await connectDB();
