@@ -817,7 +817,7 @@ export default function VisualBuilder({ site, onUpdate }: VisualBuilderProps) {
                     label="Font Family"
                     value={previewConfig.theme.fontFamily}
                     onChange={(e) => updatePreview({
-                      theme: { fontFamily: e.target.value }
+                      theme: { ...previewConfig.theme, fontFamily: e.target.value }
                     })}
                     placeholder="Inter, sans-serif"
                   />
@@ -826,7 +826,7 @@ export default function VisualBuilder({ site, onUpdate }: VisualBuilderProps) {
                     label="Border Radius"
                     value={previewConfig.theme.borderRadius}
                     onChange={(e) => updatePreview({
-                      theme: { borderRadius: e.target.value }
+                      theme: { ...previewConfig.theme, borderRadius: e.target.value }
                     })}
                     placeholder="8px"
                   />
@@ -835,7 +835,7 @@ export default function VisualBuilder({ site, onUpdate }: VisualBuilderProps) {
                     label="Button Style"
                     value={previewConfig.theme.buttonStyle}
                     onChange={(e) => updatePreview({
-                      theme: { buttonStyle: e.target.value as any }
+                      theme: { ...previewConfig.theme, buttonStyle: e.target.value as any }
                     })}
                     options={[
                       { value: 'filled', label: 'Filled' },
