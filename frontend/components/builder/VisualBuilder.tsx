@@ -778,14 +778,14 @@ export default function VisualBuilder({ site, onUpdate }: VisualBuilderProps) {
                         type="color"
                         value={previewConfig.theme.primaryColor}
                         onChange={(e) => updatePreview({
-                          theme: { primaryColor: e.target.value }
+                          theme: { ...previewConfig.theme, primaryColor: e.target.value }
                         })}
                         className="h-10 w-16 border border-gray-300 rounded-lg cursor-pointer"
                       />
                       <Input
                         value={previewConfig.theme.primaryColor}
                         onChange={(e) => updatePreview({
-                          theme: { primaryColor: e.target.value }
+                          theme: { ...previewConfig.theme, primaryColor: e.target.value }
                         })}
                         className="flex-1"
                       />
@@ -799,14 +799,14 @@ export default function VisualBuilder({ site, onUpdate }: VisualBuilderProps) {
                         type="color"
                         value={previewConfig.theme.secondaryColor}
                         onChange={(e) => updatePreview({
-                          theme: { secondaryColor: e.target.value }
+                          theme: { ...previewConfig.theme, secondaryColor: e.target.value }
                         })}
                         className="h-10 w-16 border border-gray-300 rounded-lg cursor-pointer"
                       />
                       <Input
                         value={previewConfig.theme.secondaryColor}
                         onChange={(e) => updatePreview({
-                          theme: { secondaryColor: e.target.value }
+                          theme: { ...previewConfig.theme, secondaryColor: e.target.value }
                         })}
                         className="flex-1"
                       />
