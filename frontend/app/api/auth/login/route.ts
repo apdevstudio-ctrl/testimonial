@@ -4,9 +4,6 @@ import connectDB from '@/lib/db/mongoose';
 import User from '@/lib/models/User';
 import { signToken } from '@/lib/services/jwt';
 
-// Explicitly set runtime for Vercel
-export const runtime = 'nodejs';
-
 export async function POST(req: NextRequest) {
   try {
     await connectDB();
