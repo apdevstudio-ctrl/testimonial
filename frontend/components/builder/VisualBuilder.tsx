@@ -556,7 +556,7 @@ export default function VisualBuilder({ site, onUpdate }: VisualBuilderProps) {
                 <label className="block text-sm font-medium text-gray-700 mb-2">Page URL</label>
                 <div className="flex gap-2">
                   <Input
-                    value={site.siteId ? `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'}/testimonial-form/${site.siteId}` : 'Loading...'}
+                    value={site.siteId ? `${typeof window !== 'undefined' ? window.location.origin : (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000')}/testimonial-form/${site.siteId}` : 'Loading...'}
                     readOnly
                     className="flex-1 font-mono text-sm"
                   />
@@ -564,7 +564,7 @@ export default function VisualBuilder({ site, onUpdate }: VisualBuilderProps) {
                     variant="outline"
                     size="sm"
                     onClick={() => {
-                      const url = site.siteId ? `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'}/testimonial-form/${site.siteId}` : '';
+                      const url = site.siteId ? `${typeof window !== 'undefined' ? window.location.origin : (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000')}/testimonial-form/${site.siteId}` : '';
                       if (url) {
                         window.open(url, '_blank');
                       }
@@ -581,7 +581,7 @@ export default function VisualBuilder({ site, onUpdate }: VisualBuilderProps) {
                 <label className="block text-sm font-medium text-gray-700 mb-2">Embed Code</label>
                 <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-2">
                   <code className="text-sm text-gray-800 font-mono break-all">
-                    {site.siteId ? `<iframe src="${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'}/testimonial-form/${site.siteId}" width="100%" height="800" frameborder="0"></iframe>` : 'Loading...'}
+                    {site.siteId ? `<iframe src="${typeof window !== 'undefined' ? window.location.origin : (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000')}/testimonial-form/${site.siteId}" width="100%" height="800" frameborder="0"></iframe>` : 'Loading...'}
                   </code>
                 </div>
                 <Button
@@ -616,7 +616,7 @@ export default function VisualBuilder({ site, onUpdate }: VisualBuilderProps) {
                 <label className="block text-sm font-medium text-gray-700 mb-2">Direct Link</label>
                 <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-2">
                   <code className="text-sm text-gray-800 font-mono break-all">
-                    {site.siteId ? `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'}/testimonial-form/${site.siteId}` : 'Loading...'}
+                    {site.siteId ? `${typeof window !== 'undefined' ? window.location.origin : (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000')}/testimonial-form/${site.siteId}` : 'Loading...'}
                   </code>
                 </div>
                 <Button

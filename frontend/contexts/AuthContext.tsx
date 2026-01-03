@@ -29,8 +29,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
-
   useEffect(() => {
     // Check for stored token on mount
     const storedToken = localStorage.getItem('auth_token');
@@ -45,7 +43,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const fetchUserProfile = async (authToken: string) => {
     try {
-      const response = await fetch(`${API_URL}/api/auth/me`, {
+      const response = await fetch('/api/auth/me', {
         headers: {
           'Authorization': `Bearer ${authToken}`,
         },

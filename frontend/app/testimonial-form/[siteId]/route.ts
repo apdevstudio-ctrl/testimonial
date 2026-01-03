@@ -15,7 +15,12 @@ export async function GET(
       return new NextResponse('Site not found', { status: 404 });
     }
 
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || process.env.API_URL || 'http://localhost:3001';
+    // Get API URL from request headers (works on Vercel and localhost)
+    const host = req.headers.get('host') || '';
+    const protocol = req.headers.get('x-forwarded-proto') || (host.includes('localhost') ? 'http' : 'https');
+    const apiUrl = host 
+      ? `${protocol}://${host}`
+      : (process.env.NEXT_PUBLIC_API_URL || process.env.API_URL || 'http://localhost:3001');
     const pageDesign = site.pageDesign || {
       hero: {
         enabled: true,
