@@ -15,10 +15,7 @@ const nextConfig = {
     }
     return config;
   },
-  // Disable symlinks to avoid OneDrive issues on Windows
-  experimental: {
-    outputFileTracingIncludes: {},
-  },
+  // Note: Removed outputFileTracingIncludes as it may cause issues with Vercel
 }
 
 module.exports = nextConfig
