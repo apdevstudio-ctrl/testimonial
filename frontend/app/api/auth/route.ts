@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import connectDB from '@/lib/db/mongoose';
 import User from '@/lib/models/User';
 import { signToken } from '@/lib/services/jwt';
