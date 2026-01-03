@@ -1,5 +1,15 @@
 // API utility functions for making authenticated requests
-// Uses relative URLs since we're using Next.js API routes
+// Uses absolute URLs for Vercel compatibility
+
+export function getApiUrl(path: string): string {
+  // In browser, use window.location.origin for absolute URLs
+  // This works on Vercel where relative paths might not resolve correctly
+  if (typeof window !== 'undefined') {
+    return `${window.location.origin}${path.startsWith('/') ? path : `/${path}`}`;
+  }
+  // Server-side fallback (shouldn't be used for client-side API calls)
+  return path;
+}
 
 export function getAuthHeaders(): HeadersInit {
   const token = typeof window !== 'undefined' ? localStorage.getItem('auth_token') : null;
@@ -17,8 +27,9 @@ export function getAuthHeaders(): HeadersInit {
 export async function fetchWithAuth(url: string, options: RequestInit = {}) {
   const headers = getAuthHeaders();
   
-  // Use relative URL for Next.js API routes
-  const response = await fetch(url.startsWith('/') ? url : `/${url}`, {
+  // Use absolute URL for Vercel compatibility
+  const fullUrl = getApiUrl(url);
+  const response = await fetch(fullUrl, {
     ...options,
     headers: {
       ...headers,
