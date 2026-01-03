@@ -1,6 +1,5 @@
 // API utility functions for making authenticated requests
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+// Uses relative URLs since we're using Next.js API routes
 
 export function getAuthHeaders(): HeadersInit {
   const token = typeof window !== 'undefined' ? localStorage.getItem('auth_token') : null;
@@ -18,7 +17,8 @@ export function getAuthHeaders(): HeadersInit {
 export async function fetchWithAuth(url: string, options: RequestInit = {}) {
   const headers = getAuthHeaders();
   
-  const response = await fetch(`${API_URL}${url}`, {
+  // Use relative URL for Next.js API routes
+  const response = await fetch(url.startsWith('/') ? url : `/${url}`, {
     ...options,
     headers: {
       ...headers,
