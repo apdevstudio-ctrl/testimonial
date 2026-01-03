@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { authenticate } from '@/lib/middleware/auth';
 
+// Explicitly set runtime for Vercel
+export const runtime = 'nodejs';
+
 export async function GET(req: NextRequest) {
   try {
     const user = await authenticate(req);
