@@ -89,7 +89,7 @@
         // Load script dynamically to catch errors
         const API_URL = 'http://localhost:3001'; // Next.js frontend server
         const script = document.createElement('script');
-        script.src = `${API_URL}/api/script.js`;
+        script.src = `${API_URL}/script.js`; // Route is at /script.js, not /api/script.js
         script.setAttribute('data-site-id', '78aa25ae-fe26-441a-b709-31320479433b');
         script.async = true;
         
@@ -113,7 +113,7 @@
             document.getElementById('testimonials-container').innerHTML = `
                 <div class="status-message error">
                     <h3>⚠️ Script Failed to Load</h3>
-                    <p>Could not load script from ${API_URL}/api/script.js</p>
+                    <p>Could not load script from ${API_URL}/script.js</p>
                     <p>Make sure:</p>
                     <ul>
                         <li>Next.js frontend is running: <code>cd frontend && npm run dev</code></li>
@@ -290,7 +290,7 @@
                     container.innerHTML = `
                         <div style="padding: 20px; text-align: center; color: #dc3545;">
                             <h3>⚠️ Script Failed to Load</h3>
-                            <p>Could not load script from ${API_URL}/api/script.js</p>
+                            <p>Could not load script from ${API_URL}/script.js</p>
                             <p style="font-size: 12px; margin-top: 10px;">
                                 Make sure Next.js frontend is running and script is built
                             </p>
