@@ -5,8 +5,9 @@ import path from 'path';
 export async function GET(req: NextRequest) {
   try {
     // Calculate path to script
+    // process.cwd() is the frontend directory, so we need to go up one level
     const projectRoot = process.cwd();
-    const scriptPath = path.join(projectRoot, 'script', 'dist', 'testimonial-script.js');
+    const scriptPath = path.join(projectRoot, '..', 'script', 'dist', 'testimonial-script.js');
 
     if (fs.existsSync(scriptPath)) {
       const scriptContent = fs.readFileSync(scriptPath, 'utf-8');
