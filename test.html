@@ -71,24 +71,26 @@
             <li><strong>Site ID:</strong> <span id="debug-site-id">1</span></li>
             <li><strong>Script Status:</strong> <span id="debug-script-status">Checking...</span></li>
             <li><strong>Widget Status:</strong> <span id="debug-widget-status">Checking...</span></li>
-            <li><strong>Backend URL:</strong> http://localhost:3000</li>
+            <li><strong>API URL:</strong> <span id="debug-api-url">http://localhost:3001</span></li>
         </ul>
         <p style="margin-top: 10px; color: #666;">
             <strong>To test:</strong><br>
-            1. Make sure backend is running: <code>cd backend && npm run start:dev</code><br>
-            2. Create a site with ID "1" in the dashboard at http://localhost:3001<br>
-            3. Submit a testimonial using the "Give Testimonial" button<br>
-            4. Publish the testimonial in the dashboard<br>
-            5. Refresh this page to see it displayed
+            1. Make sure Next.js frontend is running: <code>cd frontend && npm run dev</code><br>
+            2. Build the script: <code>cd script && npm run build</code><br>
+            3. Create a site in the dashboard at http://localhost:3001<br>
+            4. Submit a testimonial using the "Give Testimonial" button<br>
+            5. Publish the testimonial in the dashboard<br>
+            6. Refresh this page to see it displayed
         </p>
     </div>
 
     <!-- Include the Testimonial Script -->
     <script>
         // Load script dynamically to catch errors
+        const API_URL = 'http://localhost:3001'; // Next.js frontend server
         const script = document.createElement('script');
-        script.src = 'http://localhost:3000/api/script.js';
-        script.setAttribute('data-site-id', '1');
+        script.src = `${API_URL}/api/script.js`;
+        script.setAttribute('data-site-id', '78aa25ae-fe26-441a-b709-31320479433b');
         script.async = true;
         
         script.onload = function() {
@@ -111,10 +113,10 @@
             document.getElementById('testimonials-container').innerHTML = `
                 <div class="status-message error">
                     <h3>⚠️ Script Failed to Load</h3>
-                    <p>Could not load script from http://localhost:3000/api/script.js</p>
+                    <p>Could not load script from ${API_URL}/api/script.js</p>
                     <p>Make sure:</p>
                     <ul>
-                        <li>Backend is running on port 3000</li>
+                        <li>Next.js frontend is running: <code>cd frontend && npm run dev</code></li>
                         <li>Script is built: <code>cd script && npm run build</code></li>
                         <li>Check browser console for CORS or network errors</li>
                     </ul>
@@ -159,7 +161,7 @@
             // Check if script loaded
             if (!window.TestimonialWidget) {
                 console.error('TestimonialWidget not found! Make sure:');
-                console.error('1. Backend is running on http://localhost:3000');
+                console.error('1. Next.js frontend is running: cd frontend && npm run dev');
                 console.error('2. Script is built: cd script && npm run build');
                 console.error('3. Check browser console for script loading errors');
                 
@@ -172,7 +174,7 @@
                             <h3>⚠️ Script Not Loaded</h3>
                             <p>Please check:</p>
                             <ul style="text-align: left; display: inline-block;">
-                                <li>Backend is running on http://localhost:3000</li>
+                                <li>Next.js frontend is running: <code>cd frontend && npm run dev</code></li>
                                 <li>Script is built: <code>cd script && npm run build</code></li>
                                 <li>Open browser console (F12) for errors</li>
                             </ul>
@@ -200,7 +202,7 @@
             try {
                 // Get the widget instance (it auto-initializes)
                 // Or create a new one
-                const widget = new window.TestimonialWidget('1', 'http://localhost:3000');
+                const widget = new window.TestimonialWidget('78aa25ae-fe26-441a-b709-31320479433b', API_URL);
                 console.log('Widget instance created');
                 
                 // Wait for config to load and button to appear
@@ -216,7 +218,7 @@
                     console.warn('⚠️ Button container not found. Checking config...');
                     // Check config directly
                     try {
-                        const configResponse = await fetch('http://localhost:3000/api/config/1');
+                        const configResponse = await fetch(`${API_URL}/api/config/78aa25ae-fe26-441a-b709-31320479433b`);
                         const config = await configResponse.json();
                         console.log('Config button.enabled:', config.button?.enabled);
                         console.log('Full button config:', config.button);
@@ -269,8 +271,8 @@
                             <p>${error.message}</p>
                             <p style="font-size: 12px; margin-top: 10px;">
                                 Make sure:<br>
-                                1. Site with ID "1" exists in dashboard<br>
-                                2. Backend is running<br>
+                                1. Site exists in dashboard<br>
+                                2. Next.js frontend is running<br>
                                 3. Check browser console for details
                             </p>
                         </div>
@@ -288,9 +290,9 @@
                     container.innerHTML = `
                         <div style="padding: 20px; text-align: center; color: #dc3545;">
                             <h3>⚠️ Script Failed to Load</h3>
-                            <p>Could not load script from http://localhost:3000/api/script.js</p>
+                            <p>Could not load script from ${API_URL}/api/script.js</p>
                             <p style="font-size: 12px; margin-top: 10px;">
-                                Make sure backend is running and script is built
+                                Make sure Next.js frontend is running and script is built
                             </p>
                         </div>
                     `;

@@ -45,3 +45,7 @@ data/
 *.pem
 .cache/
 
+# Test files (keep for local testing but don't commit)
+test.html
+test-server.js
+
