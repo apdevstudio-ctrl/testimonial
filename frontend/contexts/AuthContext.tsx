@@ -43,7 +43,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const fetchUserProfile = async (authToken: string) => {
     try {
-      const apiUrl = typeof window !== 'undefined' ? `${window.location.origin}/api/auth/me` : '/api/auth/me';
+      const apiUrl = typeof window !== 'undefined' ? `${window.location.origin}/api/auth` : '/api/auth';
       const response = await fetch(apiUrl, {
         headers: {
           'Authorization': `Bearer ${authToken}`,
@@ -78,7 +78,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = async (email: string, password: string) => {
     try {
-      const apiUrl = typeof window !== 'undefined' ? `${window.location.origin}/api/auth/login` : '/api/auth/login';
+      const apiUrl = typeof window !== 'undefined' ? `${window.location.origin}/api/auth?action=login` : '/api/auth?action=login';
       const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
@@ -111,7 +111,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const register = async (name: string, email: string, password: string) => {
     try {
-      const apiUrl = typeof window !== 'undefined' ? `${window.location.origin}/api/auth/register` : '/api/auth/register';
+      const apiUrl = typeof window !== 'undefined' ? `${window.location.origin}/api/auth?action=register` : '/api/auth?action=register';
       const response = await fetch(apiUrl, {
         method: 'POST',
         headers: {
