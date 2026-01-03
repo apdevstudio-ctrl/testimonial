@@ -588,7 +588,7 @@ export default function VisualBuilder({ site, onUpdate }: VisualBuilderProps) {
                   variant="outline"
                   size="sm"
                   onClick={() => {
-                    const embedCode = site.siteId ? `<iframe src="${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'}/testimonial-form/${site.siteId}" width="100%" height="800" frameborder="0"></iframe>` : '';
+                    const embedCode = site.siteId ? `<iframe src="${typeof window !== 'undefined' ? window.location.origin : (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000')}/testimonial-form/${site.siteId}" width="100%" height="800" frameborder="0"></iframe>` : '';
                     if (embedCode) {
                       navigator.clipboard.writeText(embedCode);
                       setCopiedCode('embed');
@@ -623,7 +623,7 @@ export default function VisualBuilder({ site, onUpdate }: VisualBuilderProps) {
                   variant="outline"
                   size="sm"
                   onClick={() => {
-                    const link = site.siteId ? `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'}/testimonial-form/${site.siteId}` : '';
+                    const link = site.siteId ? `${typeof window !== 'undefined' ? window.location.origin : (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000')}/testimonial-form/${site.siteId}` : '';
                     if (link) {
                       navigator.clipboard.writeText(link);
                       setCopiedCode('link');
