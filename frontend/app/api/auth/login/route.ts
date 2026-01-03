@@ -4,6 +4,9 @@ import connectDB from '@/lib/db/mongoose';
 import User from '@/lib/models/User';
 import { signToken } from '@/lib/services/jwt';
 
+// Force dynamic rendering to prevent static optimization
+export const dynamic = 'force-dynamic';
+
 export async function POST(req: NextRequest) {
   try {
     await connectDB();
