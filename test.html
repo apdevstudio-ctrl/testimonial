@@ -4,301 +4,53 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Test Testimonial Widget</title>
+    
+    <!-- CSP: Allow testimonial script to load -->
+    <meta http-equiv="Content-Security-Policy" 
+          content="script-src 'self' 'unsafe-inline' https://testimonial-frontend-soz6.vercel.app; 
+                   connect-src 'self' https://testimonial-frontend-soz6.vercel.app;">
+    
     <style>
         body {
             font-family: Arial, sans-serif;
-            padding: 40px;
             max-width: 1200px;
             margin: 0 auto;
-        }
-        h1 {
-            color: #333;
-        }
-        .content {
-            margin: 40px 0;
-            line-height: 1.6;
-        }
-        /* Container for displaying testimonials */
-        #testimonials-container {
-            margin: 40px 0;
             padding: 20px;
-            border: 2px dashed #ddd;
-            border-radius: 8px;
-            min-height: 200px;
-        }
-        
-        .status-message {
-            padding: 20px;
-            text-align: center;
-            color: #666;
-            background: #f9fafb;
-            border-radius: 8px;
-        }
-        
-        .status-message.success {
-            color: #059669;
-            background: #d1fae5;
-        }
-        
-        .status-message.error {
-            color: #dc3545;
-            background: #fee2e2;
         }
     </style>
 </head>
 <body>
-    <h1>Welcome to Our Test Website</h1>
+    <h1>Test Testimonial Widget</h1>
+    <p>This is a test page to demonstrate the testimonial widget functionality.</p>
     
-    <div class="content">
-        <p>This is a test page to demonstrate the testimonial widget. Scroll down to see testimonials displayed below.</p>
-    </div>
-
-    <!-- Testimonials Display Container -->
-    <h2>What Our Customers Say</h2>
-    <div id="testimonials-container">
-        <div class="status-message">
-            <p>Loading testimonials...</p>
-            <p style="font-size: 12px; margin-top: 10px; color: #999;">
-                If this message persists, check the browser console (F12) for errors
-            </p>
-        </div>
-    </div>
+    <!-- Testimonials Container -->
+    <div id="testimonials" style="margin: 40px 0;"></div>
     
-    <!-- Debug Info -->
-    <div style="margin-top: 40px; padding: 20px; background: #f3f4f6; border-radius: 8px; font-size: 12px;">
-        <h3 style="margin-top: 0;">Debug Information:</h3>
-        <ul>
-            <li><strong>Site ID:</strong> <span id="debug-site-id">78aa25ae-fe26-441a-b709-31320479433b</span></li>
-            <li><strong>Script Status:</strong> <span id="debug-script-status">Checking...</span></li>
-            <li><strong>Widget Status:</strong> <span id="debug-widget-status">Checking...</span></li>
-            <li><strong>API URL:</strong> <span id="debug-api-url">http://localhost:3001</span></li>
-        </ul>
-        <p style="margin-top: 10px; color: #666;">
-            <strong>To test:</strong><br>
-            1. Make sure Next.js frontend is running: <code>cd frontend && npm run dev</code><br>
-            2. Build the script: <code>cd script && npm run build</code><br>
-            3. Create a site in the dashboard at http://localhost:3001<br>
-            4. Submit a testimonial using the "Give Testimonial" button<br>
-            5. Publish the testimonial in the dashboard<br>
-            6. Refresh this page to see it displayed
-        </p>
-    </div>
-
-    <!-- Include the Testimonial Script -->
-    <script>
-        // Load script dynamically to catch errors
-        const API_URL = 'http://localhost:3001'; // Next.js frontend server
-        const script = document.createElement('script');
-        script.src = `${API_URL}/script.js`; // Route is at /script.js, not /api/script.js
-        script.setAttribute('data-site-id', '78aa25ae-fe26-441a-b709-31320479433b');
-        script.async = true;
-        
-        script.onload = function() {
-            console.log('✅ Script loaded successfully');
-            console.log('window.TestimonialWidget:', typeof window.TestimonialWidget);
-            
-            // Wait a moment for initialization
-            setTimeout(() => {
-                if (window.TestimonialWidget) {
-                    console.log('✅ TestimonialWidget is available');
-                } else {
-                    console.error('❌ TestimonialWidget not found on window object');
-                    console.log('Available window properties:', Object.keys(window).filter(k => k.includes('Testimonial')));
-                }
-            }, 500);
-        };
-        
-        script.onerror = function(e) {
-            console.error('❌ Failed to load script.js:', e);
-            document.getElementById('testimonials-container').innerHTML = `
-                <div class="status-message error">
-                    <h3>⚠️ Script Failed to Load</h3>
-                    <p>Could not load script from ${API_URL}/script.js</p>
-                    <p>Make sure:</p>
-                    <ul>
-                        <li>Next.js frontend is running: <code>cd frontend && npm run dev</code></li>
-                        <li>Script is built: <code>cd script && npm run build</code></li>
-                        <li>Check browser console for CORS or network errors</li>
-                    </ul>
-                </div>
-            `;
-        };
-        
-        document.head.appendChild(script);
+    <!-- Add the testimonial script -->
+    <script 
+        src="https://testimonial-frontend-soz6.vercel.app/script.js" 
+        data-site-id="78aa25ae-fe26-441a-b709-31320479433b">
     </script>
     
     <script>
-        // Debug information
-        console.log('Test page loaded');
-        
-        // Update debug status
-        function updateDebugStatus(elementId, status, isError = false) {
-            const element = document.getElementById(elementId);
-            if (element) {
-                element.textContent = status;
-                element.style.color = isError ? '#dc3545' : '#059669';
-            }
-        }
-        
-        // Check script loading
-        const scriptTag = document.querySelector('script[src*="script.js"]');
-        if (scriptTag) {
-            scriptTag.addEventListener('load', () => {
-                updateDebugStatus('debug-script-status', '✓ Loaded');
-            });
-            scriptTag.addEventListener('error', () => {
-                updateDebugStatus('debug-script-status', '✗ Failed to load', true);
-            });
-        }
-        
-        // Wait for page to load, then display testimonials
+        // Display testimonials
         window.addEventListener('load', async () => {
-            console.log('Page loaded, waiting for script...');
-            
-            // Wait a bit for the widget to initialize
             await new Promise(resolve => setTimeout(resolve, 2000));
             
-            // Check if script loaded
-            if (!window.TestimonialWidget) {
-                console.error('TestimonialWidget not found! Make sure:');
-                console.error('1. Next.js frontend is running: cd frontend && npm run dev');
-                console.error('2. Script is built: cd script && npm run build');
-                console.error('3. Check browser console for script loading errors');
+            if (window.TestimonialWidget) {
+                const widget = new window.TestimonialWidget(
+                    '78aa25ae-fe26-441a-b709-31320479433b',
+                    'https://testimonial-frontend-soz6.vercel.app'
+                );
                 
-                updateDebugStatus('debug-widget-status', '✗ Not found', true);
-                
-                const container = document.getElementById('testimonials-container');
-                if (container) {
-                    container.innerHTML = `
-                        <div class="status-message error">
-                            <h3>⚠️ Script Not Loaded</h3>
-                            <p>Please check:</p>
-                            <ul style="text-align: left; display: inline-block;">
-                                <li>Next.js frontend is running: <code>cd frontend && npm run dev</code></li>
-                                <li>Script is built: <code>cd script && npm run build</code></li>
-                                <li>Open browser console (F12) for errors</li>
-                            </ul>
-                        </div>
-                    `;
-                }
-                return;
-            }
-            
-            // Verify it's a constructor
-            if (typeof window.TestimonialWidget !== 'function') {
-                console.error('❌ TestimonialWidget is not a function!');
-                console.error('Type:', typeof window.TestimonialWidget);
-                console.error('Value:', window.TestimonialWidget);
-                console.error('Constructor check:', window.TestimonialWidget && window.TestimonialWidget.prototype);
-                updateDebugStatus('debug-widget-status', '✗ Not a constructor', true);
-                return;
-            }
-            
-            updateDebugStatus('debug-widget-status', '✓ Available');
-            console.log('TestimonialWidget found, creating instance...');
-            console.log('TestimonialWidget is a function:', typeof window.TestimonialWidget === 'function');
-            console.log('TestimonialWidget.prototype:', window.TestimonialWidget.prototype);
-            
-            try {
-                // Get the widget instance (it auto-initializes)
-                // Or create a new one
-                const widget = new window.TestimonialWidget('78aa25ae-fe26-441a-b709-31320479433b', API_URL);
-                console.log('Widget instance created');
-                
-                // Wait for config to load and button to appear
-                await new Promise(resolve => setTimeout(resolve, 3000));
-                
-                // Check if button appeared
-                const buttonContainer = document.getElementById('testimonial-widget-container');
-                if (buttonContainer) {
-                    console.log('✅ Button container found:', buttonContainer);
-                    // Try to access shadow DOM (might be closed, but container should exist)
-                    console.log('Shadow root exists:', buttonContainer.shadowRoot !== null);
-                } else {
-                    console.warn('⚠️ Button container not found. Checking config...');
-                    // Check config directly
-                    try {
-                        const configResponse = await fetch(`${API_URL}/api/config/78aa25ae-fe26-441a-b709-31320479433b`);
-                        const config = await configResponse.json();
-                        console.log('Config button.enabled:', config.button?.enabled);
-                        console.log('Full button config:', config.button);
-                    } catch (e) {
-                        console.error('Failed to fetch config:', e);
-                    }
-                }
-                
-                console.log('Attempting to display testimonials...');
-                
-                // Display testimonials
-                await widget.displayTestimonials('testimonials-container', {
+                await widget.displayTestimonials('testimonials', {
                     layout: 'grid',
                     limit: 6,
                     showRating: true,
                     showAuthor: true
                 });
-                
-                console.log('Testimonials display called');
-                
-                // Check if container is still empty (no testimonials)
-                setTimeout(() => {
-                    const container = document.getElementById('testimonials-container');
-                    if (container && container.children.length === 0) {
-                        container.innerHTML = `
-                            <div class="status-message success">
-                                <h3>✓ Script Working!</h3>
-                                <p>No testimonials found yet. This is normal for a new site.</p>
-                                <p style="font-size: 12px; margin-top: 10px;">
-                                    <strong>Next steps:</strong><br>
-                                    1. Click the "Give Testimonial" button (should appear on the page)<br>
-                                    2. Submit a testimonial<br>
-                                    3. Go to dashboard and publish it<br>
-                                    4. Refresh this page to see it displayed
-                                </p>
-                            </div>
-                        `;
-                    }
-                }, 1000);
-                
-            } catch (error) {
-                console.error('Error displaying testimonials:', error);
-                updateDebugStatus('debug-widget-status', '✗ Error: ' + error.message, true);
-                
-                const container = document.getElementById('testimonials-container');
-                if (container) {
-                    container.innerHTML = `
-                        <div class="status-message error">
-                            <h3>⚠️ Error Loading Testimonials</h3>
-                            <p>${error.message}</p>
-                            <p style="font-size: 12px; margin-top: 10px;">
-                                Make sure:<br>
-                                1. Site exists in dashboard<br>
-                                2. Next.js frontend is running<br>
-                                3. Check browser console for details
-                            </p>
-                        </div>
-                    `;
-                }
             }
         });
-        
-        // Also check if script loads
-        window.addEventListener('error', (e) => {
-            if (e.target && e.target.src && e.target.src.includes('script.js')) {
-                console.error('Failed to load script.js:', e);
-                const container = document.getElementById('testimonials-container');
-                if (container) {
-                    container.innerHTML = `
-                        <div style="padding: 20px; text-align: center; color: #dc3545;">
-                            <h3>⚠️ Script Failed to Load</h3>
-                            <p>Could not load script from ${API_URL}/script.js</p>
-                            <p style="font-size: 12px; margin-top: 10px;">
-                                Make sure Next.js frontend is running and script is built
-                            </p>
-                        </div>
-                    `;
-                }
-            }
-        }, true);
     </script>
 </body>
 </html>
