@@ -15,15 +15,22 @@ console.log('Destination:', scriptDest);
 // Check if source exists
 if (!fs.existsSync(scriptSource)) {
   console.warn('⚠️  Warning: Script file not found at:', scriptSource);
-  console.warn('   Make sure to run "npm run build:script" in the script directory first.');
-  // Create empty public directory if it doesn't exist
+  console.warn('   This is normal on Vercel deployments where only frontend directory is available.');
+  
+  // If destination already exists (committed file), don't overwrite it
+  if (fs.existsSync(scriptDest)) {
+    console.log('✅ Script file already exists in public/ directory. Skipping copy.');
+    const stats = fs.statSync(scriptDest);
+    console.log(`   File size: ${(stats.size / 1024).toFixed(2)} KB`);
+    process.exit(0);
+  }
+  
+  // Only create placeholder if destination doesn't exist
   const publicDir = path.dirname(scriptDest);
   if (!fs.existsSync(publicDir)) {
     fs.mkdirSync(publicDir, { recursive: true });
   }
-  // Create a placeholder file so build doesn't fail
-  fs.writeFileSync(scriptDest, 'console.warn("Testimonial script not built. Please build the script package first.");');
-  console.warn('   Created placeholder file. Script will not work until built.');
+  console.warn('   No script file found. Build will continue but script.js route may not work.');
   process.exit(0);
 }
 
