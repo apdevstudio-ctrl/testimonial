@@ -4,12 +4,26 @@ import path from 'path';
 
 export async function GET(req: NextRequest) {
   try {
-    // Calculate path to script
-    // process.cwd() is the frontend directory, so we need to go up one level
     const projectRoot = process.cwd();
-    const scriptPath = path.join(projectRoot, '..', 'script', 'dist', 'testimonial-script.js');
+    
+    // Try multiple paths in order of preference:
+    // 1. public/script.js (Vercel deployment - copied during build)
+    // 2. ../script/dist/testimonial-script.js (local development)
+    // 3. Fallback placeholder
+    const scriptPaths = [
+      path.join(projectRoot, 'public', 'script.js'),
+      path.join(projectRoot, '..', 'script', 'dist', 'testimonial-script.js'),
+    ];
 
-    if (fs.existsSync(scriptPath)) {
+    let scriptPath: string | null = null;
+    for (const potentialPath of scriptPaths) {
+      if (fs.existsSync(potentialPath)) {
+        scriptPath = potentialPath;
+        break;
+      }
+    }
+
+    if (scriptPath) {
       const scriptContent = fs.readFileSync(scriptPath, 'utf-8');
       
       return new NextResponse(scriptContent, {
@@ -30,6 +44,7 @@ export async function GET(req: NextRequest) {
       // Testimonial SaaS Script Loader
       // This is a placeholder - build the script package to get the full script
       console.warn('Testimonial script not built yet. Please build the script package.');
+      // To build: cd script && npm run build
     `;
 
     return new NextResponse(fallbackScript, {
