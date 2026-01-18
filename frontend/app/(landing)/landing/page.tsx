@@ -57,7 +57,8 @@ export default function LandingPage() {
               <img 
                 src="/logo.png" 
                 alt="TestiFlow" 
-                className="h-16 md:h-20 w-auto"
+                className="h-24 md:h-28 w-auto object-contain"
+                style={{ minHeight: '60px' }}
               />
             </div>
             <div className="hidden md:flex items-center space-x-8">

@@ -58,7 +58,8 @@ export default function SignUpPage() {
             <img 
               src="/logo.png" 
               alt="TestiFlow" 
-              className="h-16 w-auto mx-auto max-w-[250px]"
+              className="h-24 md:h-28 w-auto mx-auto object-contain"
+              style={{ minHeight: '80px', maxWidth: '300px' }}
             />
           </Link>
           <h2 className="mt-6 text-3xl font-bold text-gray-900">Create your account</h2>

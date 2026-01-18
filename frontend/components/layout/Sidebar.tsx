@@ -21,7 +21,8 @@ export default function Sidebar() {
             <img 
               src="/logo.png" 
               alt="TestiFlow" 
-              className="h-14 w-auto"
+              className="h-24 w-auto object-contain"
+              style={{ minHeight: '60px' }}
             />
           </div>
           <nav className="flex-1 px-3 space-y-1">
