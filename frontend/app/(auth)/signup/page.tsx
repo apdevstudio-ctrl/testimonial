@@ -55,9 +55,11 @@ export default function SignUpPage() {
         {/* Logo/Header */}
         <div className="text-center mb-8">
           <Link href="/" className="inline-block">
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-              TestiFlow
-            </h1>
+            <img 
+              src="/logo.png" 
+              alt="TestiFlow" 
+              className="h-10 w-auto mx-auto"
+            />
           </Link>
           <h2 className="mt-6 text-3xl font-bold text-gray-900">Create your account</h2>
           <p className="mt-2 text-sm text-gray-600">
