@@ -55,7 +55,7 @@ export default function LandingPage() {
           <div className="flex justify-between items-center h-16">
             <div className="flex-shrink-0">
               <h1 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-                Testimonial SaaS
+                TestiFlow
               </h1>
             </div>
             <div className="hidden md:flex items-center space-x-8">
@@ -150,7 +150,7 @@ export default function LandingPage() {
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-                Why choose Testimonial SaaS?
+                Why choose TestiFlow?
               </h2>
               <ul className="space-y-4">
                 {benefits.map((benefit, index) => (
@@ -208,7 +208,7 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-4 gap-8">
             <div>
-              <h3 className="text-xl font-bold mb-4">Testimonial SaaS</h3>
+              <h3 className="text-xl font-bold mb-4">TestiFlow</h3>
               <p className="text-gray-400">
                 Collect and display customer testimonials with ease.
               </p>
@@ -238,7 +238,7 @@ export default function LandingPage() {
             </div>
           </div>
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; {new Date().getFullYear()} Testimonial SaaS. All rights reserved.</p>
+            <p>&copy; {new Date().getFullYear()} TestiFlow. All rights reserved.</p>
           </div>
         </div>
       </footer>

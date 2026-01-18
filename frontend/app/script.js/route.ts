@@ -41,7 +41,7 @@ export async function GET(req: NextRequest) {
 
     // Fallback if script not built
     const fallbackScript = `
-      // Testimonial SaaS Script Loader
+      // TestiFlow Script Loader
       // This is a placeholder - build the script package to get the full script
       console.warn('Testimonial script not built yet. Please build the script package.');
       // To build: cd script && npm run build

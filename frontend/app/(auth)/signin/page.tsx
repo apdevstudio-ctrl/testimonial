@@ -43,7 +43,7 @@ export default function SignInPage() {
         <div className="text-center mb-8">
           <Link href="/" className="inline-block">
             <h1 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-              Testimonial SaaS
+              TestiFlow
             </h1>
           </Link>
           <h2 className="mt-6 text-3xl font-bold text-gray-900">Sign in to your account</h2>

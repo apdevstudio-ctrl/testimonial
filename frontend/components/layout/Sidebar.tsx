@@ -19,7 +19,7 @@ export default function Sidebar() {
         <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
           <div className="flex items-center flex-shrink-0 px-4 mb-8">
             <h1 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-              Testimonial SaaS
+              TestiFlow
             </h1>
           </div>
           <nav className="flex-1 px-3 space-y-1">

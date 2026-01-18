@@ -1,4 +1,4 @@
-# Testimonial SaaS Frontend Dashboard
+# TestiFlow Frontend Dashboard
 
 Next.js dashboard for managing testimonial collection sites.
 
