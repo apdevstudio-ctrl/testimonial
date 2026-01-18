@@ -45,7 +45,7 @@ export default function SignInPage() {
             <img 
               src="/logo.png" 
               alt="TestiFlow" 
-              className="h-10 w-auto mx-auto"
+              className="h-16 w-auto mx-auto max-w-[250px]"
             />
           </Link>
           <h2 className="mt-6 text-3xl font-bold text-gray-900">Sign in to your account</h2>
