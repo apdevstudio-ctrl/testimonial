@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     description: 'The easiest way to collect and display customer testimonials. Video and text testimonials, beautiful displays, easy integration.',
     images: [
       {
-        url: '/og-image.jpg',
+        url: '/logo.png',
         width: 1200,
         height: 630,
         alt: 'TestiFlow - Testimonial Collection Platform',
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'TestiFlow - Collect & Display Customer Testimonials',
     description: 'The easiest way to collect and display customer testimonials. Video and text testimonials, beautiful displays, easy integration.',
-    images: ['/og-image.jpg'],
+    images: ['/logo.png'],
     creator: '@testiflow',
   },
   robots: {
@@ -54,14 +54,11 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: '/favicon.ico', sizes: 'any' },
-      { url: '/icon-16x16.png', sizes: '16x16', type: 'image/png' },
-      { url: '/icon-32x32.png', sizes: '32x32', type: 'image/png' },
-      { url: '/icon-192x192.png', sizes: '192x192', type: 'image/png' },
-      { url: '/icon-512x512.png', sizes: '512x512', type: 'image/png' },
+      { url: '/favicon.png', sizes: 'any' },
+      { url: '/logo.png', sizes: 'any' },
     ],
     apple: [
-      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+      { url: '/logo.png', sizes: '180x180', type: 'image/png' },
     ],
   },
   manifest: '/manifest.json',
@@ -78,9 +75,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <link rel="icon" href="/favicon.ico" sizes="any" />
-        <link rel="icon" href="/icon.svg" type="image/svg+xml" />
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link rel="icon" href="/favicon.png" sizes="any" />
+        <link rel="apple-touch-icon" href="/logo.png" />
         <meta name="theme-color" content="#4f46e5" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="application-name" content="TestiFlow" />
