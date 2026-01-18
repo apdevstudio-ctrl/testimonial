@@ -21,7 +21,7 @@ export default function Sidebar() {
             <img 
               src="/logo.png" 
               alt="TestiFlow" 
-              className="h-12 w-auto max-w-[200px]"
+              className="h-14 w-auto"
             />
           </div>
           <nav className="flex-1 px-3 space-y-1">

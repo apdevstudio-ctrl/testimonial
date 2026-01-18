@@ -57,7 +57,7 @@ export default function LandingPage() {
               <img 
                 src="/logo.png" 
                 alt="TestiFlow" 
-                className="h-12 w-auto max-w-[200px]"
+                className="h-16 md:h-20 w-auto"
               />
             </div>
             <div className="hidden md:flex items-center space-x-8">
