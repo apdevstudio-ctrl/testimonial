@@ -48,12 +48,40 @@ interface Site {
   isActive: boolean;
   formDesign?: any;
   testimonialDisplay?: {
-    component: 'grid' | 'carousel' | 'list' | 'card' | 'minimal';
+    component?: 'grid' | 'carousel' | 'list' | 'card' | 'minimal';
     layout?: 'grid' | 'carousel' | 'list';
+    itemsPerRow?: number;
     columns?: number;
+    limit?: number;
     showRating?: boolean;
+    showAuthor?: boolean;
     showAvatar?: boolean;
     showCompany?: boolean;
+    showVideo?: boolean;
+    cardStyle?: {
+      backgroundColor: string;
+      textColor: string;
+      borderColor: string;
+      borderRadius: string;
+      padding: string;
+      shadow: 'none' | 'small' | 'medium' | 'large';
+    };
+    authorStyle?: {
+      showAvatar: boolean;
+      avatarSize: string;
+      showCompany: boolean;
+      showPosition: boolean;
+      textColor: string;
+    };
+    ratingStyle?: {
+      starColor: string;
+      emptyStarColor: string;
+      size: 'small' | 'medium' | 'large';
+    };
+    spacing?: {
+      gap: string;
+      margin: string;
+    };
   };
 }
 
@@ -282,7 +310,7 @@ export default function SitePage() {
         <div className={activeTab === 'builder' ? '' : 'p-6'}>
           {activeTab === 'builder' && (
             <div className="p-6">
-              <VisualBuilder site={site} onUpdate={updateSite} />
+              <VisualBuilder site={site as any} onUpdate={updateSite} />
             </div>
           )}
           {activeTab === 'config' && (
@@ -308,8 +336,8 @@ function ConfigTab({ site, onUpdate }: { site: Site; onUpdate: (updates: Partial
   const [features, setFeatures] = useState(site.enabledFeatures);
   const [flowType, setFlowType] = useState(site.flowType);
   const [displayConfig, setDisplayConfig] = useState(site.testimonialDisplay || {
-    component: 'grid',
-    layout: 'grid',
+    component: 'grid' as const,
+    layout: 'grid' as const,
     columns: 3,
     showRating: true,
     showAvatar: true,
@@ -321,7 +349,7 @@ function ConfigTab({ site, onUpdate }: { site: Site; onUpdate: (updates: Partial
       button: config,
       enabledFeatures: features,
       flowType,
-      testimonialDisplay: displayConfig,
+      testimonialDisplay: displayConfig as any,
     });
   };
 
