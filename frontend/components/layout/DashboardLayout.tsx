@@ -29,6 +29,7 @@ export default function DashboardLayout({
         router.push('/signin');
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoading, isAuthenticated, pathname, shouldHideLayout, router]);
 
   if (shouldHideLayout) {

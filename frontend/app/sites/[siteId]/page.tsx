@@ -87,10 +87,6 @@ export default function SitePage() {
   const { showToast } = useToast();
 
 
-  useEffect(() => {
-    fetchSite();
-  }, [siteId]);
-
   const fetchSite = async () => {
     try {
       const token = localStorage.getItem('auth_token');
@@ -427,7 +423,7 @@ function ConfigTab({ site, onUpdate }: { site: Site; onUpdate: (updates: Partial
         />
         {flowType === 'page' && (
           <p className="mt-2 text-sm text-gray-500">
-            When using iframe, you'll receive an embed code instead of a script tag.
+            When using iframe, you&apos;ll receive an embed code instead of a script tag.
           </p>
         )}
       </div>
@@ -600,6 +596,7 @@ function AnalyticsTab({ siteId }: { siteId: string }) {
 
   useEffect(() => {
     fetchStats();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [siteId]);
 
   const fetchStats = async () => {
@@ -689,6 +686,7 @@ function TestimonialsTab({ siteId }: { siteId: string }) {
 
   useEffect(() => {
     fetchTestimonials();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [siteId]);
 
   const fetchTestimonials = async () => {

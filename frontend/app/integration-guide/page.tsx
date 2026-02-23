@@ -173,7 +173,7 @@ export default function IntegrationGuidePage() {
         <div className="bg-green-50 border border-green-200 rounded-lg p-4">
           <p className="text-sm text-green-800 font-medium mb-2">What you get:</p>
           <ul className="text-sm text-green-700 space-y-1 list-disc list-inside">
-            <li>"Give Testimonial" button appears automatically</li>
+            <li>&quot;Give Testimonial&quot; button appears automatically</li>
             <li>Users can submit testimonials</li>
             <li>All configuration done in dashboard</li>
           </ul>
@@ -318,7 +318,7 @@ export default function IntegrationGuidePage() {
           <div>
             <h3 className="text-lg font-medium text-gray-900 mb-2">Script blocked by CSP?</h3>
             <p className="text-gray-600 mb-2">
-              If you see "blocked:csp" error, add this meta tag to your <code className="bg-gray-100 px-2 py-1 rounded">&lt;head&gt;</code>:
+              If you see &quot;blocked:csp&quot; error, add this meta tag to your <code className="bg-gray-100 px-2 py-1 rounded">&lt;head&gt;</code>:
             </p>
             <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 relative">
               <code className="text-sm text-gray-800 font-mono whitespace-pre-wrap break-all">{cspMetaTag}</code>
@@ -360,7 +360,7 @@ export default function IntegrationGuidePage() {
             <h3 className="text-lg font-medium text-gray-900 mb-2">Duplicate testimonials?</h3>
             <p className="text-gray-700 mb-2">Make sure to:</p>
             <ul className="list-disc list-inside space-y-1 text-gray-700">
-              <li>Clear container before displaying: <code className="bg-gray-100 px-1 rounded">container.innerHTML = '';</code></li>
+              <li>Clear container before displaying: <code className="bg-gray-100 px-1 rounded">container.innerHTML = &apos;&apos;;</code></li>
               <li>Use <code className="bg-gray-100 px-1 rounded">isDisplaying</code> flag to prevent multiple calls</li>
               <li>Use <code className="bg-gray-100 px-1 rounded">{'{ once: true }'}</code> on event listeners</li>
             </ul>

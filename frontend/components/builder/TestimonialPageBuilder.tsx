@@ -99,7 +99,7 @@ export default function TestimonialPageBuilder({ pageDesign, theme, onUpdate }: 
         {/* Hero Section */}
         <Card>
           <div className="flex items-center gap-2 mb-4">
-            <Image className="h-5 w-5 text-indigo-600" />
+            <Image className="h-5 w-5 text-indigo-600" aria-label="Hero section icon" />
             <h3 className="text-lg font-semibold text-gray-900">Hero Section</h3>
           </div>
           <div className="space-y-4">
