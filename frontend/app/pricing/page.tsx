@@ -41,7 +41,7 @@ export default function PricingPage() {
             <div className="p-8">
               <div className="text-center mb-8">
                 <div className="flex items-baseline justify-center">
-                  <span className="text-5xl font-bold text-gray-900">$9</span>
+                  <span className="text-5xl font-bold text-gray-900">$0</span>
                   <span className="text-xl text-gray-600 ml-2">/month</span>
                 </div>
                 <p className="text-gray-600 mt-2">Billed monthly</p>

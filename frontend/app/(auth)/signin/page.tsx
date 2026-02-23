@@ -8,7 +8,7 @@ import { useToast } from '@/components/ui/Toast';
 import { useAuth } from '@/contexts/AuthContext';
 
 export default function SignInPage() {
-  const { login } = useAuth();
+  const { login, loginWithGoogle } = useAuth();
   const { showToast } = useToast();
   const [formData, setFormData] = useState({
     email: '',
@@ -32,8 +32,16 @@ export default function SignInPage() {
 
   const handleGoogleSignIn = async (e: React.MouseEvent) => {
     e.preventDefault();
-    // TODO: Implement Google OAuth
-    showToast('Google sign in - Coming soon!', 'info');
+    setIsLoading(true);
+    
+    try {
+      await loginWithGoogle();
+      showToast('Signed in with Google successfully!', 'success');
+    } catch (error: any) {
+      showToast(error.message || 'Google sign in failed', 'error');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (

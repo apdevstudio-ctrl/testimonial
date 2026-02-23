@@ -16,6 +16,7 @@ interface AuthContextType {
   token: string | null;
   login: (email: string, password: string) => Promise<void>;
   register: (name: string, email: string, password: string) => Promise<void>;
+  loginWithGoogle: () => Promise<void>;
   logout: () => void;
   isLoading: boolean;
   isAuthenticated: boolean;
@@ -142,6 +143,120 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const loginWithGoogle = async () => {
+    if (typeof window === 'undefined') {
+      throw new Error('Google login is only available in the browser');
+    }
+
+    const googleClientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
+    if (!googleClientId) {
+      throw new Error('Google OAuth is not configured. Please set NEXT_PUBLIC_GOOGLE_CLIENT_ID');
+    }
+
+    // Load Google Identity Services script
+    return new Promise<void>((resolve, reject) => {
+      // Check if script is already loaded
+      if ((window as any).google?.accounts) {
+        initializeGoogleSignIn(googleClientId, resolve, reject);
+      } else {
+        const script = document.createElement('script');
+        script.src = 'https://accounts.google.com/gsi/client';
+        script.async = true;
+        script.defer = true;
+        script.onload = () => {
+          initializeGoogleSignIn(googleClientId, resolve, reject);
+        };
+        script.onerror = () => {
+          reject(new Error('Failed to load Google Sign-In script'));
+        };
+        document.head.appendChild(script);
+      }
+    });
+  };
+
+  const initializeGoogleSignIn = (
+    clientId: string,
+    resolve: () => void,
+    reject: (error: Error) => void
+  ) => {
+    try {
+      const google = (window as any).google;
+      if (!google?.accounts?.id) {
+        reject(new Error('Google Sign-In not available'));
+        return;
+      }
+
+      // Initialize Google Sign-In
+      google.accounts.id.initialize({
+        client_id: clientId,
+        callback: async (response: { credential: string }) => {
+          try {
+            // Send credential to backend
+            const apiUrl = `${window.location.origin}/api/auth/google`;
+            const authResponse = await fetch(apiUrl, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ idToken: response.credential }),
+            });
+
+            const responseText = await authResponse.text();
+            let data;
+            
+            try {
+              data = responseText ? JSON.parse(responseText) : {};
+            } catch (parseError) {
+              throw new Error('Invalid response from server');
+            }
+
+            if (!authResponse.ok) {
+              throw new Error(data.message || 'Google authentication failed');
+            }
+
+            setToken(data.access_token);
+            setUser(data.user);
+            localStorage.setItem('auth_token', data.access_token);
+            router.push('/dashboard');
+            resolve();
+          } catch (error: any) {
+            reject(error);
+          }
+        },
+      });
+
+      // Trigger Google Sign-In popup
+      google.accounts.id.prompt((notification: any) => {
+        if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+          // If prompt doesn't work, use button click flow
+          const button = document.createElement('div');
+          button.id = 'google-signin-button';
+          document.body.appendChild(button);
+          
+          google.accounts.id.renderButton(button, {
+            theme: 'outline',
+            size: 'large',
+            width: 300,
+            text: 'signin_with',
+          });
+
+          // Auto-click the button
+          setTimeout(() => {
+            const btn = document.getElementById('google-signin-button');
+            if (btn) {
+              const clickable = btn.querySelector('div[role="button"]') as HTMLElement;
+              if (clickable) {
+                clickable.click();
+              }
+            }
+          }, 100);
+        }
+      });
+    } catch (error: any) {
+      reject(new Error(error.message || 'Failed to initialize Google Sign-In'));
+    }
+  };
+
   const logout = () => {
     localStorage.removeItem('auth_token');
     setToken(null);
@@ -156,6 +271,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         token,
         login,
         register,
+        loginWithGoogle,
         logout,
         isLoading,
         isAuthenticated: !!token && !!user,
@@ -173,4 +289,3 @@ export function useAuth() {
   }
   return context;
 }
-

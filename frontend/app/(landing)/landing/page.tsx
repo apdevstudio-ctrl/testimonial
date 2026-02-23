@@ -1,43 +1,10 @@
 'use client';
 
 import Link from 'next/link';
-import { ArrowRight, Check, Video, MessageSquare, BarChart3, Zap, Shield, Globe } from 'lucide-react';
+import { ArrowRight, Check, Video } from 'lucide-react';
 import Button from '@/components/ui/Button';
 
 export default function LandingPage() {
-  const features = [
-    {
-      icon: Video,
-      title: 'Video Testimonials',
-      description: 'Collect engaging video testimonials from your customers with ease.',
-    },
-    {
-      icon: MessageSquare,
-      title: 'Text Reviews',
-      description: 'Enable customers to share written testimonials and reviews.',
-    },
-    {
-      icon: BarChart3,
-      title: 'Analytics Dashboard',
-      description: 'Track engagement, views, and testimonial performance in real-time.',
-    },
-    {
-      icon: Zap,
-      title: 'Easy Integration',
-      description: 'One-line script integration. No technical knowledge required.',
-    },
-    {
-      icon: Shield,
-      title: 'Secure & Reliable',
-      description: 'Your data is safe with enterprise-grade security and backups.',
-    },
-    {
-      icon: Globe,
-      title: 'Customizable',
-      description: 'Match your brand with custom themes, colors, and designs.',
-    },
-  ];
-
   const benefits = [
     'Increase conversion rates by up to 34%',
     'Build trust with social proof',
@@ -54,24 +21,23 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex-shrink-0">
-              <img 
-                src="/logo.png" 
-                alt="TestiFlow" 
-                className="h-24 md:h-28 w-auto object-contain"
-                style={{ minHeight: '60px' }}
-              />
+              <Link href="/landing">
+                <img 
+                  src="/logo.png" 
+                  alt="TestiFlow" 
+                  className="h-24 md:h-28 w-auto object-contain cursor-pointer"
+                  style={{ minHeight: '60px' }}
+                />
+              </Link>
             </div>
             <div className="hidden md:flex items-center space-x-8">
-              <Link href="#features" className="text-gray-600 hover:text-gray-900">
-                Features
-              </Link>
               <Link href="#pricing" className="text-gray-600 hover:text-gray-900">
                 Pricing
               </Link>
               <Link href="/signin" className="text-gray-600 hover:text-gray-900">
                 Sign In
               </Link>
-              <Link href="/signup">
+              <Link href="/integration-guide">
                 <Button variant="primary">Get Started</Button>
               </Link>
             </div>
@@ -113,39 +79,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Features Section */}
-      <section id="features" className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Everything you need to collect testimonials
-            </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Powerful features to help you build trust and grow your business
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {features.map((feature, index) => {
-              const Icon = feature.icon;
-              return (
-                <div
-                  key={index}
-                  className="bg-gray-50 rounded-xl p-6 hover:shadow-lg transition-shadow"
-                >
-                  <div className="bg-indigo-100 rounded-lg w-12 h-12 flex items-center justify-center mb-4">
-                    <Icon className="h-6 w-6 text-indigo-600" />
-                  </div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                    {feature.title}
-                  </h3>
-                  <p className="text-gray-600">{feature.description}</p>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
 
       {/* Benefits Section */}
       <section className="py-20 bg-gradient-to-br from-indigo-50 to-purple-50">
@@ -164,7 +97,7 @@ export default function LandingPage() {
                 ))}
               </ul>
               <div className="mt-8">
-                <Link href="/signup">
+                <Link href="/integration-guide">
                   <Button variant="primary" size="lg">
                     Get Started Now
                     <ArrowRight className="ml-2 h-5 w-5" />
@@ -219,24 +152,15 @@ export default function LandingPage() {
             <div>
               <h4 className="font-semibold mb-4">Product</h4>
               <ul className="space-y-2 text-gray-400">
-                <li><Link href="#features" className="hover:text-white">Features</Link></li>
                 <li><Link href="/pricing" className="hover:text-white">Pricing</Link></li>
-                <li><Link href="/signup" className="hover:text-white">Get Started</Link></li>
+                <li><Link href="/integration-guide" className="hover:text-white">Get Started</Link></li>
               </ul>
             </div>
             <div>
               <h4 className="font-semibold mb-4">Company</h4>
               <ul className="space-y-2 text-gray-400">
-                <li><Link href="/about" className="hover:text-white">About</Link></li>
-                <li><Link href="/blog" className="hover:text-white">Blog</Link></li>
+                <li><Link href="/landing" className="hover:text-white">About</Link></li>
                 <li><Link href="/contact" className="hover:text-white">Contact</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">Legal</h4>
-              <ul className="space-y-2 text-gray-400">
-                <li><Link href="/terms" className="hover:text-white">Terms</Link></li>
-                <li><Link href="/privacy" className="hover:text-white">Privacy</Link></li>
               </ul>
             </div>
           </div>

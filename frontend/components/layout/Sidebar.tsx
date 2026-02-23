@@ -2,11 +2,12 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, Settings, BarChart3, MessageSquare, Plus } from 'lucide-react';
+import { LayoutDashboard, Settings, BarChart3, MessageSquare, Plus, BookOpen } from 'lucide-react';
 import clsx from 'clsx';
 
 const navigation = [
   { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
+  { name: 'Integration Guide', href: '/integration-guide', icon: BookOpen },
   { name: 'Pricing', href: '/pricing', icon: BarChart3 },
 ];
 
@@ -17,7 +18,7 @@ export default function Sidebar() {
     <div className="hidden md:flex md:w-64 md:flex-col md:fixed md:inset-y-0">
       <div className="flex-1 flex flex-col min-h-0 bg-white border-r border-gray-200">
         <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
-          <div className="flex items-center flex-shrink-0 px-4 mb-8">
+          <div className="flex items-center justify-center flex-shrink-0 px-4 mb-8">
             <img 
               src="/logo.png" 
               alt="TestiFlow" 

@@ -47,6 +47,14 @@ interface Site {
   flowType: 'modal' | 'drawer' | 'page';
   isActive: boolean;
   formDesign?: any;
+  testimonialDisplay?: {
+    component: 'grid' | 'carousel' | 'list' | 'card' | 'minimal';
+    layout?: 'grid' | 'carousel' | 'list';
+    columns?: number;
+    showRating?: boolean;
+    showAvatar?: boolean;
+    showCompany?: boolean;
+  };
 }
 
 interface Testimonial {
@@ -166,7 +174,18 @@ export default function SitePage() {
     );
   }
 
-  const scriptSnippet = `<script src="${typeof window !== 'undefined' ? window.location.origin : ''}/script.js" data-site-id="${site.siteId}"></script>`;
+  const getIntegrationCode = () => {
+    const baseUrl = typeof window !== 'undefined' ? window.location.origin : '';
+    if (site.flowType === 'page') {
+      // Return iframe embed code
+      return `<iframe src="${baseUrl}/testimonial-form/${site.siteId}" width="100%" height="800" frameborder="0" allow="camera; microphone; autoplay"></iframe>`;
+    } else {
+      // Return script tag
+      return `<script src="${baseUrl}/script.js" data-site-id="${site.siteId}"></script>`;
+    }
+  };
+
+  const scriptSnippet = getIntegrationCode();
 
   const tabs = [
     { id: 'builder', label: 'Builder', icon: Wand2 },
@@ -210,11 +229,15 @@ export default function SitePage() {
         <div className="flex items-center justify-between mb-4">
           <div>
             <h2 className="text-lg font-semibold text-gray-900 mb-1">Integration Code</h2>
-            <p className="text-sm text-gray-600">Add this script tag to your website to enable testimonial collection</p>
+            <p className="text-sm text-gray-600">
+              {site.flowType === 'page' 
+                ? 'Add this iframe code to your website to embed the testimonial form'
+                : 'Add this script tag to your website to enable testimonial collection'}
+            </p>
           </div>
         </div>
         <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-4">
-          <code className="text-sm text-gray-800 font-mono break-all">{scriptSnippet}</code>
+          <code className="text-sm text-gray-800 font-mono break-all whitespace-pre-wrap">{scriptSnippet}</code>
         </div>
         <Button
           onClick={() => copyToClipboard(scriptSnippet)}
@@ -288,12 +311,21 @@ function ConfigTab({ site, onUpdate }: { site: Site; onUpdate: (updates: Partial
   const [config, setConfig] = useState(site.button);
   const [features, setFeatures] = useState(site.enabledFeatures);
   const [flowType, setFlowType] = useState(site.flowType);
+  const [displayConfig, setDisplayConfig] = useState(site.testimonialDisplay || {
+    component: 'grid',
+    layout: 'grid',
+    columns: 3,
+    showRating: true,
+    showAvatar: true,
+    showCompany: true,
+  });
 
   const handleSave = () => {
     onUpdate({
       button: config,
       enabledFeatures: features,
       flowType,
+      testimonialDisplay: displayConfig,
     });
   };
 
@@ -393,6 +425,74 @@ function ConfigTab({ site, onUpdate }: { site: Site; onUpdate: (updates: Partial
             { value: 'page', label: 'Page (iframe)' },
           ]}
         />
+        {flowType === 'page' && (
+          <p className="mt-2 text-sm text-gray-500">
+            When using iframe, you'll receive an embed code instead of a script tag.
+          </p>
+        )}
+      </div>
+
+      <div>
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">Testimonial Display Component</h3>
+        <p className="text-sm text-gray-600 mb-4">
+          Choose how testimonials will appear on your website.
+        </p>
+        <Select
+          label="Display Style"
+          value={displayConfig.component}
+          onChange={(e) => setDisplayConfig({ ...displayConfig, component: e.target.value as any })}
+          options={[
+            { value: 'grid', label: 'Grid Layout' },
+            { value: 'carousel', label: 'Carousel' },
+            { value: 'list', label: 'List View' },
+            { value: 'card', label: 'Card Style' },
+            { value: 'minimal', label: 'Minimal' },
+          ]}
+        />
+        <div className="mt-4 space-y-3">
+          <label className="flex items-center gap-3 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={displayConfig.showRating ?? true}
+              onChange={(e) => setDisplayConfig({ ...displayConfig, showRating: e.target.checked })}
+              className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+            />
+            <span className="text-sm font-medium text-gray-700">Show Rating Stars</span>
+          </label>
+          <label className="flex items-center gap-3 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={displayConfig.showAvatar ?? true}
+              onChange={(e) => setDisplayConfig({ ...displayConfig, showAvatar: e.target.checked })}
+              className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+            />
+            <span className="text-sm font-medium text-gray-700">Show Author Avatar</span>
+          </label>
+          <label className="flex items-center gap-3 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={displayConfig.showCompany ?? true}
+              onChange={(e) => setDisplayConfig({ ...displayConfig, showCompany: e.target.checked })}
+              className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+            />
+            <span className="text-sm font-medium text-gray-700">Show Company/Position</span>
+          </label>
+        </div>
+        {displayConfig.component === 'grid' && (
+          <div className="mt-4">
+            <label className="block text-sm font-medium text-gray-700 mb-2">Grid Columns</label>
+            <Select
+              value={displayConfig.columns?.toString() || '3'}
+              onChange={(e) => setDisplayConfig({ ...displayConfig, columns: parseInt(e.target.value) })}
+              options={[
+                { value: '1', label: '1 Column' },
+                { value: '2', label: '2 Columns' },
+                { value: '3', label: '3 Columns' },
+                { value: '4', label: '4 Columns' },
+              ]}
+            />
+          </div>
+        )}
       </div>
 
       <div className="flex justify-end pt-4 border-t border-gray-200">
