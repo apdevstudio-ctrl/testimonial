@@ -39,12 +39,16 @@ let TestimonialWidgetClass: any;
     };
     flowType: 'modal' | 'drawer' | 'page';
     testimonialDisplay?: {
-      layout: 'grid' | 'carousel' | 'list';
+      component?: 'grid' | 'carousel' | 'list' | 'card' | 'minimal';
+      layout?: 'grid' | 'carousel' | 'list';
       itemsPerRow?: number;
+      columns?: number;
       limit?: number;
-      showRating: boolean;
-      showAuthor: boolean;
-      showVideo: boolean;
+      showRating?: boolean;
+      showAuthor?: boolean;
+      showAvatar?: boolean;
+      showCompany?: boolean;
+      showVideo?: boolean;
       cardStyle: {
         backgroundColor: string;
         textColor: string;
@@ -332,6 +336,85 @@ let TestimonialWidgetClass: any;
     }
 
     private openPage(): void {
+      // Create overlay container for iframe with close button
+      const overlay = document.createElement('div');
+      overlay.id = 'testimonial-iframe-overlay';
+      overlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1000000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        animation: fadeIn 0.3s ease-out;
+      `;
+
+      // Add fade-in animation if not already added
+      if (!document.getElementById('testimonial-animations')) {
+        const style = document.createElement('style');
+        style.id = 'testimonial-animations';
+        style.textContent = `
+          @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+          }
+        `;
+        document.head.appendChild(style);
+      }
+
+      const iframeContainer = document.createElement('div');
+      iframeContainer.style.cssText = `
+        position: relative;
+        width: 90%;
+        max-width: 900px;
+        height: 90vh;
+        max-height: 800px;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        overflow: hidden;
+      `;
+
+      // Close button
+      const closeButton = document.createElement('button');
+      closeButton.innerHTML = '×';
+      closeButton.style.cssText = `
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        width: 36px;
+        height: 36px;
+        background: rgba(0, 0, 0, 0.6);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        font-size: 24px;
+        line-height: 1;
+        cursor: pointer;
+        z-index: 1000001;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+      `;
+      closeButton.onmouseover = () => {
+        closeButton.style.background = 'rgba(0, 0, 0, 0.8)';
+        closeButton.style.transform = 'scale(1.1)';
+      };
+      closeButton.onmouseout = () => {
+        closeButton.style.background = 'rgba(0, 0, 0, 0.6)';
+        closeButton.style.transform = 'scale(1)';
+      };
+      closeButton.onclick = () => {
+        if (overlay.parentNode) {
+          document.body.removeChild(overlay);
+        }
+      };
+
       const iframe = document.createElement('iframe');
       // Testimonial form route is excluded from /api prefix for public access
       const pageUrl = `${this.apiUrl}/testimonial-form/${this.siteId}`;
@@ -340,19 +423,28 @@ let TestimonialWidgetClass: any;
       // Grant camera and microphone permissions to the iframe
       iframe.setAttribute('allow', 'camera; microphone; autoplay');
       iframe.style.cssText = `
-        position: fixed;
-        top: 0;
-        left: 0;
         width: 100%;
         height: 100%;
         border: none;
-        z-index: 1000000;
       `;
       iframe.onerror = (error) => {
         console.error('Failed to load testimonial page:', error);
         console.error('Page URL:', pageUrl);
       };
-      document.body.appendChild(iframe);
+
+      // Close on overlay click (outside iframe)
+      overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) {
+          if (overlay.parentNode) {
+            document.body.removeChild(overlay);
+          }
+        }
+      });
+
+      iframeContainer.appendChild(closeButton);
+      iframeContainer.appendChild(iframe);
+      overlay.appendChild(iframeContainer);
+      document.body.appendChild(overlay);
     }
 
     private createTestimonialContent(): HTMLElement {
@@ -1082,11 +1174,15 @@ let TestimonialWidgetClass: any;
 
         // Use config from dashboard or fallback to options/defaults
         const displayConfig = this.config?.testimonialDisplay;
-        const layout = options?.layout || displayConfig?.layout || 'grid';
+        const component = displayConfig?.component || 'grid';
+        const layout = options?.layout || displayConfig?.layout || (component === 'carousel' ? 'carousel' : component === 'list' ? 'list' : 'grid');
         const limit = options?.limit || displayConfig?.limit || testimonials.length;
         const showRating = options?.showRating !== undefined ? options.showRating : (displayConfig?.showRating !== false);
         const showAuthor = options?.showAuthor !== undefined ? options.showAuthor : (displayConfig?.showAuthor !== false);
+        const showAvatar = displayConfig?.showAvatar !== false;
+        const showCompany = displayConfig?.showCompany !== false;
         const showVideo = displayConfig?.showVideo !== false;
+        const columns = displayConfig?.columns || displayConfig?.itemsPerRow || 3;
 
         // Filter testimonials by type if needed
         const filteredTestimonials = showVideo 
@@ -1099,13 +1195,36 @@ let TestimonialWidgetClass: any;
         const gap = displayConfig?.spacing?.gap || '24px';
         const margin = displayConfig?.spacing?.margin || '0';
 
-        if (layout === 'grid') {
-          const itemsPerRow = displayConfig?.itemsPerRow || 3;
-          container.style.cssText = `display: grid; grid-template-columns: repeat(${itemsPerRow}, 1fr); gap: ${gap}; margin: ${margin};`;
-        } else if (layout === 'carousel') {
-          container.style.cssText = `display: flex; overflow-x: auto; gap: ${gap}; padding: 20px 0; scroll-snap-type: x mandatory; margin: ${margin};`;
+        // Apply layout based on component type
+        if (component === 'grid' || layout === 'grid') {
+          container.style.cssText = `
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+            gap: ${gap}; 
+            margin: ${margin};
+            ${columns ? `grid-template-columns: repeat(${columns}, 1fr);` : ''}
+          `;
+        } else if (component === 'carousel' || layout === 'carousel') {
+          container.style.cssText = `
+            display: flex; 
+            overflow-x: auto; 
+            gap: ${gap}; 
+            padding: 20px 0; 
+            scroll-snap-type: x mandatory; 
+            margin: ${margin};
+            scrollbar-width: thin;
+            -webkit-overflow-scrolling: touch;
+          `;
+        } else if (component === 'list' || layout === 'list') {
+          container.style.cssText = `
+            display: flex; 
+            flex-direction: column; 
+            gap: ${gap}; 
+            margin: ${margin};
+          `;
         } else {
-          container.style.cssText = `display: flex; flex-direction: column; gap: ${gap}; margin: ${margin};`;
+          // Default grid
+          container.style.cssText = `display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: ${gap}; margin: ${margin};`;
         }
 
         const getShadowStyle = (shadow: string) => {
@@ -1118,6 +1237,7 @@ let TestimonialWidgetClass: any;
         };
 
         limitedTestimonials.forEach((testimonial: any) => {
+          // Apply Shadcn-style card based on component type
           const cardStyle = displayConfig?.cardStyle || {
             backgroundColor: '#ffffff',
             textColor: '#111827',
@@ -1126,44 +1246,83 @@ let TestimonialWidgetClass: any;
             padding: '24px',
             shadow: 'medium' as 'none' | 'small' | 'medium' | 'large'
           };
+
+          // Component-specific styling
+          let componentStyles = '';
+          if (component === 'minimal') {
+            componentStyles = `
+              border: none;
+              box-shadow: none;
+              padding: 16px;
+              background: transparent;
+            `;
+          } else if (component === 'card') {
+            componentStyles = `
+              border: 1px solid ${cardStyle.borderColor || '#e5e7eb'};
+              box-shadow: ${getShadowStyle('medium')};
+              padding: ${cardStyle.padding || '24px'};
+            `;
+          } else {
+            // Grid, carousel, list - default Shadcn card style
+            componentStyles = `
+              border: 1px solid ${cardStyle.borderColor || '#e5e7eb'};
+              box-shadow: ${getShadowStyle(cardStyle.shadow || 'medium')};
+              padding: ${cardStyle.padding || '24px'};
+            `;
+          }
+
           const card = document.createElement('div');
           card.style.cssText = `
-            background: ${cardStyle.backgroundColor || '#ffffff'};
+            background: ${component === 'minimal' ? 'transparent' : (cardStyle.backgroundColor || '#ffffff')};
             color: ${cardStyle.textColor || '#111827'};
-            border: 1px solid ${cardStyle.borderColor || '#e5e7eb'};
             border-radius: ${cardStyle.borderRadius || this.config?.theme?.borderRadius || '12px'};
-            padding: ${cardStyle.padding || '24px'};
-            box-shadow: ${getShadowStyle(cardStyle.shadow || 'medium')};
+            ${componentStyles}
             ${layout === 'carousel' ? 'min-width: 300px; scroll-snap-align: start;' : ''}
             font-family: ${this.config?.theme?.fontFamily || 'inherit'};
+            transition: transform 0.2s, box-shadow 0.2s;
           `;
 
-          // Author info
+          // Add hover effect for card component
+          if (component === 'card' || component === 'grid') {
+            card.onmouseenter = () => {
+              card.style.transform = 'translateY(-2px)';
+              card.style.boxShadow = getShadowStyle('large');
+            };
+            card.onmouseleave = () => {
+              card.style.transform = 'translateY(0)';
+              card.style.boxShadow = getShadowStyle(cardStyle.shadow || 'medium');
+            };
+          }
+
+          // Author info - Shadcn style
           if (showAuthor && testimonial.author) {
             const authorDiv = document.createElement('div');
             authorDiv.style.cssText = 'display: flex; align-items: center; gap: 12px; margin-bottom: 16px;';
             
-            if (testimonial.author.avatar) {
-              const avatar = document.createElement('img');
-              avatar.src = testimonial.author.avatar;
-              avatar.style.cssText = 'width: 48px; height: 48px; border-radius: 50%; object-fit: cover;';
-              authorDiv.appendChild(avatar);
-            } else {
-              const avatarPlaceholder = document.createElement('div');
-              avatarPlaceholder.style.cssText = `
-                width: 48px;
-                height: 48px;
-                border-radius: 50%;
-                background: ${this.config?.theme.primaryColor || 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'};
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                color: white;
-                font-weight: bold;
-                font-size: 18px;
-              `;
-              avatarPlaceholder.textContent = testimonial.author.name ? testimonial.author.name.charAt(0).toUpperCase() : '?';
-              authorDiv.appendChild(avatarPlaceholder);
+            if (showAvatar) {
+              if (testimonial.author.avatar) {
+                const avatar = document.createElement('img');
+                avatar.src = testimonial.author.avatar;
+                avatar.style.cssText = 'width: 48px; height: 48px; border-radius: 50%; object-fit: cover; border: 2px solid #e5e7eb;';
+                authorDiv.appendChild(avatar);
+              } else {
+                const avatarPlaceholder = document.createElement('div');
+                avatarPlaceholder.style.cssText = `
+                  width: 48px;
+                  height: 48px;
+                  border-radius: 50%;
+                  background: ${this.config?.theme.primaryColor || '#667eea'};
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  color: white;
+                  font-weight: 600;
+                  font-size: 18px;
+                  border: 2px solid #e5e7eb;
+                `;
+                avatarPlaceholder.textContent = testimonial.author.name ? testimonial.author.name.charAt(0).toUpperCase() : '?';
+                authorDiv.appendChild(avatarPlaceholder);
+              }
             }
 
             const authorInfo = document.createElement('div');
@@ -1172,10 +1331,13 @@ let TestimonialWidgetClass: any;
             name.textContent = testimonial.author.name || 'Anonymous';
             authorInfo.appendChild(name);
 
-            if (testimonial.author.company || testimonial.author.position) {
+            if (showCompany && (testimonial.author.company || testimonial.author.position)) {
               const meta = document.createElement('div');
               meta.style.cssText = 'font-size: 14px; color: #6b7280; margin-top: 4px;';
-              meta.textContent = [testimonial.author.position, testimonial.author.company].filter(Boolean).join(' at ');
+              const metaParts = [];
+              if (testimonial.author.position) metaParts.push(testimonial.author.position);
+              if (testimonial.author.company) metaParts.push(testimonial.author.company);
+              meta.textContent = metaParts.join(' at ');
               authorInfo.appendChild(meta);
             }
 
