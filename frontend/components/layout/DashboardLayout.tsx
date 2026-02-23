@@ -16,7 +16,7 @@ export default function DashboardLayout({
   const { isAuthenticated, isLoading } = useAuth();
   
   // Routes that should not show sidebar/header
-  const hideLayoutRoutes = ['/signin', '/signup', '/landing'];
+  const hideLayoutRoutes = ['/signin', '/signup', '/landing', '/contact', '/integration-guide'];
   const shouldHideLayout = hideLayoutRoutes.includes(pathname || '') || pathname === '/';
 
   // Dashboard routes that require authentication
