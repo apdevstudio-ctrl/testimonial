@@ -36,6 +36,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     fetchSites();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchSites = async () => {
