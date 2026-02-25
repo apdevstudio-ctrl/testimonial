@@ -134,6 +134,11 @@ export default function SitePage() {
     }
   };
 
+  useEffect(() => {
+    fetchSite();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [siteId]);
+
   const updateSite = async (updates: Partial<Site>) => {
     if (!site) return;
 
