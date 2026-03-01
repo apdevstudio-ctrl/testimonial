@@ -7,9 +7,17 @@
     @apply border-gray-200;
   }
   
+  html {
+    scroll-behavior: smooth;
+  }
+  
   body {
     @apply text-gray-900 bg-gray-50;
     font-feature-settings: 'rlig' 1, 'calt' 1;
+  }
+  
+  .dark body {
+    @apply bg-gray-900 text-white;
   }
 }
 
@@ -20,6 +28,14 @@
   
   .slide-in-from-right {
     animation: slideInFromRight 0.3s ease-out;
+  }
+  
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+  
+  .animate-slide {
+    animation: slide 10s linear infinite;
   }
 }
 
@@ -43,6 +59,24 @@
   }
 }
 
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes slide {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
 /* Ensure testimonial preview button is always visible */
 .testimonial-preview-button {
   position: absolute !important;
@@ -51,5 +85,12 @@
   visibility: visible !important;
   opacity: 1 !important;
   pointer-events: auto !important;
+}
+
+/* Smooth scroll for anchor links */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
 }
 
