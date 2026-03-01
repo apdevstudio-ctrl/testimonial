@@ -343,7 +343,7 @@ export default function LandingPage() {
                     ))}
                   </div>
                   <p className={`text-sm ${darkMode ? 'text-slate-300' : 'text-gray-600'}`}>
-                    "{testimonial.text}"
+                    &ldquo;{testimonial.text}&rdquo;
                   </p>
                 </div>
               ))}
@@ -772,7 +772,7 @@ export default function LandingPage() {
               Simple, Transparent Pricing
               </h2>
             <p className={`text-xl ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-              Choose the plan that's right for you
+              Choose the plan that&apos;s right for you
             </p>
           </div>
 
@@ -1174,7 +1174,7 @@ export default function LandingPage() {
             <h3 className={`text-2xl font-bold mb-4 ${
               darkMode ? 'text-white' : 'text-gray-900'
             }`}>
-              Wait! Don't miss out
+              Wait! Don&apos;t miss out
             </h3>
             <p className={`mb-6 ${
               darkMode ? 'text-slate-400' : 'text-gray-600'
