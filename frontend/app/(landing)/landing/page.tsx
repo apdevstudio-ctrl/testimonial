@@ -298,10 +298,10 @@ export default function LandingPage() {
                   <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </Link>
-              <Link href="#demo">
+              <Link href="/contact">
                 <Button variant="outline" size="lg" className={darkMode ? 'border-slate-600 text-slate-300 hover:bg-slate-800/50' : ''}>
                   <Play className="mr-2 h-5 w-5" />
-                  See Demo
+                  Book Demo
                 </Button>
               </Link>
             </div>
@@ -1080,12 +1080,12 @@ export default function LandingPage() {
                 Product
               </h4>
               <ul className="space-y-2">
-                {['Pricing', 'Features', 'Integrations', 'API'].map((item) => (
+                {['Pricing', 'Features', 'Integrations'].map((item) => (
                   <li key={item}>
                     <Link
                       href={`/${item.toLowerCase()}`}
                       className={`transition-colors ${
-                        darkMode ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'
+                        darkMode ? 'text-slate-400 hover:text-slate-200' : 'text-gray-600 hover:text-gray-900'
                       }`}
                     >
                       {item}
@@ -1101,12 +1101,12 @@ export default function LandingPage() {
                 Company
               </h4>
               <ul className="space-y-2">
-                {['About', 'Blog', 'Careers', 'Contact'].map((item) => (
+                {['About', 'Blog', 'Contact'].map((item) => (
                   <li key={item}>
                     <Link
                       href={`/${item.toLowerCase()}`}
                       className={`transition-colors ${
-                        darkMode ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'
+                        darkMode ? 'text-slate-400 hover:text-slate-200' : 'text-gray-600 hover:text-gray-900'
                       }`}
                     >
                       {item}
@@ -1122,12 +1122,12 @@ export default function LandingPage() {
                 Legal
               </h4>
               <ul className="space-y-2">
-                {['Privacy', 'Terms', 'Security'].map((item) => (
+                {['Privacy', 'Terms'].map((item) => (
                   <li key={item}>
                     <Link
                       href={`/${item.toLowerCase()}`}
                       className={`transition-colors ${
-                        darkMode ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'
+                        darkMode ? 'text-slate-400 hover:text-slate-200' : 'text-gray-600 hover:text-gray-900'
                       }`}
                     >
                       {item}
