@@ -70,6 +70,8 @@ export const metadata: Metadata = {
   },
 }
 
+const ahrefsKey = process.env.NEXT_PUBLIC_AHREFS_WEB_ANALYTICS_KEY?.trim()
+
 export default function RootLayout({
   children,
 }: {
@@ -110,6 +112,13 @@ export default function RootLayout({
             }),
           }}
         />
+        {ahrefsKey ? (
+          <script
+            src="https://analytics.ahrefs.com/analytics.js"
+            data-key={ahrefsKey}
+            async
+          />
+        ) : null}
       </head>
       <body className="bg-gray-50">
         <ToastProvider>
