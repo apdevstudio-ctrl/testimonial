@@ -3,6 +3,7 @@ import './globals.css'
 import { ToastProvider } from '@/components/ui/Toast'
 import DashboardLayout from '@/components/layout/DashboardLayout'
 import { AuthProvider } from '@/contexts/AuthContext'
+import { getMetadataBase, getSiteUrl } from '@/lib/seo/siteUrl'
 
 export const metadata: Metadata = {
   title: {
@@ -14,14 +15,11 @@ export const metadata: Metadata = {
   authors: [{ name: 'TestiFlow' }],
   creator: 'TestiFlow',
   publisher: 'TestiFlow',
-  metadataBase: new URL('https://testiflow.site'),
-  alternates: {
-    canonical: '/',
-  },
+  metadataBase: getMetadataBase(),
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://testiflow.site',
+    url: '/',
     siteName: 'TestiFlow',
     title: 'TestiFlow - Collect & Display Customer Testimonials',
     description: 'The easiest way to collect and display customer testimonials. Video and text testimonials, beautiful displays, easy integration.',
@@ -65,12 +63,50 @@ export const metadata: Metadata = {
     ],
   },
   manifest: '/manifest.json',
-  verification: {
-    google: 'your-google-verification-code',
-  },
+  ...(process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION?.trim()
+    ? {
+        verification: {
+          google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION.trim(),
+        },
+      }
+    : {}),
 }
 
 const ahrefsKey = process.env.NEXT_PUBLIC_AHREFS_WEB_ANALYTICS_KEY?.trim()
+
+function structuredDataJsonLd() {
+  const site = getSiteUrl()
+  return {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'Organization',
+        '@id': `${site}/#organization`,
+        name: 'TestiFlow',
+        url: site,
+        logo: { '@type': 'ImageObject', url: `${site}/logo.png` },
+      },
+      {
+        '@type': 'WebSite',
+        '@id': `${site}/#website`,
+        url: site,
+        name: 'TestiFlow',
+        description:
+          'Collect and display customer testimonials with video and text, widgets, and easy integration.',
+        publisher: { '@id': `${site}/#organization` },
+        inLanguage: 'en-US',
+      },
+      {
+        '@type': 'SoftwareApplication',
+        name: 'TestiFlow',
+        applicationCategory: 'BusinessApplication',
+        operatingSystem: 'Web',
+        offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD', description: 'Free trial and paid plans' },
+        url: `${site}/landing`,
+      },
+    ],
+  }
+}
 
 export default function RootLayout({
   children,
@@ -91,25 +127,7 @@ export default function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "SoftwareApplication",
-              "name": "TestiFlow",
-              "applicationCategory": "BusinessApplication",
-              "description": "The easiest way to collect and display customer testimonials",
-              "url": "https://testiflow.site",
-              "operatingSystem": "Web",
-              "offers": {
-                "@type": "Offer",
-                "price": "9",
-                "priceCurrency": "USD"
-              },
-              "aggregateRating": {
-                "@type": "AggregateRating",
-                "ratingValue": "4.9",
-                "ratingCount": "150"
-              }
-            }),
+            __html: JSON.stringify(structuredDataJsonLd()),
           }}
         />
         {ahrefsKey ? (

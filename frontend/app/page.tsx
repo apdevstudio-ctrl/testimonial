@@ -1,14 +1,12 @@
-'use client';
+import { redirect } from 'next/navigation'
+import type { Metadata } from 'next'
 
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+/** Root only redirects; avoid indexing a thin URL—canonical is the marketing page. */
+export const metadata: Metadata = {
+  alternates: { canonical: '/landing' },
+  robots: { index: false, follow: true },
+}
 
 export default function Home() {
-  const router = useRouter();
-
-  useEffect(() => {
-    router.replace('/landing');
-  }, [router]);
-
-  return null;
+  redirect('/landing')
 }

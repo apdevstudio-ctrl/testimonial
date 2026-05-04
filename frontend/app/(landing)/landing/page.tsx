@@ -233,6 +233,9 @@ export default function LandingPage() {
               <Link href="#integrations" className={`transition-colors ${darkMode ? 'text-slate-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'}`}>
                 Integrations
               </Link>
+              <Link href="#about" className={`transition-colors ${darkMode ? 'text-slate-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'}`}>
+                About
+              </Link>
               <button
                 onClick={() => setDarkMode(!darkMode)}
                 className={`p-2 rounded-lg transition-colors ${
@@ -365,6 +368,31 @@ export default function LandingPage() {
               ))}
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* About */}
+      <section
+        id="about"
+        className={`py-20 scroll-mt-20 ${darkMode ? 'bg-slate-900/40 border-y border-slate-800/50' : 'bg-gray-50 border-y border-gray-100'}`}
+      >
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2
+            className={`text-3xl md:text-4xl font-bold mb-6 ${
+              darkMode ? 'text-white' : 'text-gray-900'
+            }`}
+          >
+            About TestiFlow
+          </h2>
+          <p className={`text-lg md:text-xl leading-relaxed mb-6 ${darkMode ? 'text-slate-300' : 'text-gray-600'}`}>
+            TestiFlow helps teams collect video and text testimonials, publish them with a simple embed, and turn
+            customer stories into trust that drives signups and sales.
+          </p>
+          <p className={`text-base leading-relaxed ${darkMode ? 'text-slate-400' : 'text-gray-600'}`}>
+            We believe great products deserve to be seen through the voices of real customers—not generic marketing
+            copy. Whether you are a solo founder or a growing SaaS, TestiFlow is built to be fast to set up, easy for
+            customers to use, and painless for your team to manage.
+          </p>
         </div>
       </section>
 
@@ -1106,18 +1134,36 @@ export default function LandingPage() {
                 Product
               </h4>
               <ul className="space-y-2">
-                {['Pricing', 'Features', 'Integrations'].map((item) => (
-                  <li key={item}>
-                    <Link
-                      href={`/${item.toLowerCase()}`}
-                      className={`transition-colors ${
-                        darkMode ? 'text-slate-400 hover:text-slate-200' : 'text-gray-600 hover:text-gray-900'
-                      }`}
-                    >
-                      {item}
-                    </Link>
-                  </li>
-                ))}
+                <li>
+                  <Link
+                    href="#features"
+                    className={`transition-colors ${
+                      darkMode ? 'text-slate-400 hover:text-slate-200' : 'text-gray-600 hover:text-gray-900'
+                    }`}
+                  >
+                    Features
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="#pricing"
+                    className={`transition-colors ${
+                      darkMode ? 'text-slate-400 hover:text-slate-200' : 'text-gray-600 hover:text-gray-900'
+                    }`}
+                  >
+                    Pricing
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="#integrations"
+                    className={`transition-colors ${
+                      darkMode ? 'text-slate-400 hover:text-slate-200' : 'text-gray-600 hover:text-gray-900'
+                    }`}
+                  >
+                    Integrations
+                  </Link>
+                </li>
               </ul>
             </div>
             <div>
@@ -1127,18 +1173,26 @@ export default function LandingPage() {
                 Company
               </h4>
               <ul className="space-y-2">
-                {['About', 'Blog', 'Contact'].map((item) => (
-                  <li key={item}>
-                    <Link
-                      href={`/${item.toLowerCase()}`}
-                      className={`transition-colors ${
-                        darkMode ? 'text-slate-400 hover:text-slate-200' : 'text-gray-600 hover:text-gray-900'
-                      }`}
-                    >
-                      {item}
-                    </Link>
-                  </li>
-                ))}
+                <li>
+                  <Link
+                    href="#about"
+                    className={`transition-colors ${
+                      darkMode ? 'text-slate-400 hover:text-slate-200' : 'text-gray-600 hover:text-gray-900'
+                    }`}
+                  >
+                    About
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/contact"
+                    className={`transition-colors ${
+                      darkMode ? 'text-slate-400 hover:text-slate-200' : 'text-gray-600 hover:text-gray-900'
+                    }`}
+                  >
+                    Contact
+                  </Link>
+                </li>
               </ul>
             </div>
             <div>
@@ -1148,18 +1202,26 @@ export default function LandingPage() {
                 Legal
               </h4>
               <ul className="space-y-2">
-                {['Privacy', 'Terms'].map((item) => (
-                  <li key={item}>
-                    <Link
-                      href={`/${item.toLowerCase()}`}
-                      className={`transition-colors ${
-                        darkMode ? 'text-slate-400 hover:text-slate-200' : 'text-gray-600 hover:text-gray-900'
-                      }`}
-                    >
-                      {item}
-                    </Link>
-                  </li>
-                ))}
+                <li>
+                  <Link
+                    href="/privacy"
+                    className={`transition-colors ${
+                      darkMode ? 'text-slate-400 hover:text-slate-200' : 'text-gray-600 hover:text-gray-900'
+                    }`}
+                  >
+                    Privacy
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/terms"
+                    className={`transition-colors ${
+                      darkMode ? 'text-slate-400 hover:text-slate-200' : 'text-gray-600 hover:text-gray-900'
+                    }`}
+                  >
+                    Terms
+                  </Link>
+                </li>
               </ul>
             </div>
           </div>

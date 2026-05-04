@@ -16,8 +16,21 @@ export default function DashboardLayout({
   const { isAuthenticated, isLoading } = useAuth();
   
   // Routes that should not show sidebar/header
-  const hideLayoutRoutes = ['/signin', '/signup', '/landing', '/contact', '/integration-guide'];
-  const shouldHideLayout = hideLayoutRoutes.includes(pathname || '') || pathname === '/';
+  const hideLayoutRoutes = [
+    '/signin',
+    '/signup',
+    '/landing',
+    '/contact',
+    '/integration-guide',
+    '/privacy',
+    '/terms',
+    '/subscribe',
+    '/pricing',
+  ];
+  const shouldHideLayout =
+    hideLayoutRoutes.includes(pathname || '') ||
+    pathname === '/' ||
+    pathname?.startsWith('/testimonial-form');
 
   // Dashboard routes that require authentication
   const protectedRoutes = ['/dashboard', '/pricing', '/sites'];
