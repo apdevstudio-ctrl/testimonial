@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Plus, ExternalLink, Settings, BarChart3, MessageSquare, Calendar, Globe } from 'lucide-react';
 import Card from '@/components/ui/Card';
@@ -27,6 +28,7 @@ interface Site {
 }
 
 export default function Dashboard() {
+  const router = useRouter();
   const [sites, setSites] = useState<Site[]>([]);
   const [loading, setLoading] = useState(true);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
@@ -35,7 +37,29 @@ export default function Dashboard() {
   const { showToast } = useToast();
 
   useEffect(() => {
-    fetchSites();
+    const checkSub = async () => {
+      const token = localStorage.getItem('auth_token');
+      if (!token) {
+        fetchSites();
+        return;
+      }
+      try {
+        const r = await fetch('/api/subscription/status', {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (r.ok) {
+          const s = await r.json();
+          if (!s.hasAccess) {
+            router.replace('/subscribe');
+            return;
+          }
+        }
+      } catch {
+        /* ignore */
+      }
+      fetchSites();
+    };
+    checkSub();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

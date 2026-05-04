@@ -2,10 +2,13 @@ import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/lib/db/mongoose';
 import AnalyticsEvent from '@/lib/models/AnalyticsEvent';
 import { authenticate } from '@/lib/middleware/auth';
+import { requireActiveSubscription } from '@/lib/middleware/subscriptionGate';
 
 export async function GET(req: NextRequest) {
   try {
-    await authenticate(req);
+    const user = await authenticate(req);
+    const denied = await requireActiveSubscription(user);
+    if (denied) return denied;
     await connectDB();
 
     const { searchParams } = new URL(req.url);

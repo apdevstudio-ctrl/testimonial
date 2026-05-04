@@ -3,6 +3,9 @@ import connectDB from '@/lib/db/mongoose';
 import Testimonial from '@/lib/models/Testimonial';
 import { uploadVideo } from '@/lib/services/cloudinary';
 import { issueCredit } from '@/lib/services/credits';
+import { authenticate } from '@/lib/middleware/auth';
+import { requireActiveSubscription } from '@/lib/middleware/subscriptionGate';
+import Site from '@/lib/models/Site';
 
 export async function OPTIONS(req: NextRequest) {
   return new NextResponse(null, {
@@ -125,6 +128,13 @@ export async function GET(req: NextRequest) {
     let testimonials;
     if (siteId) {
       if (all === 'true') {
+        const user = await authenticate(req);
+        const denied = await requireActiveSubscription(user);
+        if (denied) return denied;
+        const site = await Site.findOne({ siteId, userId: user._id.toString() });
+        if (!site) {
+          return NextResponse.json({ message: 'Site not found' }, { status: 404 });
+        }
         testimonials = await Testimonial.find({ siteId });
       } else {
         testimonials = await Testimonial.find({ siteId, isPublished: true });

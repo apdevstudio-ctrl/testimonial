@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import { useToast } from '@/components/ui/Toast';
+import { SIX_MONTH_DISPLAY_USD, YEARLY_DISPLAY_USD } from '@/lib/subscription/constants';
 
 export default function LandingPage() {
   const [darkMode, setDarkMode] = useState(false);
@@ -145,51 +146,66 @@ export default function LandingPage() {
 
   const pricingPlans = [
     {
-      name: 'Free',
-      price: '$0',
-      period: '/month',
-      description: 'Perfect for getting started',
+      name: 'Trial',
+      price: 'Free',
+      period: 'for 30 days',
+      description: 'Try the full product before you pay.',
       features: [
-        'Up to 10 testimonials',
-        'Basic widget',
-        'Email support',
-        'Standard layouts'
+        'Full dashboard & sites',
+        'Widgets & collect flow',
+        'Analytics during trial',
+        'No credit card to start',
       ],
-      cta: 'Start Free',
-      popular: false
+      cta: 'Start free trial',
+      popular: false,
+      href: '/signup',
+      trial: true,
     },
     {
-      name: 'Pro',
-      price: '$29',
-      period: '/month',
-      description: 'For growing businesses',
+      name: 'One month',
+      price: '$5',
+      period: '/ month',
+      description: 'Flexible month-to-month billing.',
       features: [
         'Unlimited testimonials',
-        'Custom branding',
-        'Analytics dashboard',
-        'All layouts',
-        'Priority support',
-        'Video testimonials'
+        'Video & text collection',
+        'Customizable widget',
+        'Lemon Squeezy checkout',
       ],
-      cta: 'Start Free Trial',
-      popular: true
+      cta: 'Get started',
+      popular: false,
+      href: '/signup',
     },
     {
-      name: 'Business',
-      price: '$99',
-      period: '/month',
-      description: 'For agencies & enterprises',
+      name: '6 months',
+      price: `$${SIX_MONTH_DISPLAY_USD}`,
+      period: '/ 6 months',
+      description: 'Better value than paying monthly.',
       features: [
-        'Everything in Pro',
-        'White-label option',
-        'API access',
-        'Custom integrations',
-        'Dedicated support',
-        'Advanced analytics'
+        'Everything in monthly',
+        'Mid-term commitment',
+        'One invoice per term',
+        'Priority-friendly plan',
       ],
-      cta: 'Contact Sales',
-      popular: false
-    }
+      cta: 'Get started',
+      popular: true,
+      href: '/signup',
+    },
+    {
+      name: 'Yearly',
+      price: `$${YEARLY_DISPLAY_USD}`,
+      period: '/ year',
+      description: 'Best value for teams that are all-in.',
+      features: [
+        'Everything in 6-month',
+        'Lowest effective rate',
+        'Annual budgeting',
+        'Price finalized in Lemon Squeezy',
+      ],
+      cta: 'Get started',
+      popular: false,
+      href: '/signup',
+    },
   ];
 
   return (
@@ -772,16 +788,20 @@ export default function LandingPage() {
               Simple, Transparent Pricing
               </h2>
             <p className={`text-xl ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
-              Choose the plan that&apos;s right for you
+              30-day trial, then monthly, 6-month, or yearly billing
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
             {pricingPlans.map((plan, index) => (
               <div
                 key={index}
-                className={`relative rounded-2xl p-8 transition-all hover:scale-105 ${
-                  plan.popular
+                className={`relative rounded-2xl p-8 transition-all hover:scale-[1.02] ${
+                  'trial' in plan && plan.trial
+                    ? darkMode
+                      ? 'bg-slate-800/40 border-2 border-indigo-500/50 ring-1 ring-indigo-400/30'
+                      : 'bg-white border-2 border-indigo-200 ring-2 ring-indigo-100'
+                    : plan.popular
                     ? darkMode
                       ? 'bg-gradient-to-br from-indigo-600 to-purple-600 border-2 border-indigo-400 shadow-2xl shadow-indigo-500/30'
                       : 'bg-gradient-to-br from-indigo-600 to-purple-600 border-2 border-indigo-500'
@@ -811,26 +831,32 @@ export default function LandingPage() {
                   <ul className="space-y-4 mb-8">
                     {plan.features.map((feature, i) => (
                       <li key={i} className="flex items-start">
-                        <Check className={`h-5 w-5 mr-3 flex-shrink-0 mt-0.5 ${
-                          plan.popular ? 'text-white' : 'text-indigo-600 dark:text-indigo-400'
-                        }`} />
-                        <span className={plan.popular ? 'text-indigo-50' : darkMode ? 'text-slate-300' : 'text-gray-700'}>
+                        <Check
+                          className={`h-5 w-5 mr-3 flex-shrink-0 mt-0.5 ${
+                            plan.popular ? 'text-white' : 'text-indigo-600 dark:text-indigo-400'
+                          }`}
+                        />
+                        <span
+                          className={
+                            plan.popular ? 'text-indigo-50' : darkMode ? 'text-slate-300' : 'text-gray-700'
+                          }
+                        >
                           {feature}
                         </span>
-                  </li>
-                ))}
-              </ul>
-                  <Link href={plan.name === 'Business' ? '/contact' : '/signup'}>
+                      </li>
+                    ))}
+                  </ul>
+                  <Link href={plan.href}>
                     <Button
                       variant={plan.popular ? 'secondary' : 'primary'}
                       size="lg"
                       className="w-full"
                     >
                       {plan.cta}
-                  </Button>
-                </Link>
+                    </Button>
+                  </Link>
+                </div>
               </div>
-            </div>
             ))}
           </div>
         </div>

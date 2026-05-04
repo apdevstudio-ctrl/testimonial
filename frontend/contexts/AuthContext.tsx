@@ -30,6 +30,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
+  const redirectAfterAuth = () => {
+    if (typeof window === 'undefined') {
+      router.push('/dashboard');
+      return;
+    }
+    const next = new URLSearchParams(window.location.search).get('next');
+    if (next && next.startsWith('/')) {
+      router.push(next);
+    } else {
+      router.push('/dashboard');
+    }
+  };
+
   useEffect(() => {
     // Check for stored token on mount
     const storedToken = localStorage.getItem('auth_token');
@@ -104,7 +117,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setToken(data.access_token);
       setUser(data.user);
       localStorage.setItem('auth_token', data.access_token);
-      router.push('/dashboard');
+      redirectAfterAuth();
     } catch (error: any) {
       throw error;
     }
@@ -137,7 +150,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setToken(data.access_token);
       setUser(data.user);
       localStorage.setItem('auth_token', data.access_token);
-      router.push('/dashboard');
+      redirectAfterAuth();
     } catch (error: any) {
       throw error;
     }
@@ -217,7 +230,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             setToken(data.access_token);
             setUser(data.user);
             localStorage.setItem('auth_token', data.access_token);
-            router.push('/dashboard');
+            redirectAfterAuth();
             resolve();
           } catch (error: any) {
             reject(error);

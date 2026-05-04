@@ -4,6 +4,7 @@ import connectDB from '@/lib/db/mongoose';
 import User from '@/lib/models/User';
 import { signToken } from '@/lib/services/jwt';
 import { authenticate } from '@/lib/middleware/auth';
+import { applyTrialForNewUser } from '@/lib/services/subscriptionAccess';
 
 // Force dynamic rendering to prevent static optimization
 export const dynamic = 'force-dynamic';
@@ -159,6 +160,7 @@ async function handleRegister(body: any) {
     password: hashedPassword,
     emailVerified: false,
   });
+  applyTrialForNewUser(user);
 
   await user.save();
 

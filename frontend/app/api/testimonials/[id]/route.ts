@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/lib/db/mongoose';
 import Testimonial from '@/lib/models/Testimonial';
 import { authenticate } from '@/lib/middleware/auth';
+import { requireActiveSubscription } from '@/lib/middleware/subscriptionGate';
 
 export async function GET(
   req: NextRequest,
@@ -33,7 +34,9 @@ export async function PUT(
   { params }: { params: { id: string } }
 ) {
   try {
-    await authenticate(req);
+    const user = await authenticate(req);
+    const denied = await requireActiveSubscription(user);
+    if (denied) return denied;
     await connectDB();
 
     const body = await req.json();

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/lib/db/mongoose';
 import User from '@/lib/models/User';
 import { signToken } from '@/lib/services/jwt';
+import { applyTrialForNewUser } from '@/lib/services/subscriptionAccess';
 
 // Force dynamic rendering
 export const dynamic = 'force-dynamic';
@@ -83,6 +84,7 @@ export async function POST(req: NextRequest) {
         isActive: true,
         lastLogin: new Date(),
       });
+      applyTrialForNewUser(user);
       await user.save();
     }
 

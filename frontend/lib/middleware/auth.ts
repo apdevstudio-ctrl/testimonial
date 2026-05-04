@@ -1,7 +1,11 @@
 import { NextRequest } from 'next/server';
-import { verifyToken, JWTPayload } from '../services/jwt';
+import { verifyToken } from '../services/jwt';
 import User, { IUser } from '../models/User';
 import connectDB from '../db/mongoose';
+import {
+  ensureSubscriptionDefaults,
+  syncExpiredState,
+} from '../services/subscriptionAccess';
 
 export interface AuthRequest extends NextRequest {
   user?: IUser;
@@ -23,6 +27,11 @@ export async function authenticate(req: NextRequest): Promise<IUser> {
     const user = await User.findById(payload.sub);
     if (!user) {
       throw new Error('User not found');
+    }
+
+    ensureSubscriptionDefaults(user);
+    if (syncExpiredState(user, new Date())) {
+      await user.save();
     }
 
     return user;

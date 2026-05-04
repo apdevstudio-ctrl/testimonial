@@ -3,10 +3,13 @@ import { randomUUID } from 'crypto';
 import connectDB from '@/lib/db/mongoose';
 import Site from '@/lib/models/Site';
 import { authenticate } from '@/lib/middleware/auth';
+import { requireActiveSubscription } from '@/lib/middleware/subscriptionGate';
 
 export async function GET(req: NextRequest) {
   try {
     const user = await authenticate(req);
+    const denied = await requireActiveSubscription(user);
+    if (denied) return denied;
     await connectDB();
 
     const sites = await Site.find({ userId: user._id.toString() });
@@ -22,6 +25,8 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   try {
     const user = await authenticate(req);
+    const denied = await requireActiveSubscription(user);
+    if (denied) return denied;
     await connectDB();
 
     const body = await req.json();

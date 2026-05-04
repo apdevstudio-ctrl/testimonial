@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/lib/db/mongoose';
 import Credit from '@/lib/models/Credit';
 import { authenticate } from '@/lib/middleware/auth';
+import { requireActiveSubscription } from '@/lib/middleware/subscriptionGate';
 
 function generateRedemptionCode(): string {
   return `CREDIT-${Date.now()}-${Math.random().toString(36).substring(2, 11).toUpperCase()}`;
@@ -34,7 +35,9 @@ async function triggerWebhook(webhookUrl: string, credit: any): Promise<void> {
 
 export async function POST(req: NextRequest) {
   try {
-    await authenticate(req);
+    const user = await authenticate(req);
+    const denied = await requireActiveSubscription(user);
+    if (denied) return denied;
     await connectDB();
 
     const body = await req.json();
