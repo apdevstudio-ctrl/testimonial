@@ -5,12 +5,6 @@ const nextConfig = {
     API_URL: process.env.API_URL || 'http://localhost:3000',
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || process.env.API_URL || 'http://localhost:3000',
   },
-  // Avoid tracing the large bundled embed (fixes Vercel "Maximum call stack" during build traces)
-  experimental: {
-    outputFileTracingExcludes: {
-      '*': ['public/script.js', 'public/**/*.js'],
-    },
-  },
   webpack: (config, { isServer }) => {
     if (!isServer) {
       config.resolve.fallback = {

@@ -1,6 +1,9 @@
 backend/
-script/node_modules/
-script/src/
+backend/**
+script/
+script/**
+node_modules/@nestjs/**
+node_modules/webpack/**
 .git/
 *.md
 !frontend/README.md
