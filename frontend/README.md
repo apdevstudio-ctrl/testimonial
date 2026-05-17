@@ -1,36 +1,45 @@
-# TestiFlow Frontend Dashboard
+# TestiFlow Frontend
 
-Next.js dashboard for managing testimonial collection sites.
+Next.js application for [testiflow.site](https://testiflow.site) — dashboard, marketing, public walls, embeds, and API routes.
+
+## Documentation
+
+| Document | Description |
+|----------|-------------|
+| [../README.md](../README.md) | Product overview & all features |
+| [../INTEGRATION_GUIDE.md](../INTEGRATION_GUIDE.md) | Full integration guide (copy-paste examples) |
+| `/integration-guide` | In-app integration guide (when running) |
+| `/docs` | Online documentation |
 
 ## Setup
 
-1. Install dependencies:
 ```bash
 npm install
-```
-
-2. Start the development server:
-```bash
+cp .env.example .env.local
+# Fill MONGODB_URI, JWT_SECRET, Lemon Squeezy keys, etc.
 npm run dev
 ```
 
-The dashboard will be available at `http://localhost:3001`
+Dashboard: `http://localhost:3001`
 
-## Features
+## Build
 
-- **Site Management**: Create and manage multiple sites
-- **Configuration Builder**: Customize button settings, position, text, colors
-- **Theme Management**: Customize colors, fonts, border radius
-- **Analytics Dashboard**: View engagement metrics and statistics
-- **Testimonial Management**: View and manage submitted testimonials
-- **Integration Code**: Copy-paste script integration code
+```bash
+npm run build:script   # from repo root — copies embed to public/script.js
+npm run build
+```
 
-## Pages
+## Key routes
 
-- `/` - Site list and management
-- `/sites/[siteId]` - Individual site configuration and management
+| Route | Purpose |
+|-------|---------|
+| `/dashboard` | Sites list |
+| `/sites/[siteId]` | Embed Studio, config, analytics |
+| `/w/[slug]` | Public Wall of Love |
+| `/embed/w/[siteId]` | Iframe wall |
+| `/integration-guide` | Integration docs UI |
+| `/docs/*` | Documentation |
 
-## Environment Variables
+## Environment
 
-Set `API_URL` in `next.config.js` or as environment variable (defaults to `http://localhost:3000`)
-
+See `.env.example` for all variables.

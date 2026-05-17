@@ -24,6 +24,16 @@ export interface ITestimonial extends Document {
   };
   creditIssued?: boolean;
   creditId?: string;
+  verified?: boolean;
+  source?: string;
+  sourceLabel?: string;
+  ai?: {
+    summary?: string;
+    headline?: string;
+    sentiment?: 'positive' | 'neutral' | 'negative';
+    tags?: string[];
+    processedAt?: Date;
+  };
   createdAt: Date;
   updatedAt: Date;
 }
@@ -62,6 +72,10 @@ const TestimonialSchema = new Schema<ITestimonial>(
     },
     creditIssued: Boolean,
     creditId: String,
+    verified: { type: Boolean, default: false },
+    source: String,
+    sourceLabel: String,
+    ai: { type: Object },
   },
   {
     timestamps: true,

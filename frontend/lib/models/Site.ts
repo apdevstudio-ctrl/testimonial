@@ -15,6 +15,17 @@ export interface ISite extends Document {
   formDesign?: any;
   testimonialDisplay?: any;
   pageDesign?: any;
+  publicSlug?: string;
+  wallSettings?: {
+    isPublic?: boolean;
+    title?: string;
+    subtitle?: string;
+    themePreset?: string;
+    layout?: 'grid' | 'carousel' | 'marquee' | 'list' | 'bento' | 'masonry' | 'floating' | 'columns';
+    limit?: number;
+    hideBranding?: boolean;
+  };
+  widgetCustomization?: Record<string, unknown>;
   isActive: boolean;
   createdAt: Date;
   updatedAt: Date;
@@ -65,6 +76,23 @@ const SiteSchema = new Schema<ISite>(
     pageDesign: {
       type: Object,
     },
+    publicSlug: {
+      type: String,
+      index: true,
+      sparse: true,
+    },
+    wallSettings: {
+      type: Object,
+      default: {
+        isPublic: true,
+        title: 'Wall of Love',
+        subtitle: 'What our customers say',
+        themePreset: 'saas',
+        layout: 'grid',
+        limit: 24,
+      },
+    },
+    widgetCustomization: { type: Object },
     isActive: {
       type: Boolean,
       default: true,

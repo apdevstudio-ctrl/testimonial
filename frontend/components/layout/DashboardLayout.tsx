@@ -26,11 +26,21 @@ export default function DashboardLayout({
     '/terms',
     '/subscribe',
     '/pricing',
+    '/wall-of-love',
+    '/integrations',
+    '/compare',
+    '/docs',
   ];
   const shouldHideLayout =
     hideLayoutRoutes.includes(pathname || '') ||
     pathname === '/' ||
-    pathname?.startsWith('/testimonial-form');
+    pathname?.startsWith('/testimonial-form') ||
+    pathname?.startsWith('/w/') ||
+    pathname?.startsWith('/embed/') ||
+    pathname?.startsWith('/collect/') ||
+    pathname?.startsWith('/integrations/') ||
+    pathname?.startsWith('/compare/') ||
+    pathname?.startsWith('/docs/');
 
   // Dashboard routes that require authentication
   const protectedRoutes = ['/dashboard', '/pricing', '/sites'];

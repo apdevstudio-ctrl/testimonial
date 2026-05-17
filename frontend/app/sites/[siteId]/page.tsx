@@ -12,6 +12,11 @@ import { useToast } from '@/components/ui/Toast';
 import { CardSkeleton } from '@/components/ui/LoadingSkeleton';
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import VisualBuilder from '@/components/builder/VisualBuilder';
+import EmbedStudio from '@/components/embed/EmbedStudio';
+import EmbedCustomizer from '@/components/embed/EmbedCustomizer';
+import AnalyticsDashboard from '@/components/analytics/AnalyticsDashboard';
+import { WIDGET_THEME_LIST } from '@/lib/widgetThemes';
+import type { WidgetCustomizeConfig } from '@/lib/widget/customizer';
 
 interface Site {
   _id: string;
@@ -45,6 +50,16 @@ interface Site {
     textTestimonial: boolean;
   };
   flowType: 'modal' | 'drawer' | 'page';
+  publicSlug?: string;
+  wallSettings?: {
+    isPublic?: boolean;
+    title?: string;
+    subtitle?: string;
+    themePreset?: string;
+    layout?: 'grid' | 'carousel' | 'marquee' | 'list';
+    limit?: number;
+  };
+  widgetCustomization?: Partial<WidgetCustomizeConfig>;
   isActive: boolean;
   formDesign?: any;
   testimonialDisplay?: {
@@ -102,6 +117,12 @@ interface Testimonial {
   isApproved: boolean;
   isPublished: boolean;
   createdAt: string;
+  ai?: {
+    headline?: string;
+    tags?: string[];
+    sentiment?: string;
+    processedAt?: string;
+  };
 }
 
 export default function SitePage() {
@@ -205,16 +226,9 @@ export default function SitePage() {
 
   const getIntegrationCode = () => {
     const baseUrl = typeof window !== 'undefined' ? window.location.origin : '';
-    if (site.flowType === 'page') {
-      // Return iframe embed code
-      return `<iframe src="${baseUrl}/testimonial-form/${site.siteId}" width="100%" height="800" frameborder="0" allow="camera; microphone; autoplay"></iframe>`;
-    } else {
-      // Return script tag
-      return `<script src="${baseUrl}/script.js" data-site-id="${site.siteId}"></script>`;
-    }
+    return `<script src="${baseUrl}/embed.js" data-site-id="${site?.siteId || ''}" async></script>`;
   };
-
-  const scriptSnippet = getIntegrationCode();
+  const scriptSnippet = site ? getIntegrationCode() : '';
 
   const tabs = [
     { id: 'builder', label: 'Builder', icon: Wand2 },
@@ -253,8 +267,22 @@ export default function SitePage() {
         </div>
       </div>
 
-      {/* Integration Code */}
-      <Card className="mb-6">
+      <EmbedStudio
+        siteId={site.siteId}
+        publicSlug={site.publicSlug}
+        flowType={site.flowType}
+      />
+
+      <EmbedCustomizer
+        siteId={site.siteId}
+        initial={site.widgetCustomization}
+        onSave={async (config) => {
+          await updateSite({ widgetCustomization: config });
+        }}
+      />
+
+      {/* Legacy block removed — use Embed Studio above */}
+      <Card className="mb-6 hidden">
         <div className="flex items-center justify-between mb-4">
           <div>
             <h2 className="text-lg font-semibold text-gray-900 mb-1">Integration Code</h2>
@@ -325,7 +353,7 @@ export default function SitePage() {
             <ThemeTab site={site} onUpdate={updateSite} />
           )}
           {activeTab === 'analytics' && (
-            <AnalyticsTab siteId={siteId} />
+            <AnalyticsDashboard siteId={siteId} />
           )}
           {activeTab === 'testimonials' && (
             <TestimonialsTab siteId={siteId} />
@@ -340,6 +368,17 @@ function ConfigTab({ site, onUpdate }: { site: Site; onUpdate: (updates: Partial
   const [config, setConfig] = useState(site.button);
   const [features, setFeatures] = useState(site.enabledFeatures);
   const [flowType, setFlowType] = useState(site.flowType);
+  const [publicSlug, setPublicSlug] = useState(site.publicSlug || site.siteId);
+  const [wallSettings, setWallSettings] = useState(
+    site.wallSettings || {
+      isPublic: true,
+      title: `${site.name} — Wall of Love`,
+      subtitle: 'What our customers say',
+      themePreset: 'saas',
+      layout: 'grid' as const,
+      limit: 24,
+    }
+  );
   const [displayConfig, setDisplayConfig] = useState(site.testimonialDisplay || {
     component: 'grid' as const,
     layout: 'grid' as const,
@@ -354,12 +393,77 @@ function ConfigTab({ site, onUpdate }: { site: Site; onUpdate: (updates: Partial
       button: config,
       enabledFeatures: features,
       flowType,
+      publicSlug,
+      wallSettings,
       testimonialDisplay: displayConfig as any,
     });
   };
 
+  const baseUrl = typeof window !== 'undefined' ? window.location.origin : '';
+
   return (
     <div className="space-y-8">
+      <div>
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">Wall of Love</h3>
+        <p className="text-sm text-gray-600 mb-4">
+          Public page:{' '}
+          <a
+            href={`${baseUrl}/w/${publicSlug}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-indigo-600 hover:underline font-mono text-xs"
+          >
+            {baseUrl}/w/{publicSlug}
+          </a>
+        </p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <Input
+            label="Public URL slug"
+            value={publicSlug}
+            onChange={(e) => setPublicSlug(e.target.value)}
+            placeholder="my-company-reviews"
+          />
+          <Input
+            label="Wall title"
+            value={wallSettings.title || ''}
+            onChange={(e) => setWallSettings({ ...wallSettings, title: e.target.value })}
+          />
+          <Input
+            label="Subtitle"
+            value={wallSettings.subtitle || ''}
+            onChange={(e) => setWallSettings({ ...wallSettings, subtitle: e.target.value })}
+          />
+          <Select
+            label="Theme preset"
+            value={wallSettings.themePreset || 'saas'}
+            onChange={(e) => setWallSettings({ ...wallSettings, themePreset: e.target.value })}
+            options={WIDGET_THEME_LIST.map((t) => ({ value: t.id, label: t.name }))}
+          />
+          <Select
+            label="Layout"
+            value={wallSettings.layout || 'grid'}
+            onChange={(e) =>
+              setWallSettings({ ...wallSettings, layout: e.target.value as typeof wallSettings.layout })
+            }
+            options={[
+              { value: 'grid', label: 'Grid' },
+              { value: 'carousel', label: 'Carousel' },
+              { value: 'marquee', label: 'Marquee' },
+              { value: 'list', label: 'List' },
+            ]}
+          />
+        </div>
+        <label className="flex items-center gap-3 cursor-pointer">
+          <input
+            type="checkbox"
+            checked={wallSettings.isPublic !== false}
+            onChange={(e) => setWallSettings({ ...wallSettings, isPublic: e.target.checked })}
+            className="h-4 w-4 text-indigo-600 rounded border-gray-300"
+          />
+          <span className="text-sm font-medium text-gray-700">Public wall (indexable)</span>
+        </label>
+      </div>
+
       <div>
         <h3 className="text-lg font-semibold text-gray-900 mb-4">Button Settings</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -715,6 +819,7 @@ function TestimonialsTab({ siteId }: { siteId: string }) {
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState<string | null>(null);
+  const [enriching, setEnriching] = useState<string | null>(null);
   const { showToast } = useToast();
 
   useEffect(() => {
@@ -739,6 +844,31 @@ function TestimonialsTab({ siteId }: { siteId: string }) {
       showToast('Failed to load testimonials', 'error');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleEnrich = async (testimonialId: string) => {
+    setEnriching(testimonialId);
+    try {
+      const token = localStorage.getItem('auth_token');
+      const response = await fetch('/api/ai/enrich', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ testimonialId }),
+      });
+      if (!response.ok) throw new Error('Enrich failed');
+      const data = await response.json();
+      setTestimonials((prev) =>
+        prev.map((t) => (t._id === testimonialId ? { ...t, ai: data.testimonial?.ai || data.enrichment } : t))
+      );
+      showToast('AI enrichment applied', 'success');
+    } catch {
+      showToast('AI enrichment failed', 'error');
+    } finally {
+      setEnriching(null);
     }
   };
 
@@ -842,6 +972,25 @@ function TestimonialsTab({ siteId }: { siteId: string }) {
                 <p className="text-gray-700 mb-4 leading-relaxed">{testimonial.text}</p>
               )}
 
+              {testimonial.ai?.headline && (
+                <div className="mb-4 p-3 rounded-lg bg-violet-50 border border-violet-100">
+                  <p className="text-xs font-semibold text-violet-700 uppercase mb-1">AI headline</p>
+                  <p className="text-sm text-violet-900">&ldquo;{testimonial.ai.headline}&rdquo;</p>
+                  {testimonial.ai.tags && testimonial.ai.tags.length > 0 && (
+                    <div className="flex flex-wrap gap-1 mt-2">
+                      {testimonial.ai.tags.map((tag) => (
+                        <span key={tag} className="text-xs px-2 py-0.5 rounded-full bg-violet-100 text-violet-700">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                  {testimonial.ai.sentiment && (
+                    <p className="text-xs text-violet-600 mt-2">Sentiment: {testimonial.ai.sentiment}</p>
+                  )}
+                </div>
+              )}
+
               {testimonial.videoUrl && (
                 <div className="mb-4">
                   <div className="relative rounded-lg overflow-hidden bg-gray-100 aspect-video">
@@ -863,8 +1012,17 @@ function TestimonialsTab({ siteId }: { siteId: string }) {
                 </div>
               )}
 
-              {/* Publish/Unpublish Button */}
               <div className="flex items-center justify-end gap-2 pt-4 border-t border-gray-200">
+                {testimonial.text && (
+                  <Button
+                    onClick={() => handleEnrich(testimonial._id)}
+                    disabled={enriching === testimonial._id}
+                    variant="outline"
+                  >
+                    <Wand2 className="h-4 w-4 mr-2" />
+                    {enriching === testimonial._id ? 'Enriching…' : testimonial.ai ? 'Re-enrich' : 'Enrich with AI'}
+                  </Button>
+                )}
                 <Button
                   onClick={() => handleTogglePublish(testimonial._id, testimonial.isPublished)}
                   disabled={updating === testimonial._id}

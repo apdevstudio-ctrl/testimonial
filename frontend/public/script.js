@@ -12,10 +12,218 @@ return /******/ (() => { // webpackBootstrap
 /******/ 	"use strict";
 var __webpack_exports__ = {};
 
+;// ./src/overlay-ui.ts
+/**
+ * Premium modal & drawer overlays for TestiFlow collect flow
+ */
+const REDUCED_MOTION = typeof window !== 'undefined' &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const OVERLAY_STYLES = `
+  @keyframes tfFadeIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes tfSlideUp { from { opacity: 0; transform: translateY(24px) scale(0.96); } to { opacity: 1; transform: translateY(0) scale(1); } }
+  @keyframes tfSlideInRight { from { transform: translateX(100%); } to { transform: translateX(0); } }
+  .tf-overlay-root { font-family: system-ui, -apple-system, sans-serif; }
+  .tf-modal-panel { animation: ${REDUCED_MOTION ? 'none' : 'tfSlideUp 0.45s cubic-bezier(0.16, 1, 0.3, 1)'}; }
+  .tf-drawer-panel { animation: ${REDUCED_MOTION ? 'none' : 'tfSlideInRight 0.4s cubic-bezier(0.16, 1, 0.3, 1)'}; }
+`;
+function trapFocus(container) {
+    const sel = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+    const onKey = (e) => {
+        if (e.key === 'Tab') {
+            const nodes = Array.from(container.querySelectorAll(sel));
+            if (!nodes.length)
+                return;
+            const first = nodes[0];
+            const last = nodes[nodes.length - 1];
+            if (e.shiftKey && document.activeElement === first) {
+                e.preventDefault();
+                last.focus();
+            }
+            else if (!e.shiftKey && document.activeElement === last) {
+                e.preventDefault();
+                first.focus();
+            }
+        }
+    };
+    container.addEventListener('keydown', onKey);
+    return () => container.removeEventListener('keydown', onKey);
+}
+function injectOverlayStyles() {
+    if (document.getElementById('testiflow-overlay-styles'))
+        return;
+    const style = document.createElement('style');
+    style.id = 'testiflow-overlay-styles';
+    style.textContent = OVERLAY_STYLES;
+    document.head.appendChild(style);
+}
+function openPremiumModal(opts) {
+    injectOverlayStyles();
+    const overlay = document.createElement('div');
+    overlay.className = 'tf-overlay-root';
+    overlay.setAttribute('role', 'dialog');
+    overlay.setAttribute('aria-modal', 'true');
+    overlay.setAttribute('aria-label', opts.ariaLabel || 'Leave a testimonial');
+    overlay.id = 'testimonial-modal';
+    overlay.style.cssText = `
+    position: fixed; inset: 0; z-index: 1000000;
+    display: flex; align-items: center; justify-content: center; padding: 16px;
+    background: rgba(15, 23, 42, 0.55);
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    animation: ${REDUCED_MOTION ? 'none' : 'tfFadeIn 0.25s ease-out'};
+  `;
+    const panel = document.createElement('div');
+    panel.className = 'tf-modal-panel';
+    panel.style.cssText = `
+    position: relative; width: 100%; max-width: 520px; max-height: 90vh;
+    overflow: auto; border-radius: 16px;
+    background: #fff; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25), 0 0 0 1px rgba(0,0,0,0.05);
+  `;
+    panel.appendChild(opts.content);
+    const closeBtn = document.createElement('button');
+    closeBtn.type = 'button';
+    closeBtn.setAttribute('aria-label', 'Close');
+    closeBtn.textContent = '×';
+    closeBtn.style.cssText = `
+    position: absolute; top: 12px; right: 12px; width: 36px; height: 36px;
+    border: none; border-radius: 8px; background: #f4f4f5; color: #18181b;
+    font-size: 22px; cursor: pointer; line-height: 1; z-index: 2;
+    transition: background 0.15s;
+  `;
+    closeBtn.onmouseenter = () => { closeBtn.style.background = '#e4e4e7'; };
+    closeBtn.onmouseleave = () => { closeBtn.style.background = '#f4f4f5'; };
+    const close = () => {
+        overlay.remove();
+        document.body.style.overflow = '';
+        opts.onClose();
+    };
+    closeBtn.onclick = close;
+    overlay.onclick = (e) => { if (e.target === overlay)
+        close(); };
+    panel.insertBefore(closeBtn, panel.firstChild);
+    overlay.appendChild(panel);
+    document.body.appendChild(overlay);
+    document.body.style.overflow = 'hidden';
+    const onEsc = (e) => {
+        if (e.key === 'Escape') {
+            close();
+            document.removeEventListener('keydown', onEsc);
+        }
+    };
+    document.addEventListener('keydown', onEsc);
+    const untrap = trapFocus(panel);
+    closeBtn.focus();
+    const origClose = close;
+    overlay.dataset.tfClose = '1';
+    overlay._tfCleanup = () => {
+        document.removeEventListener('keydown', onEsc);
+        untrap();
+        origClose();
+    };
+    return overlay;
+}
+function openPremiumDrawer(opts) {
+    injectOverlayStyles();
+    const overlay = document.createElement('div');
+    overlay.className = 'tf-overlay-root';
+    overlay.setAttribute('role', 'dialog');
+    overlay.setAttribute('aria-modal', 'true');
+    overlay.id = 'testimonial-drawer-backdrop';
+    overlay.style.cssText = `
+    position: fixed; inset: 0; z-index: 1000000;
+    background: rgba(15, 23, 42, 0.4);
+    backdrop-filter: blur(4px);
+    animation: ${REDUCED_MOTION ? 'none' : 'tfFadeIn 0.2s ease'};
+  `;
+    const drawer = document.createElement('div');
+    drawer.className = 'tf-drawer-panel';
+    drawer.id = 'testimonial-drawer';
+    drawer.style.cssText = `
+    position: fixed; top: 0; right: 0; width: min(420px, 100vw); height: 100%;
+    background: #fff; box-shadow: -8px 0 40px rgba(0,0,0,0.12);
+    overflow-y: auto; z-index: 1000001;
+  `;
+    drawer.appendChild(opts.content);
+    const close = () => {
+        overlay.remove();
+        drawer.remove();
+        document.body.style.overflow = '';
+        opts.onClose();
+    };
+    overlay.onclick = close;
+    document.body.appendChild(overlay);
+    document.body.appendChild(drawer);
+    document.body.style.overflow = 'hidden';
+    const onEsc = (e) => {
+        if (e.key === 'Escape') {
+            close();
+            document.removeEventListener('keydown', onEsc);
+        }
+    };
+    document.addEventListener('keydown', onEsc);
+    trapFocus(drawer);
+    return drawer;
+}
+
+;// ./src/autorender.ts
+/**
+ * Declarative auto-render: [data-testiflow-wall], [data-testiflow-collect]
+ */
+function detectApiUrl() {
+    const scripts = document.getElementsByTagName('script');
+    for (let i = 0; i < scripts.length; i++) {
+        const src = scripts[i].src;
+        if (src && (src.includes('embed.js') || src.includes('script.js'))) {
+            return src.replace(/\/embed\.js.*$/, '').replace(/\/script\.js.*$/, '');
+        }
+    }
+    return window.location.origin;
+}
+function initAutoRender(opts) {
+    const apiUrl = opts.apiUrl || detectApiUrl();
+    const wallNodes = document.querySelectorAll('[data-testiflow-wall]');
+    wallNodes.forEach((el, index) => {
+        if (el.dataset.testiflowRendered === 'true')
+            return;
+        const siteId = el.dataset.testiflowWall;
+        if (!siteId)
+            return;
+        el.dataset.testiflowRendered = 'true';
+        if (!el.id)
+            el.id = `testiflow-wall-${siteId.slice(0, 8)}-${index}`;
+        const widget = new opts.TestimonialWidget(siteId, apiUrl);
+        const layout = (el.dataset.layout || el.dataset.testiflowLayout || 'grid');
+        const limit = parseInt(el.dataset.limit || el.dataset.testiflowLimit || '12', 10);
+        widget.displayTestimonials(el.id, {
+            layout,
+            limit: isNaN(limit) ? 12 : limit,
+            showRating: true,
+            showAuthor: true,
+        });
+    });
+    const collectNodes = document.querySelectorAll('[data-testiflow-collect]');
+    collectNodes.forEach((el) => {
+        const siteId = el.dataset.testiflowCollect;
+        if (!siteId || el.dataset.testiflowRendered === 'true')
+            return;
+        el.dataset.testiflowRendered = 'true';
+        new opts.TestimonialWidget(siteId, apiUrl);
+    });
+}
+function observeAutoRender(opts) {
+    initAutoRender(opts);
+    if (typeof MutationObserver === 'undefined')
+        return;
+    const observer = new MutationObserver(() => initAutoRender(opts));
+    observer.observe(document.body, { childList: true, subtree: true });
+}
+
+;// ./src/index.ts
 /**
  * Testimonial SaaS - Injectable Script
  * This script can be injected into any website to enable testimonial collection
  */
+
+
 // Store the class outside the IIFE so it persists after UMD wrapper executes
 let TestimonialWidgetClass;
 (function () {
@@ -171,65 +379,130 @@ let TestimonialWidgetClass;
             }
         }
         openModal() {
-            const modal = document.createElement('div');
-            modal.id = 'testimonial-modal';
-            modal.style.cssText = `
+            openPremiumModal({
+                content: this.createTestimonialContent(),
+                ariaLabel: 'Leave a testimonial',
+                onClose: () => { },
+            });
+            return;
+            // removed by dead control flow
+
+            // removed by dead control flow
+
+            // removed by dead control flow
+
+            // Add fade-in animation
+            // removed by dead control flow
+
+            // removed by dead control flow
+
+            // removed by dead control flow
+
+            // removed by dead control flow
+
+            // removed by dead control flow
+
+            // removed by dead control flow
+
+            // removed by dead control flow
+
+        }
+        openDrawer() {
+            openPremiumDrawer({
+                content: this.createTestimonialContent(),
+                ariaLabel: 'Leave a testimonial',
+                onClose: () => { },
+            });
+            return;
+            // removed by dead control flow
+
+            // removed by dead control flow
+
+            // removed by dead control flow
+
+            // removed by dead control flow
+
+            // removed by dead control flow
+
+            // removed by dead control flow
+
+        }
+        openPage() {
+            // Create overlay container for iframe with close button
+            const overlay = document.createElement('div');
+            overlay.id = 'testimonial-iframe-overlay';
+            overlay.style.cssText = `
         position: fixed;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
-        background: linear-gradient(135deg, rgba(102, 126, 234, 0.4) 0%, rgba(118, 75, 162, 0.4) 100%);
-        backdrop-filter: blur(8px);
-        -webkit-backdrop-filter: blur(8px);
+        background: rgba(0, 0, 0, 0.5);
         z-index: 1000000;
         display: flex;
-        justify-content: center;
         align-items: center;
+        justify-content: center;
         animation: fadeIn 0.3s ease-out;
       `;
-            // Add fade-in animation
-            const style = document.createElement('style');
-            style.textContent = `
-        @keyframes fadeIn {
-          from { opacity: 0; }
-          to { opacity: 1; }
-        }
-        @keyframes slideUp {
-          from { transform: translateY(20px); opacity: 0; }
-          to { transform: translateY(0); opacity: 1; }
-        }
+            // Add fade-in animation if not already added
+            if (!document.getElementById('testimonial-animations')) {
+                const style = document.createElement('style');
+                style.id = 'testimonial-animations';
+                style.textContent = `
+          @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+          }
+        `;
+                document.head.appendChild(style);
+            }
+            const iframeContainer = document.createElement('div');
+            iframeContainer.style.cssText = `
+        position: relative;
+        width: 90%;
+        max-width: 900px;
+        height: 90vh;
+        max-height: 800px;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        overflow: hidden;
       `;
-            document.head.appendChild(style);
-            const content = this.createTestimonialContent();
-            modal.appendChild(content);
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    document.body.removeChild(modal);
+            // Close button
+            const closeButton = document.createElement('button');
+            closeButton.innerHTML = '×';
+            closeButton.style.cssText = `
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        width: 36px;
+        height: 36px;
+        background: rgba(0, 0, 0, 0.6);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        font-size: 24px;
+        line-height: 1;
+        cursor: pointer;
+        z-index: 1000001;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+      `;
+            closeButton.onmouseover = () => {
+                closeButton.style.background = 'rgba(0, 0, 0, 0.8)';
+                closeButton.style.transform = 'scale(1.1)';
+            };
+            closeButton.onmouseout = () => {
+                closeButton.style.background = 'rgba(0, 0, 0, 0.6)';
+                closeButton.style.transform = 'scale(1)';
+            };
+            closeButton.onclick = () => {
+                if (overlay.parentNode) {
+                    document.body.removeChild(overlay);
                 }
-            });
-            document.body.appendChild(modal);
-        }
-        openDrawer() {
-            const drawer = document.createElement('div');
-            drawer.id = 'testimonial-drawer';
-            drawer.style.cssText = `
-        position: fixed;
-        top: 0;
-        right: 0;
-        width: 400px;
-        max-width: 90vw;
-        height: 100vh;
-        background-color: white;
-        z-index: 1000000;
-        box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
-        overflow-y: auto;
-      `;
-            const content = this.createTestimonialContent();
-            drawer.appendChild(content);
-            document.body.appendChild(drawer);
-        }
-        openPage() {
+            };
             const iframe = document.createElement('iframe');
             // Testimonial form route is excluded from /api prefix for public access
             const pageUrl = `${this.apiUrl}/testimonial-form/${this.siteId}`;
@@ -238,19 +511,26 @@ let TestimonialWidgetClass;
             // Grant camera and microphone permissions to the iframe
             iframe.setAttribute('allow', 'camera; microphone; autoplay');
             iframe.style.cssText = `
-        position: fixed;
-        top: 0;
-        left: 0;
         width: 100%;
         height: 100%;
         border: none;
-        z-index: 1000000;
       `;
             iframe.onerror = (error) => {
                 console.error('Failed to load testimonial page:', error);
                 console.error('Page URL:', pageUrl);
             };
-            document.body.appendChild(iframe);
+            // Close on overlay click (outside iframe)
+            overlay.addEventListener('click', (e) => {
+                if (e.target === overlay) {
+                    if (overlay.parentNode) {
+                        document.body.removeChild(overlay);
+                    }
+                }
+            });
+            iframeContainer.appendChild(closeButton);
+            iframeContainer.appendChild(iframe);
+            overlay.appendChild(iframeContainer);
+            document.body.appendChild(overlay);
         }
         createTestimonialContent() {
             if (!this.config)
@@ -917,11 +1197,15 @@ let TestimonialWidgetClass;
                 }
                 // Use config from dashboard or fallback to options/defaults
                 const displayConfig = this.config?.testimonialDisplay;
-                const layout = options?.layout || displayConfig?.layout || 'grid';
+                const component = displayConfig?.component || 'grid';
+                const layout = options?.layout || displayConfig?.layout || (component === 'carousel' ? 'carousel' : component === 'list' ? 'list' : 'grid');
                 const limit = options?.limit || displayConfig?.limit || testimonials.length;
                 const showRating = options?.showRating !== undefined ? options.showRating : (displayConfig?.showRating !== false);
                 const showAuthor = options?.showAuthor !== undefined ? options.showAuthor : (displayConfig?.showAuthor !== false);
+                const showAvatar = displayConfig?.showAvatar !== false;
+                const showCompany = displayConfig?.showCompany !== false;
                 const showVideo = displayConfig?.showVideo !== false;
+                const columns = displayConfig?.columns || displayConfig?.itemsPerRow || 3;
                 // Filter testimonials by type if needed
                 const filteredTestimonials = showVideo
                     ? testimonials
@@ -930,15 +1214,39 @@ let TestimonialWidgetClass;
                 // Apply spacing from config
                 const gap = displayConfig?.spacing?.gap || '24px';
                 const margin = displayConfig?.spacing?.margin || '0';
-                if (layout === 'grid') {
-                    const itemsPerRow = displayConfig?.itemsPerRow || 3;
-                    container.style.cssText = `display: grid; grid-template-columns: repeat(${itemsPerRow}, 1fr); gap: ${gap}; margin: ${margin};`;
+                // Apply layout based on component type
+                if (component === 'grid' || layout === 'grid') {
+                    container.style.cssText = `
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+            gap: ${gap}; 
+            margin: ${margin};
+            ${columns ? `grid-template-columns: repeat(${columns}, 1fr);` : ''}
+          `;
                 }
-                else if (layout === 'carousel') {
-                    container.style.cssText = `display: flex; overflow-x: auto; gap: ${gap}; padding: 20px 0; scroll-snap-type: x mandatory; margin: ${margin};`;
+                else if (component === 'carousel' || layout === 'carousel') {
+                    container.style.cssText = `
+            display: flex; 
+            overflow-x: auto; 
+            gap: ${gap}; 
+            padding: 20px 0; 
+            scroll-snap-type: x mandatory; 
+            margin: ${margin};
+            scrollbar-width: thin;
+            -webkit-overflow-scrolling: touch;
+          `;
+                }
+                else if (component === 'list' || layout === 'list') {
+                    container.style.cssText = `
+            display: flex; 
+            flex-direction: column; 
+            gap: ${gap}; 
+            margin: ${margin};
+          `;
                 }
                 else {
-                    container.style.cssText = `display: flex; flex-direction: column; gap: ${gap}; margin: ${margin};`;
+                    // Default grid
+                    container.style.cssText = `display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: ${gap}; margin: ${margin};`;
                 }
                 const getShadowStyle = (shadow) => {
                     switch (shadow) {
@@ -949,6 +1257,7 @@ let TestimonialWidgetClass;
                     }
                 };
                 limitedTestimonials.forEach((testimonial) => {
+                    // Apply Shadcn-style card based on component type
                     const cardStyle = displayConfig?.cardStyle || {
                         backgroundColor: '#ffffff',
                         textColor: '#111827',
@@ -957,53 +1266,96 @@ let TestimonialWidgetClass;
                         padding: '24px',
                         shadow: 'medium'
                     };
+                    // Component-specific styling
+                    let componentStyles = '';
+                    if (component === 'minimal') {
+                        componentStyles = `
+              border: none;
+              box-shadow: none;
+              padding: 16px;
+              background: transparent;
+            `;
+                    }
+                    else if (component === 'card') {
+                        componentStyles = `
+              border: 1px solid ${cardStyle.borderColor || '#e5e7eb'};
+              box-shadow: ${getShadowStyle('medium')};
+              padding: ${cardStyle.padding || '24px'};
+            `;
+                    }
+                    else {
+                        // Grid, carousel, list - default Shadcn card style
+                        componentStyles = `
+              border: 1px solid ${cardStyle.borderColor || '#e5e7eb'};
+              box-shadow: ${getShadowStyle(cardStyle.shadow || 'medium')};
+              padding: ${cardStyle.padding || '24px'};
+            `;
+                    }
                     const card = document.createElement('div');
                     card.style.cssText = `
-            background: ${cardStyle.backgroundColor || '#ffffff'};
+            background: ${component === 'minimal' ? 'transparent' : (cardStyle.backgroundColor || '#ffffff')};
             color: ${cardStyle.textColor || '#111827'};
-            border: 1px solid ${cardStyle.borderColor || '#e5e7eb'};
             border-radius: ${cardStyle.borderRadius || this.config?.theme?.borderRadius || '12px'};
-            padding: ${cardStyle.padding || '24px'};
-            box-shadow: ${getShadowStyle(cardStyle.shadow || 'medium')};
+            ${componentStyles}
             ${layout === 'carousel' ? 'min-width: 300px; scroll-snap-align: start;' : ''}
             font-family: ${this.config?.theme?.fontFamily || 'inherit'};
+            transition: transform 0.2s, box-shadow 0.2s;
           `;
-                    // Author info
+                    // Add hover effect for card component
+                    if (component === 'card' || component === 'grid') {
+                        card.onmouseenter = () => {
+                            card.style.transform = 'translateY(-2px)';
+                            card.style.boxShadow = getShadowStyle('large');
+                        };
+                        card.onmouseleave = () => {
+                            card.style.transform = 'translateY(0)';
+                            card.style.boxShadow = getShadowStyle(cardStyle.shadow || 'medium');
+                        };
+                    }
+                    // Author info - Shadcn style
                     if (showAuthor && testimonial.author) {
                         const authorDiv = document.createElement('div');
                         authorDiv.style.cssText = 'display: flex; align-items: center; gap: 12px; margin-bottom: 16px;';
-                        if (testimonial.author.avatar) {
-                            const avatar = document.createElement('img');
-                            avatar.src = testimonial.author.avatar;
-                            avatar.style.cssText = 'width: 48px; height: 48px; border-radius: 50%; object-fit: cover;';
-                            authorDiv.appendChild(avatar);
-                        }
-                        else {
-                            const avatarPlaceholder = document.createElement('div');
-                            avatarPlaceholder.style.cssText = `
-                width: 48px;
-                height: 48px;
-                border-radius: 50%;
-                background: ${this.config?.theme.primaryColor || 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'};
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                color: white;
-                font-weight: bold;
-                font-size: 18px;
-              `;
-                            avatarPlaceholder.textContent = testimonial.author.name ? testimonial.author.name.charAt(0).toUpperCase() : '?';
-                            authorDiv.appendChild(avatarPlaceholder);
+                        if (showAvatar) {
+                            if (testimonial.author.avatar) {
+                                const avatar = document.createElement('img');
+                                avatar.src = testimonial.author.avatar;
+                                avatar.style.cssText = 'width: 48px; height: 48px; border-radius: 50%; object-fit: cover; border: 2px solid #e5e7eb;';
+                                authorDiv.appendChild(avatar);
+                            }
+                            else {
+                                const avatarPlaceholder = document.createElement('div');
+                                avatarPlaceholder.style.cssText = `
+                  width: 48px;
+                  height: 48px;
+                  border-radius: 50%;
+                  background: ${this.config?.theme.primaryColor || '#667eea'};
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  color: white;
+                  font-weight: 600;
+                  font-size: 18px;
+                  border: 2px solid #e5e7eb;
+                `;
+                                avatarPlaceholder.textContent = testimonial.author.name ? testimonial.author.name.charAt(0).toUpperCase() : '?';
+                                authorDiv.appendChild(avatarPlaceholder);
+                            }
                         }
                         const authorInfo = document.createElement('div');
                         const name = document.createElement('div');
                         name.style.cssText = 'font-weight: 600; font-size: 16px; color: #111827;';
                         name.textContent = testimonial.author.name || 'Anonymous';
                         authorInfo.appendChild(name);
-                        if (testimonial.author.company || testimonial.author.position) {
+                        if (showCompany && (testimonial.author.company || testimonial.author.position)) {
                             const meta = document.createElement('div');
                             meta.style.cssText = 'font-size: 14px; color: #6b7280; margin-top: 4px;';
-                            meta.textContent = [testimonial.author.position, testimonial.author.company].filter(Boolean).join(' at ');
+                            const metaParts = [];
+                            if (testimonial.author.position)
+                                metaParts.push(testimonial.author.position);
+                            if (testimonial.author.company)
+                                metaParts.push(testimonial.author.company);
+                            meta.textContent = metaParts.join(' at ');
                             authorInfo.appendChild(meta);
                         }
                         authorDiv.appendChild(authorInfo);
@@ -1174,6 +1526,17 @@ let TestimonialWidgetClass;
     if (typeof window !== 'undefined') {
         window.TestimonialWidget = TestimonialWidget;
     }
+    const bootApiUrl = (() => {
+        const scripts = document.getElementsByTagName('script');
+        for (let i = 0; i < scripts.length; i++) {
+            const src = scripts[i].src;
+            if (src && (src.includes('embed.js') || src.includes('script.js'))) {
+                return src.replace(/\/embed\.js.*$/, '').replace(/\/script\.js.*$/, '');
+            }
+        }
+        return window.location.origin;
+    })();
+    observeAutoRender({ apiUrl: bootApiUrl, TestimonialWidget });
     // Auto-initialize if script tag has data-site-id attribute
     // Handle both static and dynamically loaded scripts
     const scriptTag = document.currentScript;

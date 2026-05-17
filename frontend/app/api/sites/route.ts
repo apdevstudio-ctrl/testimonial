@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { randomUUID } from 'crypto';
 import connectDB from '@/lib/db/mongoose';
 import Site from '@/lib/models/Site';
+import { slugifySiteName } from '@/lib/embed/snippets';
 import { authenticate } from '@/lib/middleware/auth';
 import { requireActiveSubscription } from '@/lib/middleware/subscriptionGate';
 
@@ -51,11 +52,22 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    const publicSlug = slugifySiteName(name, siteId);
+
     const site = new Site({
       userId: user._id.toString(),
       siteId,
       name,
       domain,
+      publicSlug,
+      wallSettings: {
+        isPublic: true,
+        title: `${name} — Wall of Love`,
+        subtitle: 'What our customers say',
+        themePreset: 'saas',
+        layout: 'grid',
+        limit: 24,
+      },
       button: {
         enabled: true,
         type: 'floating',

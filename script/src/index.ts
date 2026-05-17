@@ -3,6 +3,9 @@
  * This script can be injected into any website to enable testimonial collection
  */
 
+import { openPremiumModal, openPremiumDrawer } from './overlay-ui';
+import { observeAutoRender } from './autorender';
+
 // Store the class outside the IIFE so it persists after UMD wrapper executes
 let TestimonialWidgetClass: any;
 
@@ -269,6 +272,12 @@ let TestimonialWidgetClass: any;
     }
 
     private openModal(): void {
+      openPremiumModal({
+        content: this.createTestimonialContent(),
+        ariaLabel: 'Leave a testimonial',
+        onClose: () => {},
+      });
+      return;
       const modal = document.createElement('div');
       modal.id = 'testimonial-modal';
       modal.style.cssText = `
@@ -314,6 +323,12 @@ let TestimonialWidgetClass: any;
     }
 
     private openDrawer(): void {
+      openPremiumDrawer({
+        content: this.createTestimonialContent(),
+        ariaLabel: 'Leave a testimonial',
+        onClose: () => {},
+      });
+      return;
       const drawer = document.createElement('div');
       drawer.id = 'testimonial-drawer';
       drawer.style.cssText = `
@@ -1523,6 +1538,19 @@ let TestimonialWidgetClass: any;
     (window as any).TestimonialWidget = TestimonialWidget;
   }
   
+  const bootApiUrl = (() => {
+    const scripts = document.getElementsByTagName('script');
+    for (let i = 0; i < scripts.length; i++) {
+      const src = scripts[i].src;
+      if (src && (src.includes('embed.js') || src.includes('script.js'))) {
+        return src.replace(/\/embed\.js.*$/, '').replace(/\/script\.js.*$/, '');
+      }
+    }
+    return window.location.origin;
+  })();
+
+  observeAutoRender({ apiUrl: bootApiUrl, TestimonialWidget });
+
   // Auto-initialize if script tag has data-site-id attribute
   // Handle both static and dynamically loaded scripts
   const scriptTag = document.currentScript as HTMLScriptElement;

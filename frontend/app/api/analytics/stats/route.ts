@@ -25,6 +25,8 @@ export async function GET(req: NextRequest) {
 
     const stats = {
       totalEvents: events.length,
+      wallViews: events.filter((e) => e.eventType === 'wall_view').length,
+      widgetImpressions: events.filter((e) => e.eventType === 'widget_impression').length,
       buttonViews: events.filter((e) => e.eventType === 'button_view').length,
       buttonClicks: events.filter((e) => e.eventType === 'button_click').length,
       testimonialSubmissions: events.filter(

@@ -10,6 +10,7 @@ import Modal from '@/components/ui/Modal';
 import Input from '@/components/ui/Input';
 import { useToast } from '@/components/ui/Toast';
 import { CardSkeleton } from '@/components/ui/LoadingSkeleton';
+import OnboardingWizard, { isOnboardingComplete } from '@/components/onboarding/OnboardingWizard';
 
 interface Site {
   _id: string;
@@ -34,6 +35,7 @@ export default function Dashboard() {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [newSite, setNewSite] = useState({ name: '', domain: '' });
   const [isCreating, setIsCreating] = useState(false);
+  const [showOnboarding, setShowOnboarding] = useState(false);
   const { showToast } = useToast();
 
   useEffect(() => {
@@ -74,6 +76,9 @@ export default function Dashboard() {
       if (!response.ok) throw new Error('Failed to fetch sites');
       const data = await response.json();
       setSites(data);
+      if (data.length === 0 && !isOnboardingComplete()) {
+        setShowOnboarding(true);
+      }
     } catch (error) {
       console.error('Error fetching sites:', error);
       showToast('Failed to load sites', 'error');
@@ -128,6 +133,12 @@ export default function Dashboard() {
 
   return (
     <div className="p-6 md:p-8 max-w-7xl mx-auto">
+      {showOnboarding && sites.length === 0 && !loading && (
+        <OnboardingWizard
+          onSiteCreated={() => fetchSites()}
+          onDismiss={() => setShowOnboarding(false)}
+        />
+      )}
       <div className="flex justify-between items-center mb-8">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Sites</h1>
