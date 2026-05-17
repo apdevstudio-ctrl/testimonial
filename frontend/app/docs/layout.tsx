@@ -6,7 +6,7 @@ export default function DocsLayout({ children }: { children: React.ReactNode }) 
     <div className="min-h-screen bg-zinc-50 flex flex-col lg:flex-row">
       <aside className="lg:w-64 lg:min-h-screen border-b lg:border-b-0 lg:border-r border-zinc-200 bg-white shrink-0">
         <div className="p-5 lg:p-6 lg:sticky lg:top-0 lg:max-h-screen lg:overflow-y-auto">
-          <Link href="/landing" className="font-bold text-zinc-900 block mb-1">
+          <Link href="/" className="font-bold text-zinc-900 block mb-1">
             TestiFlow
           </Link>
           <p className="text-xs text-zinc-500 mb-6">Documentation</p>

@@ -102,7 +102,7 @@ function structuredDataJsonLd() {
         applicationCategory: 'BusinessApplication',
         operatingSystem: 'Web',
         offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD', description: 'Free trial and paid plans' },
-        url: `${site}/landing`,
+        url: site,
       },
     ],
   }

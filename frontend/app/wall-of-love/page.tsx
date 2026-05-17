@@ -14,7 +14,7 @@ export default function WallOfLoveProductPage() {
     <div className="min-h-screen bg-white">
       <nav className="border-b border-gray-100">
         <div className="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between">
-          <Link href="/landing" className="font-semibold text-gray-900">
+          <Link href="/" className="font-semibold text-gray-900">
             TestiFlow
           </Link>
           <Link href="/signup" className="text-sm font-medium text-indigo-600 hover:text-indigo-700">

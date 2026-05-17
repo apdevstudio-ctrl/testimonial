@@ -12,7 +12,7 @@ export default function ExamplesPage() {
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
       <header className="border-b bg-white/80 backdrop-blur sticky top-0 z-10">
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-          <Link href="/landing" className="font-bold text-indigo-600">
+          <Link href="/" className="font-bold text-indigo-600">
             TestiFlow
           </Link>
           <Link href="/signup" className="text-sm font-medium text-indigo-600 hover:text-indigo-700">

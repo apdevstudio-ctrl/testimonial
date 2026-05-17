@@ -19,7 +19,7 @@ export default function DashboardLayout({
   const hideLayoutRoutes = [
     '/signin',
     '/signup',
-    '/landing',
+    '/',
     '/contact',
     '/integration-guide',
     '/privacy',
