@@ -3,6 +3,8 @@
 import Link from 'next/link';
 import { Moon, Sun } from 'lucide-react';
 import Button from '@/components/ui/Button';
+import LanguageSwitcher from '@/components/i18n/LanguageSwitcher';
+import { useI18n } from '@/contexts/I18nProvider';
 
 interface LandingNavProps {
   darkMode: boolean;
@@ -10,6 +12,8 @@ interface LandingNavProps {
 }
 
 export default function LandingNav({ darkMode, onToggleDark }: LandingNavProps) {
+  const { t } = useI18n();
+
   return (
     <nav
       className={`sticky top-0 z-50 border-b backdrop-blur-xl ${
@@ -25,19 +29,19 @@ export default function LandingNav({ darkMode, onToggleDark }: LandingNavProps) 
           </Link>
           <div className="hidden md:flex items-center gap-8">
             <a href="#demo" className={darkMode ? 'text-slate-300 hover:text-white text-sm' : 'text-gray-600 hover:text-gray-900 text-sm'}>
-              Live demo
+              {t('nav.liveDemo')}
             </a>
             <a href="#features" className={darkMode ? 'text-slate-300 hover:text-white text-sm' : 'text-gray-600 hover:text-gray-900 text-sm'}>
-              Features
+              {t('nav.features')}
             </a>
             <Link href="/examples" className={darkMode ? 'text-slate-300 hover:text-white text-sm' : 'text-gray-600 hover:text-gray-900 text-sm'}>
-              Examples
+              {t('nav.examples')}
             </Link>
             <Link href="/docs/playground" className={darkMode ? 'text-slate-300 hover:text-white text-sm' : 'text-gray-600 hover:text-gray-900 text-sm'}>
-              Playground
+              {t('nav.playground')}
             </Link>
             <a href="#pricing" className={darkMode ? 'text-slate-300 hover:text-white text-sm' : 'text-gray-600 hover:text-gray-900 text-sm'}>
-              Pricing
+              {t('nav.pricing')}
             </a>
           </div>
           <div className="flex items-center gap-3">
@@ -50,11 +54,12 @@ export default function LandingNav({ darkMode, onToggleDark }: LandingNavProps) 
               {darkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
             </button>
             <Link href="/signin" className={`hidden sm:block text-sm ${darkMode ? 'text-slate-300' : 'text-gray-600'}`}>
-              Sign in
+              {t('nav.signIn')}
             </Link>
+            <LanguageSwitcher darkMode={darkMode} compact />
             <Link href="/signup">
               <Button variant="primary" size="sm">
-                Start free
+                {t('nav.startFree')}
               </Button>
             </Link>
           </div>

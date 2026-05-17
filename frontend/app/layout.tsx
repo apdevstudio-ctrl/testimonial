@@ -1,8 +1,11 @@
 import type { Metadata } from 'next'
+import { cookies } from 'next/headers'
 import './globals.css'
 import { ToastProvider } from '@/components/ui/Toast'
 import DashboardLayout from '@/components/layout/DashboardLayout'
 import { AuthProvider } from '@/contexts/AuthContext'
+import AppProviders from '@/components/providers/AppProviders'
+import { LOCALE_COOKIE, resolveLocale } from '@/lib/i18n/config'
 import { getMetadataBase, getSiteUrl } from '@/lib/seo/siteUrl'
 
 export const metadata: Metadata = {
@@ -113,8 +116,10 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  const initialLocale = resolveLocale(cookies().get(LOCALE_COOKIE)?.value)
+
   return (
-    <html lang="en">
+    <html lang={initialLocale}>
       <head>
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png" />
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon.png" />
@@ -139,13 +144,15 @@ export default function RootLayout({
         ) : null}
       </head>
       <body className="bg-gray-50">
-        <ToastProvider>
-          <AuthProvider>
-            <DashboardLayout>
-              {children}
-            </DashboardLayout>
-          </AuthProvider>
-        </ToastProvider>
+        <AppProviders initialLocale={initialLocale}>
+          <ToastProvider>
+            <AuthProvider>
+              <DashboardLayout>
+                {children}
+              </DashboardLayout>
+            </AuthProvider>
+          </ToastProvider>
+        </AppProviders>
       </body>
     </html>
   )

@@ -5,6 +5,7 @@ import { ArrowRight, Play, Code2 } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import BrowserFrame from '@/components/ui/BrowserFrame';
 import HeroWallPreview from '@/components/landing/HeroWallPreview';
+import { useI18n } from '@/contexts/I18nProvider';
 
 interface LandingHeroProps {
   darkMode: boolean;
@@ -13,6 +14,8 @@ interface LandingHeroProps {
 }
 
 export default function LandingHero({ darkMode, onCopyScript, copied }: LandingHeroProps) {
+  const { t } = useI18n();
+
   return (
     <section
       className={`relative overflow-hidden py-16 sm:py-20 lg:py-24 ${
@@ -37,32 +40,32 @@ export default function LandingHero({ darkMode, onCopyScript, copied }: LandingH
               }`}
             >
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              Wall of Love infrastructure for modern SaaS
+              {t('hero.badge')}
             </span>
             <h1
               className={`text-4xl sm:text-5xl lg:text-[3.25rem] font-bold tracking-tight mb-5 leading-[1.08] ${
                 darkMode ? 'text-white' : 'text-gray-900'
               }`}
             >
-              Social proof that{' '}
+              {t('hero.title')}{' '}
               <span className="bg-gradient-to-r from-indigo-500 to-violet-500 bg-clip-text text-transparent">
-                converts
+                {t('hero.titleHighlight')}
               </span>
             </h1>
             <p className={`text-lg mb-8 leading-relaxed ${darkMode ? 'text-slate-300' : 'text-gray-600'}`}>
-              Collect video & text testimonials, publish SEO walls, and embed premium widgets - one script, every stack.
+              {t('hero.subtitle')}
             </p>
             <div className="flex flex-wrap gap-3 mb-6">
               <Link href="/signup">
                 <Button variant="primary" size="lg" className="group">
-                  Start free trial
+                  {t('hero.startTrial')}
                   <ArrowRight className="h-4 w-4 ml-2 group-hover:translate-x-0.5 transition-transform" />
                 </Button>
               </Link>
               <a href="#demo">
                 <Button variant="outline" size="lg">
                   <Play className="h-4 w-4 mr-2" />
-                  Live demo
+                  {t('hero.liveDemo')}
                 </Button>
               </a>
             </div>
@@ -77,7 +80,7 @@ export default function LandingHero({ darkMode, onCopyScript, copied }: LandingH
             >
               <Code2 className="h-4 w-4 shrink-0" />
               <span className="truncate">
-                {copied ? 'Copied!' : '<script src="https://testiflow.site/embed.js" async></script>'}
+                {copied ? t('hero.copied') : '<script src="https://testiflow.site/embed.js" async></script>'}
               </span>
             </button>
           </div>
@@ -85,7 +88,7 @@ export default function LandingHero({ darkMode, onCopyScript, copied }: LandingH
           <div className="w-full min-w-0 lg:max-w-none">
             <BrowserFrame
               url="yoursite.com"
-              title="Live preview"
+              title={t('hero.previewTitle')}
               dark={darkMode}
               className="w-full shadow-xl shadow-indigo-500/10 ring-1 ring-black/5"
             >

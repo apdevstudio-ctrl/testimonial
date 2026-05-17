@@ -1,13 +1,13 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import Link from 'next/link';
 import {
-  ArrowRight, Check, Zap, Shield, Palette, BarChart3, Layout, Sparkles,
-  Star, MessageSquare, CheckCircle, Globe, X,
+  ArrowRight, Check, Zap, Shield, Palette, BarChart3, Layout, Sparkles, X,
 } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import { useToast } from '@/components/ui/Toast';
+import { useI18n } from '@/contexts/I18nProvider';
 import { SIX_MONTH_DISPLAY_USD, YEARLY_DISPLAY_USD } from '@/lib/subscription/constants';
 import LandingNav from '@/components/landing/LandingNav';
 import LandingHero from '@/components/landing/LandingHero';
@@ -19,6 +19,7 @@ export default function PremiumLanding() {
   const [copied, setCopied] = useState(false);
   const [showExitPopup, setShowExitPopup] = useState(false);
   const { showToast } = useToast();
+  const { t } = useI18n();
   const exitIntentRef = useRef(false);
 
   useEffect(() => {
@@ -39,25 +40,63 @@ export default function PremiumLanding() {
   const copyScript = () => {
     navigator.clipboard.writeText('<script src="https://testiflow.site/embed.js" async></script>');
     setCopied(true);
-    showToast('Script copied!', 'success');
+    showToast(t('toast.scriptCopied'), 'success');
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const features = [
-    { icon: Zap, title: 'One-line embed', description: 'Script, iframe, or React — works on any stack.', color: 'from-yellow-400 to-orange-500' },
-    { icon: Shield, title: 'Moderation', description: 'Approve before publish. Rate limits built in.', color: 'from-green-400 to-emerald-500' },
-    { icon: Palette, title: '8 premium themes', description: 'SaaS, glass, dark, ocean, bold, and more.', color: 'from-purple-400 to-pink-500' },
-    { icon: BarChart3, title: 'Analytics', description: 'Wall views, impressions, and conversion funnel.', color: 'from-blue-400 to-cyan-500' },
-    { icon: Layout, title: '8 layouts', description: 'Grid, bento, marquee, masonry, carousel, and more.', color: 'from-indigo-400 to-purple-500' },
-    { icon: Sparkles, title: 'AI enrichment', description: 'Headlines, tags, and sentiment on testimonials.', color: 'from-red-400 to-rose-500' },
-  ];
+  const features = useMemo(
+    () => [
+      { icon: Zap, title: t('features.oneLineEmbed'), description: t('features.oneLineEmbedDesc'), color: 'from-yellow-400 to-orange-500' },
+      { icon: Shield, title: t('features.moderation'), description: t('features.moderationDesc'), color: 'from-green-400 to-emerald-500' },
+      { icon: Palette, title: t('features.themes'), description: t('features.themesDesc'), color: 'from-purple-400 to-pink-500' },
+      { icon: BarChart3, title: t('features.analytics'), description: t('features.analyticsDesc'), color: 'from-blue-400 to-cyan-500' },
+      { icon: Layout, title: t('features.layouts'), description: t('features.layoutsDesc'), color: 'from-indigo-400 to-purple-500' },
+      { icon: Sparkles, title: t('features.ai'), description: t('features.aiDesc'), color: 'from-red-400 to-rose-500' },
+    ],
+    [t]
+  );
 
-  const pricingPlans = [
-    { name: 'Trial', price: 'Free', period: '30 days', features: ['Full dashboard', 'All widgets', 'Analytics', 'No card'], cta: 'Start trial', popular: false, href: '/signup' },
-    { name: 'Monthly', price: '$5', period: '/mo', features: ['Unlimited testimonials', 'Video & text', 'Custom widgets', 'Lemon Squeezy'], cta: 'Get started', popular: false, href: '/signup' },
-    { name: '6 months', price: `$${SIX_MONTH_DISPLAY_USD}`, period: '/6 mo', features: ['Everything monthly', 'Better value', 'One invoice', 'Priority support'], cta: 'Get started', popular: true, href: '/signup' },
-    { name: 'Yearly', price: `$${YEARLY_DISPLAY_USD}`, period: '/yr', features: ['Lowest rate', 'Annual billing', 'All features', 'Best for teams'], cta: 'Get started', popular: false, href: '/signup' },
-  ];
+  const pricingPlans = useMemo(
+    () => [
+      {
+        name: t('pricing.trial'),
+        price: t('pricing.free'),
+        period: t('pricing.days30'),
+        features: [t('pricing.featFullDashboard'), t('pricing.featAllWidgets'), t('pricing.featAnalytics'), t('pricing.featNoCard')],
+        cta: t('pricing.startTrial'),
+        popular: false,
+        href: '/signup',
+      },
+      {
+        name: t('pricing.monthly'),
+        price: '$5',
+        period: t('pricing.perMo'),
+        features: [t('pricing.featUnlimited'), t('pricing.featVideoText'), t('pricing.featCustomWidgets'), 'Lemon Squeezy'],
+        cta: t('pricing.getStarted'),
+        popular: false,
+        href: '/signup',
+      },
+      {
+        name: t('pricing.sixMonths'),
+        price: `$${SIX_MONTH_DISPLAY_USD}`,
+        period: t('pricing.per6Mo'),
+        features: [t('pricing.featEverythingMonthly'), t('pricing.featBetterValue'), t('pricing.featOneInvoice'), t('pricing.featPriority')],
+        cta: t('pricing.getStarted'),
+        popular: true,
+        href: '/signup',
+      },
+      {
+        name: t('pricing.yearly'),
+        price: `$${YEARLY_DISPLAY_USD}`,
+        period: t('pricing.perYr'),
+        features: [t('pricing.featLowestRate'), t('pricing.featAnnual'), t('pricing.featAllFeatures'), t('pricing.featBestTeams')],
+        cta: t('pricing.getStarted'),
+        popular: false,
+        href: '/signup',
+      },
+    ],
+    [t]
+  );
 
   return (
     <div className={`min-h-screen transition-colors ${darkMode ? 'bg-slate-950 text-white' : 'bg-white'}`}>
@@ -73,7 +112,7 @@ export default function PremiumLanding() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">
             <h2 className={`text-3xl md:text-4xl font-bold mb-3 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-              Everything you need for social proof
+              {t('features.title')}
             </h2>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -101,8 +140,8 @@ export default function PremiumLanding() {
       <section id="pricing" className={`py-20 scroll-mt-24 ${darkMode ? 'bg-slate-950' : 'bg-white'}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className={`text-3xl md:text-4xl font-bold mb-3 ${darkMode ? 'text-white' : 'text-gray-900'}`}>Simple pricing</h2>
-            <p className={darkMode ? 'text-slate-400' : 'text-gray-600'}>Start free. Upgrade when you are ready.</p>
+            <h2 className={`text-3xl md:text-4xl font-bold mb-3 ${darkMode ? 'text-white' : 'text-gray-900'}`}>{t('pricing.title')}</h2>
+            <p className={darkMode ? 'text-slate-400' : 'text-gray-600'}>{t('pricing.subtitle')}</p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {pricingPlans.map((plan) => (
@@ -118,7 +157,7 @@ export default function PremiumLanding() {
               >
                 {plan.popular && (
                   <span className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 bg-indigo-600 text-white text-xs font-semibold rounded-full">
-                    Popular
+                    {t('pricing.popular')}
                   </span>
                 )}
                 <h3 className={`font-semibold text-lg mb-1 ${darkMode ? 'text-white' : 'text-gray-900'}`}>{plan.name}</h3>
@@ -152,13 +191,13 @@ export default function PremiumLanding() {
               TestiFlow
             </span>
             <p className={`mt-2 text-sm ${darkMode ? 'text-slate-400' : 'text-gray-600'}`}>
-              Embeddable social proof for modern teams.
+              {t('footer.tagline')}
             </p>
           </div>
           <div className="flex flex-wrap gap-6 text-sm">
-            <Link href="/docs" className={darkMode ? 'text-slate-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'}>Docs</Link>
-            <Link href="/examples" className={darkMode ? 'text-slate-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'}>Examples</Link>
-            <Link href="/integrations" className={darkMode ? 'text-slate-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'}>Integrations</Link>
+            <Link href="/docs" className={darkMode ? 'text-slate-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'}>{t('nav.docs')}</Link>
+            <Link href="/examples" className={darkMode ? 'text-slate-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'}>{t('nav.examples')}</Link>
+            <Link href="/integrations" className={darkMode ? 'text-slate-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'}>{t('nav.integrations')}</Link>
           </div>
         </div>
       </footer>
@@ -169,11 +208,11 @@ export default function PremiumLanding() {
             <button type="button" onClick={() => setShowExitPopup(false)} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
               <X className="h-5 w-5" />
             </button>
-            <h3 className={`text-xl font-bold mb-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>Before you go</h3>
-            <p className={`mb-6 ${darkMode ? 'text-slate-400' : 'text-gray-600'}`}>Start your free trial — full access, no credit card.</p>
+            <h3 className={`text-xl font-bold mb-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>{t('exit.title')}</h3>
+            <p className={`mb-6 ${darkMode ? 'text-slate-400' : 'text-gray-600'}`}>{t('exit.subtitle')}</p>
             <Link href="/signup">
               <Button variant="primary" className="w-full">
-                Start free <ArrowRight className="h-4 w-4 ml-2 inline" />
+                {t('exit.cta')} <ArrowRight className="h-4 w-4 ml-2 inline" />
               </Button>
             </Link>
           </div>

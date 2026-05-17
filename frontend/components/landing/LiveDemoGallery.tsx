@@ -9,6 +9,7 @@ import { WIDGET_THEME_LIST } from '@/lib/widgetThemes';
 import type { WidgetThemePreset } from '@/lib/widgetThemes';
 import type { WidgetCustomizeConfig } from '@/lib/widget/customizer';
 import Button from '@/components/ui/Button';
+import { useI18n } from '@/contexts/I18nProvider';
 
 interface LiveDemoGalleryProps {
   darkMode?: boolean;
@@ -16,6 +17,7 @@ interface LiveDemoGalleryProps {
 }
 
 export default function LiveDemoGallery({ darkMode = false, id = 'demo' }: LiveDemoGalleryProps) {
+  const { t } = useI18n();
   const [presetId, setPresetId] = useState(DEMO_PRESETS[0].id);
   const [copied, setCopied] = useState(false);
 
@@ -37,12 +39,12 @@ export default function LiveDemoGallery({ darkMode = false, id = 'demo' }: LiveD
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-10">
-          <p className="text-sm font-semibold text-indigo-600 mb-2">LIVE DEMO GALLERY</p>
+          <p className="text-sm font-semibold text-indigo-600 mb-2">{t('demo.eyebrow')}</p>
           <h2 className={`text-3xl md:text-4xl font-bold mb-3 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-            See widgets in action
+            {t('demo.title')}
           </h2>
           <p className={`max-w-2xl mx-auto ${darkMode ? 'text-slate-400' : 'text-gray-600'}`}>
-            Switch themes and layouts instantly. Every preset is embeddable on your site in one line.
+            {t('demo.subtitle')}
           </p>
         </div>
 
@@ -92,17 +94,17 @@ export default function LiveDemoGallery({ darkMode = false, id = 'demo' }: LiveD
                   }`}
                 >
                   {copied ? <Check className="h-4 w-4 text-green-500" /> : <Copy className="h-4 w-4" />}
-                  {copied ? 'Copied' : 'Copy embed'}
+                  {copied ? t('hero.copied') : t('demo.copyEmbed')}
                 </button>
                 <Link href="/examples" className="flex-1">
                   <Button variant="primary" className="w-full text-sm">
-                    All examples
+                    {t('demo.allExamples')}
                   </Button>
                 </Link>
               </div>
             </div>
             <p className={`text-xs ${darkMode ? 'text-slate-500' : 'text-gray-500'}`}>
-              Themes: {WIDGET_THEME_LIST.map((t) => t.id).join(', ')}
+              {t('demo.themesLabel')}: {WIDGET_THEME_LIST.map((theme) => theme.id).join(', ')}
             </p>
           </div>
 
