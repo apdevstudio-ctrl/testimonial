@@ -1,0 +1,6 @@
+backend/
+script/node_modules/
+script/src/
+.git/
+*.md
+!frontend/README.md

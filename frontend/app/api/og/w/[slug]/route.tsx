@@ -2,7 +2,7 @@ import { ImageResponse } from '@vercel/og';
 import { loadPublicWall } from '@/lib/seo/walls';
 
 export const runtime = 'nodejs';
-export const revalidate = 3600;
+export const dynamic = 'force-dynamic';
 
 export async function GET(
   _req: Request,

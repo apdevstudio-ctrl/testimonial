@@ -122,6 +122,9 @@ export default function DocMarkdown({ content }: { content: string }) {
             {renderInline(paraLines.join(' '))}
           </p>
         );
+      } else {
+        // Unrecognized line (e.g. `# title`) — skip to avoid infinite loop during SSG
+        i++;
       }
     }
 

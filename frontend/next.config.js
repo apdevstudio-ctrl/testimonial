@@ -5,7 +5,12 @@ const nextConfig = {
     API_URL: process.env.API_URL || 'http://localhost:3000',
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || process.env.API_URL || 'http://localhost:3000',
   },
-  // Workaround for Windows/OneDrive symlink issues
+  // Avoid tracing the large bundled embed (fixes Vercel "Maximum call stack" during build traces)
+  experimental: {
+    outputFileTracingExcludes: {
+      '*': ['public/script.js', 'public/**/*.js'],
+    },
+  },
   webpack: (config, { isServer }) => {
     if (!isServer) {
       config.resolve.fallback = {
@@ -15,8 +20,7 @@ const nextConfig = {
     }
     return config;
   },
-  // Note: Removed outputFileTracingIncludes as it may cause issues with Vercel
-}
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;
 
