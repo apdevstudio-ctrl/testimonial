@@ -59,8 +59,8 @@ export default function EmbedStudio({ siteId, publicSlug, flowType }: EmbedStudi
     <Card className="mb-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
         <div>
-          <h2 className="text-lg font-semibold text-gray-900">Embed Studio</h2>
-          <p className="text-sm text-gray-600">Copy snippets with auto-resizing iframe support</p>
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Embed Studio</h2>
+          <p className="text-sm text-gray-600 dark:text-gray-400">Copy snippets with auto-resizing iframe support</p>
         </div>
         <div className="flex gap-2 flex-wrap">
           <a href={getPublicWallUrl(baseUrl, slug)} target="_blank" rel="noopener noreferrer">
@@ -87,7 +87,7 @@ export default function EmbedStudio({ siteId, publicSlug, flowType }: EmbedStudi
               type="button"
               onClick={() => setTab(t.id)}
               className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-md text-sm font-medium transition-colors ${
-                tab === t.id ? 'bg-white text-indigo-600 shadow-sm' : 'text-gray-600 hover:text-gray-900'
+                tab === t.id ? 'bg-white dark:bg-slate-900 text-indigo-600 dark:text-indigo-400 shadow-sm' : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:text-white'
               }`}
             >
               <Icon className="h-4 w-4" />
@@ -100,11 +100,11 @@ export default function EmbedStudio({ siteId, publicSlug, flowType }: EmbedStudi
       {(tab === 'wall' || tab === 'display') && (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Theme</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Theme</label>
             <select
               value={theme}
               onChange={(e) => setTheme(e.target.value as WidgetThemePreset)}
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm"
+              className="w-full rounded-lg border border-gray-300 dark:border-slate-600 px-3 py-2 text-sm"
             >
               {WIDGET_THEME_LIST.map((t) => (
                 <option key={t.id} value={t.id}>
@@ -114,11 +114,11 @@ export default function EmbedStudio({ siteId, publicSlug, flowType }: EmbedStudi
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Layout</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Layout</label>
             <select
               value={layout}
               onChange={(e) => setLayout(e.target.value as typeof layout)}
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm"
+              className="w-full rounded-lg border border-gray-300 dark:border-slate-600 px-3 py-2 text-sm"
             >
               <option value="grid">Grid</option>
               <option value="carousel">Carousel</option>
@@ -136,8 +136,8 @@ export default function EmbedStudio({ siteId, publicSlug, flowType }: EmbedStudi
         </div>
       )}
 
-      <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-4 max-h-48 overflow-auto">
-        <pre className="text-xs text-gray-800 font-mono whitespace-pre-wrap break-all">{code}</pre>
+      <div className="bg-gray-50 dark:bg-slate-950 border border-gray-200 dark:border-slate-700 rounded-lg p-4 mb-4 max-h-48 overflow-auto">
+        <pre className="text-xs text-gray-800 dark:text-gray-200 font-mono whitespace-pre-wrap break-all">{code}</pre>
       </div>
 
       <Button onClick={copy} variant="outline" className="w-full sm:w-auto">

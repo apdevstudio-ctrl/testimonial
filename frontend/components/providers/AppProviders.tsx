@@ -2,6 +2,7 @@
 
 import type { ReactNode } from 'react';
 import { I18nProvider } from '@/contexts/I18nProvider';
+import { ThemeProvider } from '@/contexts/ThemeProvider';
 import type { Locale } from '@/lib/i18n/config';
 
 export default function AppProviders({
@@ -12,8 +13,10 @@ export default function AppProviders({
   initialLocale: Locale;
 }) {
   return (
-    <I18nProvider initialLocale={initialLocale}>
-      {children}
-    </I18nProvider>
+    <ThemeProvider>
+      <I18nProvider initialLocale={initialLocale}>
+        {children}
+      </I18nProvider>
+    </ThemeProvider>
   );
 }

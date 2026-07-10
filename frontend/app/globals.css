@@ -3,21 +3,66 @@
 @tailwind utilities;
 
 @layer base {
-  * {
-    @apply border-gray-200;
+  :root {
+    --tf-bg: #f9fafb;
+    --tf-bg-elevated: #ffffff;
+    --tf-bg-muted: #f3f4f6;
+    --tf-border: #e5e7eb;
+    --tf-text: #111827;
+    --tf-text-muted: #4b5563;
+    --tf-text-subtle: #6b7280;
+    --tf-ring: #6366f1;
+    --tf-sidebar: #ffffff;
+    --tf-header: #ffffff;
+    --tf-input: #ffffff;
+    --tf-hover: #f3f4f6;
+    --tf-active: #eef2ff;
   }
-  
+
+  .dark {
+    --tf-bg: #0b1220;
+    --tf-bg-elevated: #111827;
+    --tf-bg-muted: #1f2937;
+    --tf-border: #374151;
+    --tf-text: #f9fafb;
+    --tf-text-muted: #d1d5db;
+    --tf-text-subtle: #9ca3af;
+    --tf-ring: #818cf8;
+    --tf-sidebar: #0f172a;
+    --tf-header: #0f172a;
+    --tf-input: #1f2937;
+    --tf-hover: #1f2937;
+    --tf-active: rgba(99, 102, 241, 0.18);
+    color-scheme: dark;
+  }
+
+  * {
+    @apply border-gray-200 dark:border-gray-700;
+  }
+
   html {
     scroll-behavior: smooth;
   }
-  
+
   body {
-    @apply text-gray-900 bg-gray-50;
+    @apply text-gray-900 bg-gray-50 antialiased;
+    background-color: var(--tf-bg);
+    color: var(--tf-text);
     font-feature-settings: 'rlig' 1, 'calt' 1;
   }
-  
+
   .dark body {
-    @apply bg-gray-900 text-white;
+    @apply bg-slate-950 text-gray-100;
+  }
+
+  /* Readable form controls in dark mode */
+  .dark input::placeholder,
+  .dark textarea::placeholder {
+    @apply text-gray-500;
+  }
+
+  .dark :focus-visible {
+    outline-color: var(--tf-ring);
   }
 }
 
@@ -25,17 +70,26 @@
   .animate-in {
     animation: fadeIn 0.3s ease-in-out;
   }
-  
+
   .slide-in-from-right {
     animation: slideInFromRight 0.3s ease-out;
   }
-  
+
   .animate-float {
     animation: float 3s ease-in-out infinite;
   }
-  
+
   .animate-slide {
     animation: slide 10s linear infinite;
+  }
+
+  .tf-surface {
+    background-color: var(--tf-bg-elevated);
+    border-color: var(--tf-border);
+  }
+
+  .tf-muted {
+    color: var(--tf-text-muted);
   }
 }
 
@@ -107,6 +161,9 @@
 .tf-card-hover:hover {
   transform: translateY(-2px);
   box-shadow: 0 12px 40px rgb(99 102 241 / 0.12);
+}
+.dark .tf-card-hover:hover {
+  box-shadow: 0 12px 40px rgb(99 102 241 / 0.22);
 }
 
 .tf-anim-subtle {
@@ -196,4 +253,3 @@
     scroll-behavior: smooth;
   }
 }
-

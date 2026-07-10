@@ -19,9 +19,11 @@ export default function Card({ children, className, padding = 'md', hover = fals
   return (
     <div
       className={clsx(
-        'bg-white rounded-xl shadow-sm border border-gray-200',
+        'bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-gray-200 dark:border-slate-700/80',
+        'dark:shadow-none',
         paddings[padding],
-        hover && 'hover:shadow-md transition-shadow cursor-pointer',
+        hover &&
+          'hover:shadow-md dark:hover:border-slate-600 dark:hover:bg-slate-900/90 transition-all cursor-pointer',
         className
       )}
     >
@@ -29,4 +31,3 @@ export default function Card({ children, className, padding = 'md', hover = fals
     </div>
   );
 }
-

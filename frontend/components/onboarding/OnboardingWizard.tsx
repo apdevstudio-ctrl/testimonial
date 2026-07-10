@@ -82,14 +82,14 @@ export default function OnboardingWizard({ onSiteCreated, onDismiss }: Onboardin
     onDismiss?.();
   };
 
-  const steps = ['Name your site', 'Install embed', 'You\'re ready'];
+  const steps = ['Name your site', 'Install embed', "You're ready"];
 
   return (
-    <Card className="mb-8 border-indigo-200 bg-gradient-to-br from-indigo-50 to-white">
+    <Card className="mb-8 border-indigo-200 dark:border-indigo-500/30 bg-gradient-to-br from-indigo-50 to-white dark:from-indigo-950/40 dark:to-slate-900">
       <div className="flex items-center gap-2 mb-6">
-        <Sparkles className="h-5 w-5 text-indigo-600" />
-        <h2 className="text-lg font-semibold text-gray-900">Quick setup</h2>
-        <span className="text-sm text-gray-500 ml-auto">
+        <Sparkles className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
+        <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Quick setup</h2>
+        <span className="text-sm text-gray-500 dark:text-gray-400 ml-auto">
           Step {step} of 3 — {steps[step - 1]}
         </span>
       </div>
@@ -98,14 +98,16 @@ export default function OnboardingWizard({ onSiteCreated, onDismiss }: Onboardin
         {[1, 2, 3].map((s) => (
           <div
             key={s}
-            className={`h-1.5 flex-1 rounded-full ${s <= step ? 'bg-indigo-600' : 'bg-gray-200'}`}
+            className={`h-1.5 flex-1 rounded-full ${
+              s <= step ? 'bg-indigo-600 dark:bg-indigo-500' : 'bg-gray-200 dark:bg-slate-700'
+            }`}
           />
         ))}
       </div>
 
       {step === 1 && (
         <div className="space-y-4 max-w-md">
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-gray-600 dark:text-gray-400">
             Create a site to collect testimonials. You can add more sites later.
           </p>
           <Input
@@ -123,10 +125,16 @@ export default function OnboardingWizard({ onSiteCreated, onDismiss }: Onboardin
 
       {step === 2 && siteId && (
         <div className="space-y-4">
-          <p className="text-sm text-gray-600">
-            Paste this script on your website (before <code className="text-xs bg-gray-100 px-1 rounded">&lt;/body&gt;</code>).
+          <p className="text-sm text-gray-600 dark:text-gray-400">
+            Paste this script on your website (before{' '}
+            <code className="text-xs bg-gray-100 dark:bg-slate-800 px-1 rounded text-gray-800 dark:text-gray-200">
+              &lt;/body&gt;
+            </code>
+            ).
           </p>
-          <pre className="text-xs bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto">{embedCode}</pre>
+          <pre className="text-xs bg-gray-900 dark:bg-slate-950 text-gray-100 p-4 rounded-lg overflow-x-auto border border-transparent dark:border-slate-700">
+            {embedCode}
+          </pre>
           <div className="flex gap-3 flex-wrap">
             <Button onClick={copyEmbed} variant="outline">
               {copied ? <Check className="h-4 w-4 mr-2" /> : <Copy className="h-4 w-4 mr-2" />}
@@ -142,13 +150,18 @@ export default function OnboardingWizard({ onSiteCreated, onDismiss }: Onboardin
 
       {step === 3 && (
         <div className="space-y-4 max-w-lg">
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-gray-600 dark:text-gray-400">
             Share your collection link or open the dashboard to approve testimonials and publish your Wall of Love.
           </p>
-          <ul className="text-sm text-gray-700 space-y-2 list-disc list-inside">
+          <ul className="text-sm text-gray-700 dark:text-gray-300 space-y-2 list-disc list-inside">
             <li>Publish testimonials from the Testimonials tab</li>
             <li>Use Embed Studio for Wall of Love iframe code</li>
-            <li>Share <code className="text-xs bg-gray-100 px-1 rounded">{baseUrl}/collect/{siteId}</code></li>
+            <li>
+              Share{' '}
+              <code className="text-xs bg-gray-100 dark:bg-slate-800 px-1 rounded">
+                {baseUrl}/collect/{siteId}
+              </code>
+            </li>
           </ul>
           <Button onClick={finish}>
             Open site dashboard

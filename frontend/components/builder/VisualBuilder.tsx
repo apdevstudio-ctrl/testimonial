@@ -384,13 +384,13 @@ export default function VisualBuilder({ site, onUpdate }: VisualBuilderProps) {
   return (
     <div className="space-y-6">
       {/* Section Tabs */}
-      <div className="flex gap-2 border-b border-gray-200 pb-2">
+      <div className="flex gap-2 border-b border-gray-200 dark:border-slate-700 pb-2">
         <button
           onClick={() => setActiveSection('button')}
           className={`flex items-center gap-2 px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
             activeSection === 'button'
               ? 'border-indigo-500 text-indigo-600'
-              : 'border-transparent text-gray-500 hover:text-gray-700'
+              : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:text-gray-300'
           }`}
         >
           <Move className="h-4 w-4" />
@@ -401,7 +401,7 @@ export default function VisualBuilder({ site, onUpdate }: VisualBuilderProps) {
           className={`flex items-center gap-2 px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
             activeSection === 'theme'
               ? 'border-indigo-500 text-indigo-600'
-              : 'border-transparent text-gray-500 hover:text-gray-700'
+              : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:text-gray-300'
           }`}
         >
           <Palette className="h-4 w-4" />
@@ -412,7 +412,7 @@ export default function VisualBuilder({ site, onUpdate }: VisualBuilderProps) {
           className={`flex items-center gap-2 px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
             activeSection === 'form'
               ? 'border-indigo-500 text-indigo-600'
-              : 'border-transparent text-gray-500 hover:text-gray-700'
+              : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:text-gray-300'
           }`}
         >
           <Layout className="h-4 w-4" />
@@ -423,7 +423,7 @@ export default function VisualBuilder({ site, onUpdate }: VisualBuilderProps) {
           className={`flex items-center gap-2 px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
             activeSection === 'designer'
               ? 'border-indigo-500 text-indigo-600'
-              : 'border-transparent text-gray-500 hover:text-gray-700'
+              : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:text-gray-300'
           }`}
         >
           <FileEdit className="h-4 w-4" />
@@ -434,7 +434,7 @@ export default function VisualBuilder({ site, onUpdate }: VisualBuilderProps) {
           className={`flex items-center gap-2 px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
             activeSection === 'page'
               ? 'border-indigo-500 text-indigo-600'
-              : 'border-transparent text-gray-500 hover:text-gray-700'
+              : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:text-gray-300'
           }`}
         >
           <Globe className="h-4 w-4" />
@@ -445,14 +445,14 @@ export default function VisualBuilder({ site, onUpdate }: VisualBuilderProps) {
           className={`flex items-center gap-2 px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
             activeSection === 'display'
               ? 'border-indigo-500 text-indigo-600'
-              : 'border-transparent text-gray-500 hover:text-gray-700'
+              : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:text-gray-300'
           }`}
         >
           <Grid className="h-4 w-4" />
           Display Settings
         </button>
         {isSaving && (
-          <div className="ml-auto flex items-center gap-2 text-sm text-gray-500">
+          <div className="ml-auto flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
             <Save className="h-4 w-4 animate-pulse" />
             <span>Saving...</span>
           </div>
@@ -549,11 +549,11 @@ export default function VisualBuilder({ site, onUpdate }: VisualBuilderProps) {
           
           {/* Page URL and Embed Code Section */}
           <Card className="mt-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Page Integration</h3>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Page Integration</h3>
             <div className="space-y-4">
               {/* Page URL */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Page URL</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Page URL</label>
                 <div className="flex gap-2">
                   <Input
                     value={site.siteId ? `${typeof window !== 'undefined' ? window.location.origin : (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000')}/testimonial-form/${site.siteId}` : 'Loading...'}
@@ -578,8 +578,8 @@ export default function VisualBuilder({ site, onUpdate }: VisualBuilderProps) {
 
               {/* Embed Code */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Embed Code</label>
-                <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Embed Code</label>
+                <div className="bg-gray-50 dark:bg-slate-900/50 border border-gray-200 dark:border-slate-700 rounded-lg p-4 mb-2">
                   <code className="text-sm text-gray-800 font-mono break-all">
                     {site.siteId ? `<iframe src="${typeof window !== 'undefined' ? window.location.origin : (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000')}/testimonial-form/${site.siteId}" width="100%" height="800" frameborder="0"></iframe>` : 'Loading...'}
                   </code>
@@ -613,8 +613,8 @@ export default function VisualBuilder({ site, onUpdate }: VisualBuilderProps) {
 
               {/* Direct Link */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Direct Link</label>
-                <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-2">
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Direct Link</label>
+                <div className="bg-gray-50 dark:bg-slate-900/50 border border-gray-200 dark:border-slate-700 rounded-lg p-4 mb-2">
                   <code className="text-sm text-gray-800 font-mono break-all">
                     {site.siteId ? `${typeof window !== 'undefined' ? window.location.origin : (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000')}/testimonial-form/${site.siteId}` : 'Loading...'}
                   </code>
@@ -658,7 +658,7 @@ export default function VisualBuilder({ site, onUpdate }: VisualBuilderProps) {
             {/* Button Controls */}
             {activeSection === 'button' && (
               <Card>
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Button Settings</h3>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Button Settings</h3>
                 <div className="space-y-4">
                   <Input
                     label="Button Text"
@@ -684,7 +684,7 @@ export default function VisualBuilder({ site, onUpdate }: VisualBuilderProps) {
 
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Background Color</label>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Background Color</label>
                       <div className="flex gap-2">
                         <input
                           type="color"
@@ -692,7 +692,7 @@ export default function VisualBuilder({ site, onUpdate }: VisualBuilderProps) {
                           onChange={(e) => updatePreview({
                             button: { ...previewConfig.button, backgroundColor: e.target.value }
                           })}
-                          className="h-10 w-16 border border-gray-300 rounded-lg cursor-pointer"
+                          className="h-10 w-16 border border-gray-300 dark:border-slate-600 rounded-lg cursor-pointer"
                         />
                         <Input
                           value={previewConfig.button.backgroundColor}
@@ -704,7 +704,7 @@ export default function VisualBuilder({ site, onUpdate }: VisualBuilderProps) {
                       </div>
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Text Color</label>
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Text Color</label>
                       <div className="flex gap-2">
                         <input
                           type="color"
@@ -712,7 +712,7 @@ export default function VisualBuilder({ site, onUpdate }: VisualBuilderProps) {
                           onChange={(e) => updatePreview({
                             button: { ...previewConfig.button, textColor: e.target.value }
                           })}
-                          className="h-10 w-16 border border-gray-300 rounded-lg cursor-pointer"
+                          className="h-10 w-16 border border-gray-300 dark:border-slate-600 rounded-lg cursor-pointer"
                         />
                         <Input
                           value={previewConfig.button.textColor}
@@ -751,16 +751,16 @@ export default function VisualBuilder({ site, onUpdate }: VisualBuilderProps) {
                     ]}
                   />
 
-                  <label className="flex items-center gap-3 cursor-pointer p-3 rounded-lg hover:bg-gray-50 transition-colors">
+                  <label className="flex items-center gap-3 cursor-pointer p-3 rounded-lg hover:bg-gray-50 dark:bg-slate-900/50 transition-colors">
                     <input
                       type="checkbox"
                       checked={previewConfig.button.enabled}
                       onChange={(e) => updatePreview({
                         button: { ...previewConfig.button, enabled: e.target.checked }
                       })}
-                      className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                      className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 dark:border-slate-600 rounded"
                     />
-                    <span className="text-sm font-medium text-gray-700">Enable Button</span>
+                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Enable Button</span>
                   </label>
                 </div>
               </Card>
@@ -769,10 +769,10 @@ export default function VisualBuilder({ site, onUpdate }: VisualBuilderProps) {
             {/* Theme Controls */}
             {activeSection === 'theme' && (
               <Card>
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Theme Settings</h3>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Theme Settings</h3>
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Primary Color</label>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Primary Color</label>
                     <div className="flex gap-2">
                       <input
                         type="color"
@@ -780,7 +780,7 @@ export default function VisualBuilder({ site, onUpdate }: VisualBuilderProps) {
                         onChange={(e) => updatePreview({
                           theme: { ...previewConfig.theme, primaryColor: e.target.value }
                         })}
-                        className="h-10 w-16 border border-gray-300 rounded-lg cursor-pointer"
+                        className="h-10 w-16 border border-gray-300 dark:border-slate-600 rounded-lg cursor-pointer"
                       />
                       <Input
                         value={previewConfig.theme.primaryColor}
@@ -793,7 +793,7 @@ export default function VisualBuilder({ site, onUpdate }: VisualBuilderProps) {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Secondary Color</label>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Secondary Color</label>
                     <div className="flex gap-2">
                       <input
                         type="color"
@@ -801,7 +801,7 @@ export default function VisualBuilder({ site, onUpdate }: VisualBuilderProps) {
                         onChange={(e) => updatePreview({
                           theme: { ...previewConfig.theme, secondaryColor: e.target.value }
                         })}
-                        className="h-10 w-16 border border-gray-300 rounded-lg cursor-pointer"
+                        className="h-10 w-16 border border-gray-300 dark:border-slate-600 rounded-lg cursor-pointer"
                       />
                       <Input
                         value={previewConfig.theme.secondaryColor}
@@ -850,7 +850,7 @@ export default function VisualBuilder({ site, onUpdate }: VisualBuilderProps) {
             {/* Form Controls */}
             {activeSection === 'form' && (
               <Card>
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Form Settings</h3>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Form Settings</h3>
                 <div className="space-y-4">
                   <Select
                     label="Flow Type"
@@ -864,28 +864,28 @@ export default function VisualBuilder({ site, onUpdate }: VisualBuilderProps) {
                   />
 
                   <div className="space-y-3">
-                    <label className="block text-sm font-medium text-gray-700">Enabled Features</label>
-                    <label className="flex items-center gap-3 cursor-pointer p-3 rounded-lg hover:bg-gray-50 transition-colors">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Enabled Features</label>
+                    <label className="flex items-center gap-3 cursor-pointer p-3 rounded-lg hover:bg-gray-50 dark:bg-slate-900/50 transition-colors">
                       <input
                         type="checkbox"
                         checked={previewConfig.enabledFeatures.videoTestimonial}
                         onChange={(e) => updatePreview({
                           enabledFeatures: { ...previewConfig.enabledFeatures, videoTestimonial: e.target.checked }
                         })}
-                        className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                        className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 dark:border-slate-600 rounded"
                       />
-                      <span className="text-sm font-medium text-gray-700">Video Testimonials</span>
+                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Video Testimonials</span>
                     </label>
-                    <label className="flex items-center gap-3 cursor-pointer p-3 rounded-lg hover:bg-gray-50 transition-colors">
+                    <label className="flex items-center gap-3 cursor-pointer p-3 rounded-lg hover:bg-gray-50 dark:bg-slate-900/50 transition-colors">
                       <input
                         type="checkbox"
                         checked={previewConfig.enabledFeatures.textTestimonial}
                         onChange={(e) => updatePreview({
                           enabledFeatures: { ...previewConfig.enabledFeatures, textTestimonial: e.target.checked }
                         })}
-                        className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                        className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 dark:border-slate-600 rounded"
                       />
-                      <span className="text-sm font-medium text-gray-700">Text Testimonials</span>
+                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Text Testimonials</span>
                     </label>
                   </div>
                 </div>
@@ -897,7 +897,7 @@ export default function VisualBuilder({ site, onUpdate }: VisualBuilderProps) {
           <div className="lg:col-span-2">
             <Card>
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-gray-900">Live Preview</h3>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Live Preview</h3>
                 <Button
                   variant="outline"
                   size="sm"
@@ -919,7 +919,7 @@ export default function VisualBuilder({ site, onUpdate }: VisualBuilderProps) {
 
               {/* Preview Container */}
               <div
-                className={`relative border-2 border-dashed border-gray-300 rounded-lg bg-gradient-to-br from-gray-50 to-white ${
+                className={`relative border-2 border-dashed border-gray-300 dark:border-slate-600 rounded-lg bg-gradient-to-br from-gray-50 to-white ${
                   showMobilePreview ? 'max-w-sm mx-auto' : 'w-full'
                 }`}
                 style={{ 
@@ -941,7 +941,7 @@ export default function VisualBuilder({ site, onUpdate }: VisualBuilderProps) {
                     <div className="h-4 bg-gray-200 rounded w-4/6"></div>
                   </div>
                   <div className="mt-8 space-y-3">
-                    <div className="h-32 bg-gray-100 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center">
+                    <div className="h-32 bg-gray-100 rounded-lg border-2 border-dashed border-gray-300 dark:border-slate-600 flex items-center justify-center">
                       <p className="text-gray-400 text-sm">Sample website content</p>
                     </div>
                   </div>
@@ -969,7 +969,7 @@ export default function VisualBuilder({ site, onUpdate }: VisualBuilderProps) {
                     onClick={() => setShowModalPreview(false)}
                   >
                     <div
-                      className="bg-white rounded-lg p-6 max-w-2xl w-full mx-4 relative my-8"
+                      className="bg-white dark:bg-slate-900 rounded-lg p-6 max-w-2xl w-full mx-4 relative my-8"
                       style={{
                         borderRadius: previewConfig.theme.borderRadius,
                       }}
@@ -977,7 +977,7 @@ export default function VisualBuilder({ site, onUpdate }: VisualBuilderProps) {
                     >
                       <button
                         onClick={() => setShowModalPreview(false)}
-                        className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-2xl leading-none"
+                        className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:text-gray-400 text-2xl leading-none"
                       >
                         ×
                       </button>
@@ -991,7 +991,7 @@ export default function VisualBuilder({ site, onUpdate }: VisualBuilderProps) {
                             {previewConfig.formDesign?.headerText || 'Share Your Testimonial'}
                           </h4>
                           {previewConfig.formDesign?.headerSubtext && (
-                            <p className="text-gray-600">{previewConfig.formDesign.headerSubtext}</p>
+                            <p className="text-gray-600 dark:text-gray-400">{previewConfig.formDesign.headerSubtext}</p>
                           )}
                         </div>
                       )}
@@ -1032,7 +1032,7 @@ export default function VisualBuilder({ site, onUpdate }: VisualBuilderProps) {
                             .sort((a: any, b: any) => a.order - b.order)
                             .map((field: any) => (
                               <div key={field.id} className={previewConfig.formDesign!.layout === 'single' ? 'w-full' : ''}>
-                                <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
                                   {field.label}
                                   {field.required && <span className="text-red-500 ml-1">*</span>}
                                 </label>
@@ -1040,7 +1040,7 @@ export default function VisualBuilder({ site, onUpdate }: VisualBuilderProps) {
                                   <textarea
                                     placeholder={field.placeholder}
                                     rows={4}
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                                    className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg"
                                     style={{ borderRadius: previewConfig.theme.borderRadius }}
                                     disabled
                                   />
@@ -1050,7 +1050,7 @@ export default function VisualBuilder({ site, onUpdate }: VisualBuilderProps) {
                                     placeholder={field.placeholder}
                                     min={field.min}
                                     max={field.max}
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                                    className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg"
                                     style={{ borderRadius: previewConfig.theme.borderRadius }}
                                     disabled
                                   />
@@ -1058,7 +1058,7 @@ export default function VisualBuilder({ site, onUpdate }: VisualBuilderProps) {
                                   <input
                                     type="email"
                                     placeholder={field.placeholder}
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                                    className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg"
                                     style={{ borderRadius: previewConfig.theme.borderRadius }}
                                     disabled
                                   />
@@ -1066,7 +1066,7 @@ export default function VisualBuilder({ site, onUpdate }: VisualBuilderProps) {
                                   <input
                                     type="text"
                                     placeholder={field.placeholder}
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                                    className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg"
                                     style={{ borderRadius: previewConfig.theme.borderRadius }}
                                     disabled
                                   />

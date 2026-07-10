@@ -65,14 +65,14 @@ export default function EmbedCustomizer({ siteId, initial, onSave }: EmbedCustom
   return (
     <Card className="mb-6">
       <div className="mb-4">
-        <h2 className="text-lg font-semibold text-gray-900">Visual embed customizer</h2>
-        <p className="text-sm text-gray-600">Tune theme, layout, and motion — preview updates live.</p>
+        <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Visual embed customizer</h2>
+        <p className="text-sm text-gray-600 dark:text-gray-400">Tune theme, layout, and motion — preview updates live.</p>
       </div>
 
       <div className="grid lg:grid-cols-2 gap-6">
         <div className="space-y-4 max-h-[70vh] overflow-y-auto pr-2">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Theme</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Theme</label>
             <div className="grid grid-cols-4 gap-2">
               {WIDGET_THEME_LIST.map((t) => (
                 <button
@@ -81,8 +81,8 @@ export default function EmbedCustomizer({ siteId, initial, onSave }: EmbedCustom
                   onClick={() => update('themePreset', t.id as WidgetThemePreset)}
                   className={`px-2 py-2 rounded-lg text-xs font-medium border capitalize ${
                     config.themePreset === t.id
-                      ? 'border-indigo-500 bg-indigo-50 text-indigo-700'
-                      : 'border-gray-200 hover:border-indigo-300'
+                      ? 'border-indigo-500 bg-indigo-50 text-indigo-700 dark:text-indigo-300'
+                      : 'border-gray-200 dark:border-slate-700 hover:border-indigo-300'
                   }`}
                 >
                   {t.id}
@@ -92,11 +92,11 @@ export default function EmbedCustomizer({ siteId, initial, onSave }: EmbedCustom
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Layout</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Layout</label>
             <select
               value={config.layout}
               onChange={(e) => update('layout', e.target.value as WallLayout)}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+              className="w-full border border-gray-300 dark:border-slate-600 rounded-lg px-3 py-2 text-sm"
             >
               {LAYOUTS.map((l) => (
                 <option key={l} value={l}>
@@ -107,7 +107,7 @@ export default function EmbedCustomizer({ siteId, initial, onSave }: EmbedCustom
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
               Spacing: {config.spacing}px
             </label>
             <input
@@ -122,7 +122,7 @@ export default function EmbedCustomizer({ siteId, initial, onSave }: EmbedCustom
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Border radius</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Border radius</label>
               <input
                 type="range"
                 min={0}
@@ -133,11 +133,11 @@ export default function EmbedCustomizer({ siteId, initial, onSave }: EmbedCustom
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Shadow</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Shadow</label>
               <select
                 value={config.shadow}
                 onChange={(e) => update('shadow', e.target.value as WidgetCustomizeConfig['shadow'])}
-                className="w-full border border-gray-300 rounded-lg px-2 py-1.5 text-sm"
+                className="w-full border border-gray-300 dark:border-slate-600 rounded-lg px-2 py-1.5 text-sm"
               >
                 {(['none', 'sm', 'md', 'lg'] as const).map((s) => (
                   <option key={s} value={s}>
@@ -149,11 +149,11 @@ export default function EmbedCustomizer({ siteId, initial, onSave }: EmbedCustom
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Animation</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Animation</label>
             <select
               value={config.animationStyle}
               onChange={(e) => update('animationStyle', e.target.value as WidgetCustomizeConfig['animationStyle'])}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+              className="w-full border border-gray-300 dark:border-slate-600 rounded-lg px-3 py-2 text-sm"
             >
               <option value="none">None</option>
               <option value="subtle">Subtle</option>
@@ -162,12 +162,12 @@ export default function EmbedCustomizer({ siteId, initial, onSave }: EmbedCustom
             </select>
           </div>
 
-          <label className="flex items-center gap-2 text-sm text-gray-700">
+          <label className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
             <input
               type="checkbox"
               checked={config.hideBranding}
               onChange={(e) => update('hideBranding', e.target.checked)}
-              className="rounded border-gray-300"
+              className="rounded border-gray-300 dark:border-slate-600"
             />
             Hide &ldquo;Powered by TestiFlow&rdquo;
           </label>
@@ -177,7 +177,7 @@ export default function EmbedCustomizer({ siteId, initial, onSave }: EmbedCustom
           </Button>
         </div>
 
-        <div className="rounded-xl border border-gray-200 overflow-hidden min-h-[360px] bg-gray-50">
+        <div className="rounded-xl border border-gray-200 dark:border-slate-700 overflow-hidden min-h-[360px] bg-gray-50">
           {preview}
         </div>
       </div>

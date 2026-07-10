@@ -5,6 +5,7 @@ import { DEMO_PRESETS, DEMO_TESTIMONIALS } from '@/lib/demo/mockData';
 import type { WidgetThemePreset } from '@/lib/widgetThemes';
 import type { WidgetCustomizeConfig } from '@/lib/widget/customizer';
 import type { Metadata } from 'next';
+import { AuthCtaLink } from '@/components/auth/AuthCtaLink';
 
 interface PageProps {
   params: { preset: string };
@@ -38,9 +39,9 @@ export default function ExamplePresetPage({ params }: PageProps) {
             ← All examples
           </Link>
           <h1 className="text-sm font-semibold text-gray-900 truncate">{preset.name}</h1>
-          <Link href="/signup" className="text-sm font-medium text-white bg-indigo-600 px-4 py-2 rounded-lg hover:bg-indigo-700 shrink-0">
+          <AuthCtaLink className="text-sm font-medium text-white bg-indigo-600 px-4 py-2 rounded-lg hover:bg-indigo-700 shrink-0">
             Use this layout
-          </Link>
+          </AuthCtaLink>
         </div>
       </div>
 

@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, Settings, BarChart3, MessageSquare, Plus, BookOpen } from 'lucide-react';
+import { LayoutDashboard, BarChart3, BookOpen } from 'lucide-react';
 import clsx from 'clsx';
 
 const navigation = [
@@ -16,13 +16,13 @@ export default function Sidebar() {
 
   return (
     <div className="hidden md:flex md:w-64 md:flex-col md:fixed md:inset-y-0">
-      <div className="flex-1 flex flex-col min-h-0 bg-white border-r border-gray-200">
+      <div className="flex-1 flex flex-col min-h-0 bg-white dark:bg-slate-950 border-r border-gray-200 dark:border-slate-800">
         <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
           <div className="flex items-center justify-center flex-shrink-0 px-4 mb-8">
-            <img 
-              src="/logo.png" 
-              alt="TestiFlow" 
-              className="h-24 w-auto object-contain"
+            <img
+              src="/logo.png"
+              alt="TestiFlow"
+              className="h-24 w-auto object-contain dark:brightness-110"
               style={{ minHeight: '60px' }}
             />
           </div>
@@ -36,14 +36,16 @@ export default function Sidebar() {
                   className={clsx(
                     'group flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-colors',
                     isActive
-                      ? 'bg-indigo-50 text-indigo-700'
-                      : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
+                      ? 'bg-indigo-50 text-indigo-700 dark:bg-indigo-500/15 dark:text-indigo-300'
+                      : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-slate-800 dark:hover:text-white'
                   )}
                 >
                   <item.icon
                     className={clsx(
                       'mr-3 h-5 w-5 flex-shrink-0',
-                      isActive ? 'text-indigo-600' : 'text-gray-400 group-hover:text-gray-500'
+                      isActive
+                        ? 'text-indigo-600 dark:text-indigo-400'
+                        : 'text-gray-400 group-hover:text-gray-500 dark:text-gray-500 dark:group-hover:text-gray-300'
                     )}
                   />
                   {item.name}
@@ -56,4 +58,3 @@ export default function Sidebar() {
     </div>
   );
 }
-

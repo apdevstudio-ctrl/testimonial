@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import Button from '@/components/ui/Button';
 import { useToast } from '@/components/ui/Toast';
+import { useAuth } from '@/contexts/AuthContext';
 import { SIX_MONTH_DISPLAY_USD, YEARLY_DISPLAY_USD } from '@/lib/subscription/constants';
 
 const plans = [
@@ -28,11 +29,12 @@ const plans = [
 export default function SubscribePage() {
   const { showToast } = useToast();
   const router = useRouter();
+  const { isAuthenticated, isLoading: authLoading, token } = useAuth();
   const [loading, setLoading] = useState<string | null>(null);
 
   const startCheckout = async (plan: (typeof plans)[number]['id']) => {
-    const token = localStorage.getItem('auth_token');
-    if (!token) {
+    const authToken = token || (typeof window !== 'undefined' ? localStorage.getItem('auth_token') : null);
+    if (!authToken) {
       router.push('/signin?next=/subscribe');
       return;
     }
@@ -42,7 +44,7 @@ export default function SubscribePage() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${authToken}`,
         },
         body: JSON.stringify({ plan }),
       });
@@ -63,24 +65,33 @@ export default function SubscribePage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white px-4 py-16">
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white dark:from-slate-950 dark:to-slate-950 px-4 py-16">
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-12">
-          <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mb-3">Choose a plan</h1>
-          <p className="text-slate-600 max-w-xl mx-auto">
+          <h1 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-3">Choose a plan</h1>
+          <p className="text-slate-600 dark:text-slate-400 max-w-xl mx-auto">
             New accounts get a <strong>30-day free trial</strong>. After the trial, pick a paid plan to keep using the
             dashboard, sites, and analytics.
           </p>
+          {!authLoading && isAuthenticated ? (
+            <p className="mt-4 text-sm text-indigo-600 dark:text-indigo-400">
+              You&apos;re signed in — choose a plan to continue, or{' '}
+              <Link href="/dashboard" className="underline font-medium">
+                go to your dashboard
+              </Link>
+              .
+            </p>
+          ) : null}
         </div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
           {plans.map((p) => (
             <div
               key={p.id}
-              className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm flex flex-col"
+              className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-6 shadow-sm flex flex-col"
             >
-              <h2 className="text-lg font-semibold text-slate-900">{p.title}</h2>
-              <p className="mt-2 text-3xl font-bold text-slate-900">
+              <h2 className="text-lg font-semibold text-slate-900 dark:text-white">{p.title}</h2>
+              <p className="mt-2 text-3xl font-bold text-slate-900 dark:text-white">
                 {p.price}
                 <span className="text-base font-normal text-slate-500"> {p.period}</span>
               </p>
@@ -88,10 +99,10 @@ export default function SubscribePage() {
               <Button
                 variant="primary"
                 className="w-full mt-6"
-                disabled={loading !== null}
+                disabled={loading !== null || authLoading}
                 onClick={() => startCheckout(p.id)}
               >
-                {loading === p.id ? 'Redirecting…' : 'Continue to checkout'}
+                {loading === p.id ? 'Redirecting…' : isAuthenticated ? 'Continue to checkout' : 'Sign in to checkout'}
               </Button>
             </div>
           ))}
@@ -99,11 +110,11 @@ export default function SubscribePage() {
 
         <p className="text-center text-sm text-slate-500">
           Payments are processed securely by Lemon Squeezy.{' '}
-          <Link href="/pricing" className="text-indigo-600 hover:underline">
+          <Link href="/pricing" className="text-indigo-600 dark:text-indigo-400 hover:underline">
             Pricing details
           </Link>
           {' · '}
-          <Link href="/dashboard" className="text-indigo-600 hover:underline">
+          <Link href="/dashboard" className="text-indigo-600 dark:text-indigo-400 hover:underline">
             Back to dashboard
           </Link>
         </p>

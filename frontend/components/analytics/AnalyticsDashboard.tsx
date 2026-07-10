@@ -70,12 +70,12 @@ export default function AnalyticsDashboard({ siteId }: { siteId: string }) {
   if (loading) return <CardSkeleton />;
   if (!stats) {
     return (
-      <div className="text-center py-12 text-gray-600">No analytics data yet. Embed your widget to start tracking.</div>
+      <div className="text-center py-12 text-gray-600 dark:text-gray-400">No analytics data yet. Embed your widget to start tracking.</div>
     );
   }
 
   const kpis = [
-    { label: 'Widget impressions', value: stats.widgetImpressions || 0, color: 'text-indigo-600' },
+    { label: 'Widget impressions', value: stats.widgetImpressions || 0, color: 'text-indigo-600 dark:text-indigo-400' },
     { label: 'Wall views', value: stats.wallViews || 0, color: 'text-violet-600' },
     { label: 'Button clicks', value: stats.buttonClicks || 0, color: 'text-cyan-600' },
     { label: 'Submissions', value: stats.testimonialSubmissions || 0, color: 'text-emerald-600' },
@@ -85,7 +85,7 @@ export default function AnalyticsDashboard({ siteId }: { siteId: string }) {
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <h3 className="text-lg font-semibold text-gray-900">Analytics</h3>
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Analytics</h3>
         <div className="flex gap-2">
           {(['7d', '30d', 'all'] as Range[]).map((r) => (
             <button
@@ -93,7 +93,7 @@ export default function AnalyticsDashboard({ siteId }: { siteId: string }) {
               type="button"
               onClick={() => setRange(r)}
               className={`px-3 py-1 rounded-lg text-sm font-medium ${
-                range === r ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                range === r ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-600 dark:text-gray-400 hover:bg-gray-200'
               }`}
             >
               {r === 'all' ? 'All time' : r}
@@ -106,13 +106,13 @@ export default function AnalyticsDashboard({ siteId }: { siteId: string }) {
         {kpis.map((k) => (
           <Card key={k.label}>
             <div className={`text-2xl font-bold mb-1 ${k.color}`}>{k.value}</div>
-            <div className="text-sm text-gray-600">{k.label}</div>
+            <div className="text-sm text-gray-600 dark:text-gray-400">{k.label}</div>
           </Card>
         ))}
       </div>
 
       <Card>
-        <h4 className="text-md font-semibold text-gray-900 mb-4">Conversion funnel</h4>
+        <h4 className="text-md font-semibold text-gray-900 dark:text-white mb-4">Conversion funnel</h4>
         <ResponsiveContainer width="100%" height={280}>
           <BarChart data={funnelData}>
             <CartesianGrid strokeDasharray="3 3" />
@@ -126,7 +126,7 @@ export default function AnalyticsDashboard({ siteId }: { siteId: string }) {
 
       {eventBreakdown.length > 0 && (
         <Card>
-          <h4 className="text-md font-semibold text-gray-900 mb-4">Events by type</h4>
+          <h4 className="text-md font-semibold text-gray-900 dark:text-white mb-4">Events by type</h4>
           <ResponsiveContainer width="100%" height={260}>
             <LineChart data={eventBreakdown}>
               <CartesianGrid strokeDasharray="3 3" />
@@ -142,12 +142,12 @@ export default function AnalyticsDashboard({ siteId }: { siteId: string }) {
 
       {stats.recentEvents && stats.recentEvents.length > 0 && (
         <Card>
-          <h4 className="text-md font-semibold text-gray-900 mb-3">Recent activity</h4>
+          <h4 className="text-md font-semibold text-gray-900 dark:text-white mb-3">Recent activity</h4>
           <ul className="divide-y divide-gray-100">
             {stats.recentEvents.slice(0, 8).map((ev, i) => (
               <li key={i} className="py-2 flex justify-between text-sm">
-                <span className="font-mono text-indigo-600">{ev.eventType}</span>
-                <span className="text-gray-500">{new Date(ev.createdAt).toLocaleString()}</span>
+                <span className="font-mono text-indigo-600 dark:text-indigo-400">{ev.eventType}</span>
+                <span className="text-gray-500 dark:text-gray-400">{new Date(ev.createdAt).toLocaleString()}</span>
               </li>
             ))}
           </ul>

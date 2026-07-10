@@ -214,9 +214,9 @@ export default function SitePage() {
     return (
       <div className="p-8">
         <Card className="text-center py-12">
-          <h2 className="text-xl font-semibold text-gray-900 mb-2">Site not found</h2>
-            <p className="text-gray-600 mb-4">The site you&apos;re looking for doesn&apos;t exist.</p>
-          <Link href="/">
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Site not found</h2>
+            <p className="text-gray-600 dark:text-gray-400 mb-4">The site you&apos;re looking for doesn&apos;t exist.</p>
+          <Link href="/dashboard">
             <Button variant="outline">Back to Dashboard</Button>
           </Link>
         </Card>
@@ -242,7 +242,7 @@ export default function SitePage() {
     <div className="p-8">
       {/* Header */}
       <div className="mb-6">
-        <Link href="/">
+        <Link href="/dashboard">
           <Button variant="ghost" className="mb-4">
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Sites
@@ -250,15 +250,15 @@ export default function SitePage() {
         </Link>
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-1">{site.name}</h1>
-            <p className="text-gray-600 font-mono text-sm">{site.siteId}</p>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-1">{site.name}</h1>
+            <p className="text-gray-600 dark:text-gray-400 font-mono text-sm">{site.siteId}</p>
           </div>
           <div className="flex items-center gap-3">
             <span
               className={`px-3 py-1.5 rounded-full text-sm font-medium ${
                 site.isActive
-                  ? 'bg-green-100 text-green-800'
-                  : 'bg-gray-100 text-gray-800'
+                  ? 'bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300'
+                  : 'bg-gray-100 dark:bg-slate-800 text-gray-800 dark:text-gray-200'
               }`}
             >
               {site.isActive ? 'Active' : 'Inactive'}
@@ -285,15 +285,15 @@ export default function SitePage() {
       <Card className="mb-6 hidden">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h2 className="text-lg font-semibold text-gray-900 mb-1">Integration Code</h2>
-            <p className="text-sm text-gray-600">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">Integration Code</h2>
+            <p className="text-sm text-gray-600 dark:text-gray-400">
               {site.flowType === 'page' 
                 ? 'Add this iframe code to your website to embed the testimonial form'
                 : 'Add this script tag to your website to enable testimonial collection'}
             </p>
           </div>
         </div>
-        <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-4">
+        <div className="bg-gray-50 dark:bg-slate-900/60 border border-gray-200 dark:border-slate-700 rounded-lg p-4 mb-4">
           <code className="text-sm text-gray-800 font-mono break-all whitespace-pre-wrap">{scriptSnippet}</code>
         </div>
         <Button
@@ -317,7 +317,7 @@ export default function SitePage() {
 
       {/* Tabs */}
       <Card padding="none">
-        <div className="border-b border-gray-200">
+        <div className="border-b border-gray-200 dark:border-slate-700">
           <nav className="flex -mb-px px-6">
             {tabs.map((tab) => {
               const Icon = tab.icon;
@@ -328,8 +328,8 @@ export default function SitePage() {
                   onClick={() => setActiveTab(tab.id as any)}
                   className={`flex items-center gap-2 py-4 px-4 border-b-2 font-medium text-sm transition-colors ${
                     isActive
-                      ? 'border-indigo-500 text-indigo-600'
-                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                      ? 'border-indigo-500 text-indigo-600 dark:text-indigo-400'
+                      : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:border-gray-300 dark:hover:border-slate-500'
                   }`}
                 >
                   <Icon className="h-5 w-5" />
@@ -404,14 +404,14 @@ function ConfigTab({ site, onUpdate }: { site: Site; onUpdate: (updates: Partial
   return (
     <div className="space-y-8">
       <div>
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Wall of Love</h3>
-        <p className="text-sm text-gray-600 mb-4">
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Wall of Love</h3>
+        <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
           Public page:{' '}
           <a
             href={`${baseUrl}/w/${publicSlug}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-indigo-600 hover:underline font-mono text-xs"
+            className="text-indigo-600 dark:text-indigo-400 hover:underline font-mono text-xs"
           >
             {baseUrl}/w/{publicSlug}
           </a>
@@ -458,14 +458,14 @@ function ConfigTab({ site, onUpdate }: { site: Site; onUpdate: (updates: Partial
             type="checkbox"
             checked={wallSettings.isPublic !== false}
             onChange={(e) => setWallSettings({ ...wallSettings, isPublic: e.target.checked })}
-            className="h-4 w-4 text-indigo-600 rounded border-gray-300"
+            className="h-4 w-4 text-indigo-600 dark:text-indigo-400 rounded border-gray-300 dark:border-slate-600"
           />
-          <span className="text-sm font-medium text-gray-700">Public wall (indexable)</span>
+          <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Public wall (indexable)</span>
         </label>
       </div>
 
       <div>
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Button Settings</h3>
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Button Settings</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <Input
             label="Button Text"
@@ -510,26 +510,26 @@ function ConfigTab({ site, onUpdate }: { site: Site; onUpdate: (updates: Partial
               type="checkbox"
               checked={config.enabled}
               onChange={(e) => setConfig({ ...config, enabled: e.target.checked })}
-              className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+              className="h-4 w-4 text-indigo-600 dark:text-indigo-400 focus:ring-indigo-500 border-gray-300 dark:border-slate-600 rounded"
             />
-            <span className="text-sm font-medium text-gray-700">Enable Button</span>
+            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Enable Button</span>
           </label>
         </div>
       </div>
 
       <div>
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Enabled Features</h3>
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Enabled Features</h3>
         <div className="space-y-3">
           <label className="flex items-center gap-3 cursor-pointer">
             <input
               type="checkbox"
               checked={features.videoTestimonial}
               onChange={(e) => setFeatures({ ...features, videoTestimonial: e.target.checked })}
-              className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+              className="h-4 w-4 text-indigo-600 dark:text-indigo-400 focus:ring-indigo-500 border-gray-300 dark:border-slate-600 rounded"
             />
             <div className="flex items-center gap-2">
               <Video className="h-5 w-5 text-gray-400" />
-              <span className="text-sm font-medium text-gray-700">Video Testimonials</span>
+              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Video Testimonials</span>
             </div>
           </label>
           <label className="flex items-center gap-3 cursor-pointer">
@@ -537,18 +537,18 @@ function ConfigTab({ site, onUpdate }: { site: Site; onUpdate: (updates: Partial
               type="checkbox"
               checked={features.textTestimonial}
               onChange={(e) => setFeatures({ ...features, textTestimonial: e.target.checked })}
-              className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+              className="h-4 w-4 text-indigo-600 dark:text-indigo-400 focus:ring-indigo-500 border-gray-300 dark:border-slate-600 rounded"
             />
             <div className="flex items-center gap-2">
               <FileText className="h-5 w-5 text-gray-400" />
-              <span className="text-sm font-medium text-gray-700">Text Testimonials</span>
+              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Text Testimonials</span>
             </div>
           </label>
         </div>
       </div>
 
       <div>
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Flow Type</h3>
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Flow Type</h3>
         <Select
           value={flowType}
           onChange={(e) => setFlowType(e.target.value as any)}
@@ -559,15 +559,15 @@ function ConfigTab({ site, onUpdate }: { site: Site; onUpdate: (updates: Partial
           ]}
         />
         {flowType === 'page' && (
-          <p className="mt-2 text-sm text-gray-500">
+          <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
             When using iframe, you&apos;ll receive an embed code instead of a script tag.
           </p>
         )}
       </div>
 
       <div>
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Testimonial Display Component</h3>
-        <p className="text-sm text-gray-600 mb-4">
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Testimonial Display Component</h3>
+        <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
           Choose how testimonials will appear on your website.
         </p>
         <Select
@@ -588,32 +588,32 @@ function ConfigTab({ site, onUpdate }: { site: Site; onUpdate: (updates: Partial
               type="checkbox"
               checked={displayConfig.showRating ?? true}
               onChange={(e) => setDisplayConfig({ ...displayConfig, showRating: e.target.checked })}
-              className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+              className="h-4 w-4 text-indigo-600 dark:text-indigo-400 focus:ring-indigo-500 border-gray-300 dark:border-slate-600 rounded"
             />
-            <span className="text-sm font-medium text-gray-700">Show Rating Stars</span>
+            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Show Rating Stars</span>
           </label>
           <label className="flex items-center gap-3 cursor-pointer">
             <input
               type="checkbox"
               checked={displayConfig.showAvatar ?? true}
               onChange={(e) => setDisplayConfig({ ...displayConfig, showAvatar: e.target.checked })}
-              className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+              className="h-4 w-4 text-indigo-600 dark:text-indigo-400 focus:ring-indigo-500 border-gray-300 dark:border-slate-600 rounded"
             />
-            <span className="text-sm font-medium text-gray-700">Show Author Avatar</span>
+            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Show Author Avatar</span>
           </label>
           <label className="flex items-center gap-3 cursor-pointer">
             <input
               type="checkbox"
               checked={displayConfig.showCompany ?? true}
               onChange={(e) => setDisplayConfig({ ...displayConfig, showCompany: e.target.checked })}
-              className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+              className="h-4 w-4 text-indigo-600 dark:text-indigo-400 focus:ring-indigo-500 border-gray-300 dark:border-slate-600 rounded"
             />
-            <span className="text-sm font-medium text-gray-700">Show Company/Position</span>
+            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Show Company/Position</span>
           </label>
         </div>
         {displayConfig.component === 'grid' && (
           <div className="mt-4">
-            <label className="block text-sm font-medium text-gray-700 mb-2">Grid Columns</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Grid Columns</label>
             <Select
               value={displayConfig.columns?.toString() || '3'}
               onChange={(e) => setDisplayConfig({ ...displayConfig, columns: parseInt(e.target.value) })}
@@ -628,7 +628,7 @@ function ConfigTab({ site, onUpdate }: { site: Site; onUpdate: (updates: Partial
         )}
       </div>
 
-      <div className="flex justify-end pt-4 border-t border-gray-200">
+      <div className="flex justify-end pt-4 border-t border-gray-200 dark:border-slate-700">
         <Button onClick={handleSave} size="lg">
           Save Changes
         </Button>
@@ -647,10 +647,10 @@ function ThemeTab({ site, onUpdate }: { site: Site; onUpdate: (updates: Partial<
   return (
     <div className="space-y-8">
       <div>
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Colors</h3>
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Colors</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Primary Color</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Primary Color</label>
             <div className="flex gap-3">
               <input
                 type="color"
@@ -666,7 +666,7 @@ function ThemeTab({ site, onUpdate }: { site: Site; onUpdate: (updates: Partial<
             </div>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Secondary Color</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Secondary Color</label>
             <div className="flex gap-3">
               <input
                 type="color"
@@ -685,7 +685,7 @@ function ThemeTab({ site, onUpdate }: { site: Site; onUpdate: (updates: Partial<
       </div>
 
       <div>
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Typography</h3>
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Typography</h3>
         <Input
           label="Font Family"
           value={theme.fontFamily}
@@ -695,7 +695,7 @@ function ThemeTab({ site, onUpdate }: { site: Site; onUpdate: (updates: Partial<
       </div>
 
       <div>
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Border Radius</h3>
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Border Radius</h3>
         <Input
           label="Border Radius"
           value={theme.borderRadius}
@@ -706,7 +706,7 @@ function ThemeTab({ site, onUpdate }: { site: Site; onUpdate: (updates: Partial<
       </div>
 
       <div>
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Button Style</h3>
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Button Style</h3>
         <Select
           value={theme.buttonStyle}
           onChange={(e) => setTheme({ ...theme, buttonStyle: e.target.value as any })}
@@ -718,7 +718,7 @@ function ThemeTab({ site, onUpdate }: { site: Site; onUpdate: (updates: Partial<
         />
       </div>
 
-      <div className="flex justify-end pt-4 border-t border-gray-200">
+      <div className="flex justify-end pt-4 border-t border-gray-200 dark:border-slate-700">
         <Button onClick={handleSave} size="lg">
           Save Changes
         </Button>
@@ -761,7 +761,7 @@ function AnalyticsTab({ siteId }: { siteId: string }) {
   if (!stats) {
     return (
       <div className="text-center py-12">
-        <p className="text-gray-600">No analytics data available</p>
+        <p className="text-gray-600 dark:text-gray-400">No analytics data available</p>
       </div>
     );
   }
@@ -775,31 +775,31 @@ function AnalyticsTab({ siteId }: { siteId: string }) {
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="text-lg font-semibold text-gray-900 mb-6">Analytics Overview</h3>
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-6">Analytics Overview</h3>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
           <Card>
-            <div className="text-3xl font-bold text-gray-900 mb-1">{stats.buttonViews || 0}</div>
-            <div className="text-sm text-gray-600">Button Views</div>
+            <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">{stats.buttonViews || 0}</div>
+            <div className="text-sm text-gray-600 dark:text-gray-400">Button Views</div>
           </Card>
           <Card>
-            <div className="text-3xl font-bold text-gray-900 mb-1">{stats.buttonClicks || 0}</div>
-            <div className="text-sm text-gray-600">Button Clicks</div>
+            <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">{stats.buttonClicks || 0}</div>
+            <div className="text-sm text-gray-600 dark:text-gray-400">Button Clicks</div>
           </Card>
           <Card>
-            <div className="text-3xl font-bold text-gray-900 mb-1">{stats.testimonialSubmissions || 0}</div>
-            <div className="text-sm text-gray-600">Submissions</div>
+            <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">{stats.testimonialSubmissions || 0}</div>
+            <div className="text-sm text-gray-600 dark:text-gray-400">Submissions</div>
           </Card>
           <Card>
-            <div className="text-3xl font-bold text-gray-900 mb-1">
+            <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">
               {((stats.completionRate || 0) * 100).toFixed(1)}%
             </div>
-            <div className="text-sm text-gray-600">Completion Rate</div>
+            <div className="text-sm text-gray-600 dark:text-gray-400">Completion Rate</div>
           </Card>
         </div>
       </div>
 
       <Card>
-        <h4 className="text-md font-semibold text-gray-900 mb-4">Engagement Metrics</h4>
+        <h4 className="text-md font-semibold text-gray-900 dark:text-white mb-4">Engagement Metrics</h4>
         <ResponsiveContainer width="100%" height={300}>
           <BarChart data={chartData}>
             <CartesianGrid strokeDasharray="3 3" />
@@ -920,10 +920,10 @@ function TestimonialsTab({ siteId }: { siteId: string }) {
     <div className="space-y-4">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h3 className="text-lg font-semibold text-gray-900">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
             Testimonials ({testimonials.length})
           </h3>
-          <p className="text-sm text-gray-500 mt-1">
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
             Review and publish testimonials to display them on your website
           </p>
         </div>
@@ -931,7 +931,7 @@ function TestimonialsTab({ siteId }: { siteId: string }) {
       {testimonials.length === 0 ? (
         <Card className="text-center py-12">
           <MessageSquare className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-          <p className="text-gray-600">No testimonials yet</p>
+          <p className="text-gray-600 dark:text-gray-400">No testimonials yet</p>
         </Card>
       ) : (
         <div className="grid grid-cols-1 gap-4">
@@ -940,27 +940,27 @@ function TestimonialsTab({ siteId }: { siteId: string }) {
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center gap-3">
                   <div className="h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center">
-                    <User className="h-5 w-5 text-indigo-600" />
+                    <User className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
                   </div>
                   <div>
-                    <div className="font-semibold text-gray-900">
+                    <div className="font-semibold text-gray-900 dark:text-white">
                       {testimonial.author?.name || 'Anonymous'}
                     </div>
                     {testimonial.author?.email && (
-                      <div className="text-sm text-gray-500">{testimonial.author.email}</div>
+                      <div className="text-sm text-gray-500 dark:text-gray-400">{testimonial.author.email}</div>
                     )}
                   </div>
                 </div>
                 <div className="flex items-center gap-4">
-                  <div className="flex items-center gap-1 text-sm text-gray-500">
+                  <div className="flex items-center gap-1 text-sm text-gray-500 dark:text-gray-400">
                     <Calendar className="h-4 w-4" />
                     {new Date(testimonial.createdAt).toLocaleDateString()}
                   </div>
                   <span
                     className={`px-2.5 py-1 rounded-full text-xs font-medium ${
                       testimonial.isPublished
-                        ? 'bg-green-100 text-green-800'
-                        : 'bg-gray-100 text-gray-800'
+                        ? 'bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300'
+                        : 'bg-gray-100 dark:bg-slate-800 text-gray-800 dark:text-gray-200'
                     }`}
                   >
                     {testimonial.isPublished ? 'Published' : 'Draft'}
@@ -969,7 +969,7 @@ function TestimonialsTab({ siteId }: { siteId: string }) {
               </div>
 
               {testimonial.text && (
-                <p className="text-gray-700 mb-4 leading-relaxed">{testimonial.text}</p>
+                <p className="text-gray-700 dark:text-gray-300 mb-4 leading-relaxed">{testimonial.text}</p>
               )}
 
               {testimonial.ai?.headline && (
@@ -993,7 +993,7 @@ function TestimonialsTab({ siteId }: { siteId: string }) {
 
               {testimonial.videoUrl && (
                 <div className="mb-4">
-                  <div className="relative rounded-lg overflow-hidden bg-gray-100 aspect-video">
+                  <div className="relative rounded-lg overflow-hidden bg-gray-100 dark:bg-slate-800 aspect-video">
                     <video
                       src={testimonial.videoUrl}
                       controls
@@ -1007,12 +1007,12 @@ function TestimonialsTab({ siteId }: { siteId: string }) {
               {testimonial.rating && (
                 <div className="flex items-center gap-1 text-sm mb-4">
                   <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                  <span className="font-medium text-gray-900">{testimonial.rating}</span>
-                  <span className="text-gray-500">/ 5</span>
+                  <span className="font-medium text-gray-900 dark:text-white">{testimonial.rating}</span>
+                  <span className="text-gray-500 dark:text-gray-400">/ 5</span>
                 </div>
               )}
 
-              <div className="flex items-center justify-end gap-2 pt-4 border-t border-gray-200">
+              <div className="flex items-center justify-end gap-2 pt-4 border-t border-gray-200 dark:border-slate-700">
                 {testimonial.text && (
                   <Button
                     onClick={() => handleEnrich(testimonial._id)}

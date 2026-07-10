@@ -9,6 +9,7 @@ import { WIDGET_THEME_LIST } from '@/lib/widgetThemes';
 import type { WidgetThemePreset } from '@/lib/widgetThemes';
 import type { WidgetCustomizeConfig } from '@/lib/widget/customizer';
 import Button from '@/components/ui/Button';
+import { AuthCtaLink } from '@/components/auth/AuthCtaLink';
 import { useI18n } from '@/contexts/I18nProvider';
 
 interface LiveDemoGalleryProps {
@@ -123,9 +124,9 @@ export default function LiveDemoGallery({ darkMode = false, id = 'demo' }: LiveD
         </div>
 
         <div className="text-center mt-10">
-          <Link href="/signup" className="inline-flex items-center text-indigo-600 font-semibold hover:text-indigo-700">
+          <AuthCtaLink className="inline-flex items-center text-indigo-600 font-semibold hover:text-indigo-700">
             Start building your wall <ArrowRight className="h-4 w-4 ml-1" />
-          </Link>
+          </AuthCtaLink>
         </div>
       </div>
     </section>

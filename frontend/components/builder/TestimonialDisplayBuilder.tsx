@@ -126,7 +126,7 @@ export default function TestimonialDisplayBuilder({ displayConfig, theme, onUpda
         <Card>
           <div className="flex items-center gap-2 mb-4">
             <Layout className="h-5 w-5 text-indigo-600" />
-            <h3 className="text-lg font-semibold text-gray-900">Layout Settings</h3>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Layout Settings</h3>
           </div>
           <div className="space-y-4">
             <Select
@@ -163,7 +163,7 @@ export default function TestimonialDisplayBuilder({ displayConfig, theme, onUpda
         <Card>
           <div className="flex items-center gap-2 mb-4">
             <Grid className="h-5 w-5 text-indigo-600" />
-            <h3 className="text-lg font-semibold text-gray-900">Display Options</h3>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Display Options</h3>
           </div>
           <div className="space-y-4">
             <label className="flex items-center gap-3 cursor-pointer">
@@ -171,30 +171,30 @@ export default function TestimonialDisplayBuilder({ displayConfig, theme, onUpda
                 type="checkbox"
                 checked={localConfig.showRating}
                 onChange={(e) => updateConfig({ showRating: e.target.checked })}
-                className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 dark:border-slate-600 rounded"
               />
-              <Star className="h-4 w-4 text-gray-500" />
-              <span className="text-sm font-medium text-gray-700">Show Ratings</span>
+              <Star className="h-4 w-4 text-gray-500 dark:text-gray-400" />
+              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Show Ratings</span>
             </label>
             <label className="flex items-center gap-3 cursor-pointer">
               <input
                 type="checkbox"
                 checked={localConfig.showAuthor}
                 onChange={(e) => updateConfig({ showAuthor: e.target.checked })}
-                className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 dark:border-slate-600 rounded"
               />
-              <User className="h-4 w-4 text-gray-500" />
-              <span className="text-sm font-medium text-gray-700">Show Author Info</span>
+              <User className="h-4 w-4 text-gray-500 dark:text-gray-400" />
+              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Show Author Info</span>
             </label>
             <label className="flex items-center gap-3 cursor-pointer">
               <input
                 type="checkbox"
                 checked={localConfig.showVideo}
                 onChange={(e) => updateConfig({ showVideo: e.target.checked })}
-                className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 dark:border-slate-600 rounded"
               />
-              <Film className="h-4 w-4 text-gray-500" />
-              <span className="text-sm font-medium text-gray-700">Show Video Testimonials</span>
+              <Film className="h-4 w-4 text-gray-500 dark:text-gray-400" />
+              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Show Video Testimonials</span>
             </label>
           </div>
         </Card>
@@ -203,17 +203,17 @@ export default function TestimonialDisplayBuilder({ displayConfig, theme, onUpda
         <Card>
           <div className="flex items-center gap-2 mb-4">
             <Palette className="h-5 w-5 text-indigo-600" />
-            <h3 className="text-lg font-semibold text-gray-900">Card Styling</h3>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Card Styling</h3>
           </div>
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Background Color</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Background Color</label>
               <div className="flex gap-2">
                 <input
                   type="color"
                   value={localConfig.cardStyle.backgroundColor}
                   onChange={(e) => updateCardStyle({ backgroundColor: e.target.value })}
-                  className="h-10 w-16 border border-gray-300 rounded-lg cursor-pointer"
+                  className="h-10 w-16 border border-gray-300 dark:border-slate-600 rounded-lg cursor-pointer"
                 />
                 <Input
                   value={localConfig.cardStyle.backgroundColor}
@@ -223,13 +223,13 @@ export default function TestimonialDisplayBuilder({ displayConfig, theme, onUpda
               </div>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Text Color</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Text Color</label>
               <div className="flex gap-2">
                 <input
                   type="color"
                   value={localConfig.cardStyle.textColor}
                   onChange={(e) => updateCardStyle({ textColor: e.target.value })}
-                  className="h-10 w-16 border border-gray-300 rounded-lg cursor-pointer"
+                  className="h-10 w-16 border border-gray-300 dark:border-slate-600 rounded-lg cursor-pointer"
                 />
                 <Input
                   value={localConfig.cardStyle.textColor}
@@ -239,13 +239,13 @@ export default function TestimonialDisplayBuilder({ displayConfig, theme, onUpda
               </div>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Border Color</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Border Color</label>
               <div className="flex gap-2">
                 <input
                   type="color"
                   value={localConfig.cardStyle.borderColor}
                   onChange={(e) => updateCardStyle({ borderColor: e.target.value })}
-                  className="h-10 w-16 border border-gray-300 rounded-lg cursor-pointer"
+                  className="h-10 w-16 border border-gray-300 dark:border-slate-600 rounded-lg cursor-pointer"
                 />
                 <Input
                   value={localConfig.cardStyle.borderColor}
@@ -285,7 +285,7 @@ export default function TestimonialDisplayBuilder({ displayConfig, theme, onUpda
           <Card>
             <div className="flex items-center gap-2 mb-4">
               <User className="h-5 w-5 text-indigo-600" />
-              <h3 className="text-lg font-semibold text-gray-900">Author Styling</h3>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Author Styling</h3>
             </div>
             <div className="space-y-4">
               <label className="flex items-center gap-3 cursor-pointer">
@@ -293,9 +293,9 @@ export default function TestimonialDisplayBuilder({ displayConfig, theme, onUpda
                   type="checkbox"
                   checked={localConfig.authorStyle.showAvatar}
                   onChange={(e) => updateAuthorStyle({ showAvatar: e.target.checked })}
-                  className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                  className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 dark:border-slate-600 rounded"
                 />
-                <span className="text-sm font-medium text-gray-700">Show Avatar</span>
+                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Show Avatar</span>
               </label>
               {localConfig.authorStyle.showAvatar && (
                 <Input
@@ -310,27 +310,27 @@ export default function TestimonialDisplayBuilder({ displayConfig, theme, onUpda
                   type="checkbox"
                   checked={localConfig.authorStyle.showCompany}
                   onChange={(e) => updateAuthorStyle({ showCompany: e.target.checked })}
-                  className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                  className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 dark:border-slate-600 rounded"
                 />
-                <span className="text-sm font-medium text-gray-700">Show Company</span>
+                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Show Company</span>
               </label>
               <label className="flex items-center gap-3 cursor-pointer">
                 <input
                   type="checkbox"
                   checked={localConfig.authorStyle.showPosition}
                   onChange={(e) => updateAuthorStyle({ showPosition: e.target.checked })}
-                  className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                  className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 dark:border-slate-600 rounded"
                 />
-                <span className="text-sm font-medium text-gray-700">Show Position</span>
+                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Show Position</span>
               </label>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Author Text Color</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Author Text Color</label>
                 <div className="flex gap-2">
                   <input
                     type="color"
                     value={localConfig.authorStyle.textColor}
                     onChange={(e) => updateAuthorStyle({ textColor: e.target.value })}
-                    className="h-10 w-16 border border-gray-300 rounded-lg cursor-pointer"
+                    className="h-10 w-16 border border-gray-300 dark:border-slate-600 rounded-lg cursor-pointer"
                   />
                   <Input
                     value={localConfig.authorStyle.textColor}
@@ -348,17 +348,17 @@ export default function TestimonialDisplayBuilder({ displayConfig, theme, onUpda
           <Card>
             <div className="flex items-center gap-2 mb-4">
               <Star className="h-5 w-5 text-indigo-600" />
-              <h3 className="text-lg font-semibold text-gray-900">Rating Styling</h3>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Rating Styling</h3>
             </div>
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Star Color</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Star Color</label>
                 <div className="flex gap-2">
                   <input
                     type="color"
                     value={localConfig.ratingStyle.starColor}
                     onChange={(e) => updateRatingStyle({ starColor: e.target.value })}
-                    className="h-10 w-16 border border-gray-300 rounded-lg cursor-pointer"
+                    className="h-10 w-16 border border-gray-300 dark:border-slate-600 rounded-lg cursor-pointer"
                   />
                   <Input
                     value={localConfig.ratingStyle.starColor}
@@ -368,13 +368,13 @@ export default function TestimonialDisplayBuilder({ displayConfig, theme, onUpda
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Empty Star Color</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Empty Star Color</label>
                 <div className="flex gap-2">
                   <input
                     type="color"
                     value={localConfig.ratingStyle.emptyStarColor}
                     onChange={(e) => updateRatingStyle({ emptyStarColor: e.target.value })}
-                    className="h-10 w-16 border border-gray-300 rounded-lg cursor-pointer"
+                    className="h-10 w-16 border border-gray-300 dark:border-slate-600 rounded-lg cursor-pointer"
                   />
                   <Input
                     value={localConfig.ratingStyle.emptyStarColor}
@@ -401,7 +401,7 @@ export default function TestimonialDisplayBuilder({ displayConfig, theme, onUpda
         <Card>
           <div className="flex items-center gap-2 mb-4">
             <Grid className="h-5 w-5 text-indigo-600" />
-            <h3 className="text-lg font-semibold text-gray-900">Spacing</h3>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Spacing</h3>
           </div>
           <div className="space-y-4">
             <Input
@@ -425,10 +425,10 @@ export default function TestimonialDisplayBuilder({ displayConfig, theme, onUpda
         <Card>
           <div className="flex items-center gap-2 mb-4">
             <Layout className="h-5 w-5 text-indigo-600" />
-            <h3 className="text-lg font-semibold text-gray-900">Preview</h3>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Preview</h3>
           </div>
           <div
-            className="border-2 border-dashed border-gray-300 rounded-lg p-4 overflow-auto"
+            className="border-2 border-dashed border-gray-300 dark:border-slate-600 rounded-lg p-4 overflow-auto"
             style={{
               minHeight: '600px',
               maxHeight: '600px',

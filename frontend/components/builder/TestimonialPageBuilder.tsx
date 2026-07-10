@@ -100,7 +100,7 @@ export default function TestimonialPageBuilder({ pageDesign, theme, onUpdate }: 
         <Card>
           <div className="flex items-center gap-2 mb-4">
             <Image className="h-5 w-5 text-indigo-600" aria-label="Hero section icon" />
-            <h3 className="text-lg font-semibold text-gray-900">Hero Section</h3>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Hero Section</h3>
           </div>
           <div className="space-y-4">
             <label className="flex items-center gap-3 cursor-pointer">
@@ -108,9 +108,9 @@ export default function TestimonialPageBuilder({ pageDesign, theme, onUpdate }: 
                 type="checkbox"
                 checked={localDesign.hero.enabled}
                 onChange={(e) => updateHero({ enabled: e.target.checked })}
-                className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 dark:border-slate-600 rounded"
               />
-              <span className="text-sm font-medium text-gray-700">Enable Hero Section</span>
+              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Enable Hero Section</span>
             </label>
 
             {localDesign.hero.enabled && (
@@ -157,13 +157,13 @@ export default function TestimonialPageBuilder({ pageDesign, theme, onUpdate }: 
                 />
                 {localDesign.hero.backgroundType === 'color' && (
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Background Color</label>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Background Color</label>
                     <div className="flex gap-2">
                       <input
                         type="color"
                         value={localDesign.hero.backgroundColor}
                         onChange={(e) => updateHero({ backgroundColor: e.target.value })}
-                        className="h-10 w-16 border border-gray-300 rounded-lg cursor-pointer"
+                        className="h-10 w-16 border border-gray-300 dark:border-slate-600 rounded-lg cursor-pointer"
                       />
                       <Input
                         value={localDesign.hero.backgroundColor}
@@ -175,7 +175,7 @@ export default function TestimonialPageBuilder({ pageDesign, theme, onUpdate }: 
                 )}
                 {localDesign.hero.backgroundType === 'gradient' && (
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Gradient CSS</label>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Gradient CSS</label>
                     <Input
                       value={localDesign.hero.backgroundGradient}
                       onChange={(e) => updateHero({ backgroundGradient: e.target.value })}
@@ -185,7 +185,7 @@ export default function TestimonialPageBuilder({ pageDesign, theme, onUpdate }: 
                 )}
                 {localDesign.hero.backgroundType === 'image' && (
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Background Image URL</label>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Background Image URL</label>
                     <Input
                       value={localDesign.hero.backgroundImage || ''}
                       onChange={(e) => updateHero({ backgroundImage: e.target.value })}
@@ -194,13 +194,13 @@ export default function TestimonialPageBuilder({ pageDesign, theme, onUpdate }: 
                   </div>
                 )}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Text Color</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Text Color</label>
                   <div className="flex gap-2">
                     <input
                       type="color"
                       value={localDesign.hero.textColor}
                       onChange={(e) => updateHero({ textColor: e.target.value })}
-                      className="h-10 w-16 border border-gray-300 rounded-lg cursor-pointer"
+                      className="h-10 w-16 border border-gray-300 dark:border-slate-600 rounded-lg cursor-pointer"
                     />
                     <Input
                       value={localDesign.hero.textColor}
@@ -218,7 +218,7 @@ export default function TestimonialPageBuilder({ pageDesign, theme, onUpdate }: 
         <Card>
           <div className="flex items-center gap-2 mb-4">
             <Type className="h-5 w-5 text-indigo-600" />
-            <h3 className="text-lg font-semibold text-gray-900">Content Sections</h3>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Content Sections</h3>
           </div>
           <div className="space-y-4">
             <label className="flex items-center gap-3 cursor-pointer">
@@ -226,18 +226,18 @@ export default function TestimonialPageBuilder({ pageDesign, theme, onUpdate }: 
                 type="checkbox"
                 checked={localDesign.content.showBeforeForm}
                 onChange={(e) => updateContent({ showBeforeForm: e.target.checked })}
-                className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 dark:border-slate-600 rounded"
               />
-              <span className="text-sm font-medium text-gray-700">Show Content Before Form</span>
+              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Show Content Before Form</span>
             </label>
             {localDesign.content.showBeforeForm && (
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Before Form Text</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Before Form Text</label>
                 <textarea
                   value={localDesign.content.beforeFormText}
                   onChange={(e) => updateContent({ beforeFormText: e.target.value })}
                   rows={4}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                   placeholder="Add content that appears before the testimonial form..."
                 />
               </div>
@@ -248,18 +248,18 @@ export default function TestimonialPageBuilder({ pageDesign, theme, onUpdate }: 
                 type="checkbox"
                 checked={localDesign.content.showAfterForm}
                 onChange={(e) => updateContent({ showAfterForm: e.target.checked })}
-                className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 dark:border-slate-600 rounded"
               />
-              <span className="text-sm font-medium text-gray-700">Show Content After Form</span>
+              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Show Content After Form</span>
             </label>
             {localDesign.content.showAfterForm && (
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">After Form Text</label>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">After Form Text</label>
                 <textarea
                   value={localDesign.content.afterFormText}
                   onChange={(e) => updateContent({ afterFormText: e.target.value })}
                   rows={4}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                   placeholder="Add content that appears after the testimonial form..."
                 />
               </div>
@@ -271,17 +271,17 @@ export default function TestimonialPageBuilder({ pageDesign, theme, onUpdate }: 
         <Card>
           <div className="flex items-center gap-2 mb-4">
             <Palette className="h-5 w-5 text-indigo-600" />
-            <h3 className="text-lg font-semibold text-gray-900">Page Theme</h3>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Page Theme</h3>
           </div>
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Page Background Color</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Page Background Color</label>
               <div className="flex gap-2">
                 <input
                   type="color"
                   value={localDesign.pageTheme.backgroundColor}
                   onChange={(e) => updatePageTheme({ backgroundColor: e.target.value })}
-                  className="h-10 w-16 border border-gray-300 rounded-lg cursor-pointer"
+                  className="h-10 w-16 border border-gray-300 dark:border-slate-600 rounded-lg cursor-pointer"
                 />
                 <Input
                   value={localDesign.pageTheme.backgroundColor}
@@ -291,13 +291,13 @@ export default function TestimonialPageBuilder({ pageDesign, theme, onUpdate }: 
               </div>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Text Color</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Text Color</label>
               <div className="flex gap-2">
                 <input
                   type="color"
                   value={localDesign.pageTheme.textColor}
                   onChange={(e) => updatePageTheme({ textColor: e.target.value })}
-                  className="h-10 w-16 border border-gray-300 rounded-lg cursor-pointer"
+                  className="h-10 w-16 border border-gray-300 dark:border-slate-600 rounded-lg cursor-pointer"
                 />
                 <Input
                   value={localDesign.pageTheme.textColor}
@@ -327,10 +327,10 @@ export default function TestimonialPageBuilder({ pageDesign, theme, onUpdate }: 
         <Card>
           <div className="flex items-center gap-2 mb-4">
             <Eye className="h-5 w-5 text-indigo-600" />
-            <h3 className="text-lg font-semibold text-gray-900">Page Preview</h3>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Page Preview</h3>
           </div>
           <div
-            className="border-2 border-dashed border-gray-300 rounded-lg overflow-hidden"
+            className="border-2 border-dashed border-gray-300 dark:border-slate-600 rounded-lg overflow-hidden"
             style={{
               backgroundColor: localDesign.pageTheme.backgroundColor,
               color: localDesign.pageTheme.textColor,
@@ -398,7 +398,7 @@ export default function TestimonialPageBuilder({ pageDesign, theme, onUpdate }: 
                 boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
               }}
             >
-              <div className="p-6 border-2 border-dashed border-gray-300 rounded-lg text-center text-gray-500">
+              <div className="p-6 border-2 border-dashed border-gray-300 dark:border-slate-600 rounded-lg text-center text-gray-500 dark:text-gray-400">
                 <p className="text-sm">Testimonial Form Preview</p>
                 <p className="text-xs mt-2">Form will appear here</p>
               </div>

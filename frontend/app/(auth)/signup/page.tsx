@@ -1,14 +1,16 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import Button from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 import { useToast } from '@/components/ui/Toast';
 import { useAuth } from '@/contexts/AuthContext';
 
 export default function SignUpPage() {
-  const { register, loginWithGoogle } = useAuth();
+  const { register, loginWithGoogle, isAuthenticated, isLoading: authLoading } = useAuth();
+  const router = useRouter();
   const { showToast } = useToast();
   const [formData, setFormData] = useState({
     name: '',
@@ -17,6 +19,14 @@ export default function SignUpPage() {
     confirmPassword: '',
   });
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (authLoading) return;
+    const hasToken = Boolean(localStorage.getItem('auth_token'));
+    if (isAuthenticated || hasToken) {
+      router.replace('/dashboard');
+    }
+  }, [authLoading, isAuthenticated, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -57,6 +67,15 @@ export default function SignUpPage() {
     }
   };
 
+  // While auth resolves (or session exists), don't flash the signup form
+  if (authLoading || isAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-indigo-600" />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen flex items-center justify-center px-4 py-12">
       <div className="max-w-md w-full">
@@ -70,20 +89,20 @@ export default function SignUpPage() {
               style={{ minHeight: '80px', maxWidth: '300px' }}
             />
           </Link>
-          <h2 className="mt-6 text-3xl font-bold text-gray-900">Create your account</h2>
-          <p className="mt-2 text-sm text-gray-600">
+          <h2 className="mt-6 text-3xl font-bold text-gray-900 dark:text-white">Create your account</h2>
+          <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
             Already have an account?{' '}
-            <Link href="/signin" className="font-medium text-indigo-600 hover:text-indigo-500">
+            <Link href="/signin" className="font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 dark:hover:text-indigo-300">
               Sign in
             </Link>
           </p>
         </div>
 
         {/* Form */}
-        <div className="bg-white rounded-2xl shadow-xl p-8">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-xl p-8 border border-transparent dark:border-slate-700">
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Full name
               </label>
               <Input
@@ -99,7 +118,7 @@ export default function SignUpPage() {
             </div>
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Email address
               </label>
               <Input
@@ -115,7 +134,7 @@ export default function SignUpPage() {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Password
               </label>
               <Input
@@ -132,7 +151,7 @@ export default function SignUpPage() {
             </div>
 
             <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Confirm password
               </label>
               <Input
@@ -175,10 +194,10 @@ export default function SignUpPage() {
           <div className="mt-6">
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-300" />
+                <div className="w-full border-t border-gray-300 dark:border-slate-700" />
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-white text-gray-500">Or sign up with</span>
+                <span className="px-2 bg-white dark:bg-slate-900 text-gray-500 dark:text-gray-400">Or sign up with</span>
               </div>
             </div>
 
@@ -186,7 +205,7 @@ export default function SignUpPage() {
               <button
                 type="button"
                 onClick={handleGoogleSignUp}
-                className="w-full inline-flex justify-center items-center py-3 px-4 border border-gray-300 rounded-lg shadow-sm bg-white text-base font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+                className="w-full inline-flex justify-center items-center py-3 px-4 border border-gray-300 dark:border-slate-600 rounded-lg shadow-sm bg-white dark:bg-slate-800 text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors"
               >
                 <svg className="h-5 w-5 mr-3" viewBox="0 0 24 24">
                   <path

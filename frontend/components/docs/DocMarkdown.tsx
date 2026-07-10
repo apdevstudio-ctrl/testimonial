@@ -15,7 +15,7 @@ function CodeBlock({ code, lang }: { code: string; lang?: string }) {
 
 function InlineCode({ children }: { children: string }) {
   return (
-    <code className="px-1.5 py-0.5 rounded bg-zinc-100 text-indigo-700 text-[0.9em] font-mono">
+    <code className="px-1.5 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 text-indigo-700 dark:text-indigo-300 text-[0.9em] font-mono">
       {children}
     </code>
   );
@@ -56,7 +56,7 @@ export default function DocMarkdown({ content }: { content: string }) {
 
       if (line.startsWith('## ')) {
         result.push(
-          <h2 key={key++} className="text-xl font-bold text-zinc-900 mt-10 mb-4 first:mt-0">
+          <h2 key={key++} className="text-xl font-bold text-zinc-900 dark:text-white mt-10 mb-4 first:mt-0">
             {line.slice(3)}
           </h2>
         );
@@ -66,7 +66,7 @@ export default function DocMarkdown({ content }: { content: string }) {
 
       if (line.startsWith('### ')) {
         result.push(
-          <h3 key={key++} className="text-lg font-semibold text-zinc-900 mt-8 mb-3">
+          <h3 key={key++} className="text-lg font-semibold text-zinc-900 dark:text-white mt-8 mb-3">
             {line.slice(4)}
           </h3>
         );
@@ -81,7 +81,7 @@ export default function DocMarkdown({ content }: { content: string }) {
           i++;
         }
         result.push(
-          <ol key={key++} className="my-4 space-y-2 list-decimal list-inside text-zinc-700 leading-relaxed">
+          <ol key={key++} className="my-4 space-y-2 list-decimal list-inside text-zinc-700 dark:text-zinc-300 leading-relaxed">
             {items.map((item, j) => (
               <li key={j}>{renderInline(item)}</li>
             ))}
@@ -97,7 +97,7 @@ export default function DocMarkdown({ content }: { content: string }) {
           i++;
         }
         result.push(
-          <ul key={key++} className="my-4 space-y-2 list-disc list-inside text-zinc-700 leading-relaxed">
+          <ul key={key++} className="my-4 space-y-2 list-disc list-inside text-zinc-700 dark:text-zinc-300 leading-relaxed">
             {items.map((item, j) => (
               <li key={j}>{renderInline(item)}</li>
             ))}
@@ -118,7 +118,7 @@ export default function DocMarkdown({ content }: { content: string }) {
       }
       if (paraLines.length) {
         result.push(
-          <p key={key++} className="my-4 text-zinc-700 leading-relaxed">
+          <p key={key++} className="my-4 text-zinc-700 dark:text-zinc-300 leading-relaxed">
             {renderInline(paraLines.join(' '))}
           </p>
         );

@@ -8,23 +8,23 @@ import {
 import Button from '@/components/ui/Button';
 import { useToast } from '@/components/ui/Toast';
 import { useI18n } from '@/contexts/I18nProvider';
+import { useTheme } from '@/contexts/ThemeProvider';
 import { SIX_MONTH_DISPLAY_USD, YEARLY_DISPLAY_USD } from '@/lib/subscription/constants';
 import LandingNav from '@/components/landing/LandingNav';
 import LandingHero from '@/components/landing/LandingHero';
 import LiveDemoGallery from '@/components/landing/LiveDemoGallery';
 import ProductScreens from '@/components/landing/ProductScreens';
+import { AuthCtaLink, useAuthCtaHref } from '@/components/auth/AuthCtaLink';
 
 export default function PremiumLanding() {
-  const [darkMode, setDarkMode] = useState(false);
+  const { isDark, toggleTheme } = useTheme();
+  const darkMode = isDark;
+  const trialHref = useAuthCtaHref('/signup', '/dashboard');
   const [copied, setCopied] = useState(false);
   const [showExitPopup, setShowExitPopup] = useState(false);
   const { showToast } = useToast();
   const { t } = useI18n();
   const exitIntentRef = useRef(false);
-
-  useEffect(() => {
-    document.documentElement.classList.toggle('dark', darkMode);
-  }, [darkMode]);
 
   useEffect(() => {
     const handleMouseLeave = (e: MouseEvent) => {
@@ -65,7 +65,7 @@ export default function PremiumLanding() {
         features: [t('pricing.featFullDashboard'), t('pricing.featAllWidgets'), t('pricing.featAnalytics'), t('pricing.featNoCard')],
         cta: t('pricing.startTrial'),
         popular: false,
-        href: '/signup',
+        href: trialHref,
       },
       {
         name: t('pricing.monthly'),
@@ -74,7 +74,7 @@ export default function PremiumLanding() {
         features: [t('pricing.featUnlimited'), t('pricing.featVideoText'), t('pricing.featCustomWidgets'), 'Lemon Squeezy'],
         cta: t('pricing.getStarted'),
         popular: false,
-        href: '/signup',
+        href: trialHref,
       },
       {
         name: t('pricing.sixMonths'),
@@ -83,7 +83,7 @@ export default function PremiumLanding() {
         features: [t('pricing.featEverythingMonthly'), t('pricing.featBetterValue'), t('pricing.featOneInvoice'), t('pricing.featPriority')],
         cta: t('pricing.getStarted'),
         popular: true,
-        href: '/signup',
+        href: trialHref,
       },
       {
         name: t('pricing.yearly'),
@@ -92,15 +92,15 @@ export default function PremiumLanding() {
         features: [t('pricing.featLowestRate'), t('pricing.featAnnual'), t('pricing.featAllFeatures'), t('pricing.featBestTeams')],
         cta: t('pricing.getStarted'),
         popular: false,
-        href: '/signup',
+        href: trialHref,
       },
     ],
-    [t]
+    [t, trialHref]
   );
 
   return (
     <div className={`min-h-screen transition-colors ${darkMode ? 'bg-slate-950 text-white' : 'bg-white'}`}>
-      <LandingNav darkMode={darkMode} onToggleDark={() => setDarkMode(!darkMode)} />
+      <LandingNav darkMode={darkMode} onToggleDark={toggleTheme} />
 
       <LandingHero darkMode={darkMode} onCopyScript={copyScript} copied={copied} />
 
@@ -210,11 +210,11 @@ export default function PremiumLanding() {
             </button>
             <h3 className={`text-xl font-bold mb-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>{t('exit.title')}</h3>
             <p className={`mb-6 ${darkMode ? 'text-slate-400' : 'text-gray-600'}`}>{t('exit.subtitle')}</p>
-            <Link href="/signup">
+            <AuthCtaLink>
               <Button variant="primary" className="w-full">
                 {t('exit.cta')} <ArrowRight className="h-4 w-4 ml-2 inline" />
               </Button>
-            </Link>
+            </AuthCtaLink>
           </div>
         </div>
       )}

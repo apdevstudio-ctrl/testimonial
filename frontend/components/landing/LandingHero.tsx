@@ -1,10 +1,10 @@
 'use client';
 
-import Link from 'next/link';
 import { ArrowRight, Play, Code2 } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import BrowserFrame from '@/components/ui/BrowserFrame';
 import HeroWallPreview from '@/components/landing/HeroWallPreview';
+import { AuthCtaLink } from '@/components/auth/AuthCtaLink';
 import { useI18n } from '@/contexts/I18nProvider';
 
 interface LandingHeroProps {
@@ -56,12 +56,12 @@ export default function LandingHero({ darkMode, onCopyScript, copied }: LandingH
               {t('hero.subtitle')}
             </p>
             <div className="flex flex-wrap gap-3 mb-6">
-              <Link href="/signup">
+              <AuthCtaLink>
                 <Button variant="primary" size="lg" className="group">
                   {t('hero.startTrial')}
                   <ArrowRight className="h-4 w-4 ml-2 group-hover:translate-x-0.5 transition-transform" />
                 </Button>
-              </Link>
+              </AuthCtaLink>
               <a href="#demo">
                 <Button variant="outline" size="lg">
                   <Play className="h-4 w-4 mr-2" />

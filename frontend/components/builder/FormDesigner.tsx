@@ -177,7 +177,7 @@ export default function FormDesigner({ formDesign, theme, onUpdate }: FormDesign
       <div className="lg:col-span-1 space-y-4">
         <Card>
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-gray-900">Form Fields</h3>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Form Fields</h3>
             <Button size="sm" onClick={addField}>
               <Plus className="h-4 w-4 mr-1" />
               Add Field
@@ -191,14 +191,14 @@ export default function FormDesigner({ formDesign, theme, onUpdate }: FormDesign
                 className={`p-3 border rounded-lg cursor-pointer transition-colors ${
                   selectedField?.id === field.id
                     ? 'border-indigo-500 bg-indigo-50'
-                    : 'border-gray-200 hover:border-gray-300'
+                    : 'border-gray-200 dark:border-slate-700 hover:border-gray-300 dark:border-slate-600'
                 }`}
                 onClick={() => setSelectedField(field)}
               >
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-2">
                     <GripVertical className="h-4 w-4 text-gray-400" />
-                    <span className="font-medium text-sm text-gray-900">{field.label}</span>
+                    <span className="font-medium text-sm text-gray-900 dark:text-white">{field.label}</span>
                     {field.required && (
                       <span className="text-xs text-red-500">*</span>
                     )}
@@ -209,7 +209,7 @@ export default function FormDesigner({ formDesign, theme, onUpdate }: FormDesign
                         e.stopPropagation();
                         toggleFieldVisibility(field.id);
                       }}
-                      className="p-1 text-gray-400 hover:text-gray-600"
+                      className="p-1 text-gray-400 hover:text-gray-600 dark:text-gray-400"
                     >
                       {field.visible ? (
                         <Eye className="h-4 w-4" />
@@ -228,7 +228,7 @@ export default function FormDesigner({ formDesign, theme, onUpdate }: FormDesign
                     </button>
                   </div>
                 </div>
-                <div className="flex items-center gap-1 text-xs text-gray-500">
+                <div className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400">
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
@@ -259,7 +259,7 @@ export default function FormDesigner({ formDesign, theme, onUpdate }: FormDesign
         {/* Field Editor */}
         {selectedField && (
           <Card>
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Edit Field</h3>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Edit Field</h3>
             <div className="space-y-4">
               <Input
                 label="Label"
@@ -310,9 +310,9 @@ export default function FormDesigner({ formDesign, theme, onUpdate }: FormDesign
                   type="checkbox"
                   checked={selectedField.required}
                   onChange={(e) => updateField(selectedField.id, { required: e.target.checked })}
-                  className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                  className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 dark:border-slate-600 rounded"
                 />
-                <span className="text-sm font-medium text-gray-700">Required Field</span>
+                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Required Field</span>
               </label>
             </div>
           </Card>
@@ -320,16 +320,16 @@ export default function FormDesigner({ formDesign, theme, onUpdate }: FormDesign
 
         {/* Form Settings */}
         <Card>
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Form Settings</h3>
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Form Settings</h3>
           <div className="space-y-4">
             <label className="flex items-center gap-3 cursor-pointer">
               <input
                 type="checkbox"
                 checked={formDesign.showHeader}
                 onChange={(e) => updateFormDesign({ showHeader: e.target.checked })}
-                className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 dark:border-slate-600 rounded"
               />
-              <span className="text-sm font-medium text-gray-700">Show Header</span>
+              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Show Header</span>
             </label>
             {formDesign.showHeader && (
               <>
@@ -379,7 +379,7 @@ export default function FormDesigner({ formDesign, theme, onUpdate }: FormDesign
       <div className="lg:col-span-2">
         <Card>
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-gray-900">Form Preview</h3>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Form Preview</h3>
             <Button
               variant="outline"
               size="sm"
@@ -391,7 +391,7 @@ export default function FormDesigner({ formDesign, theme, onUpdate }: FormDesign
 
           {showPreview && (
             <div
-              className="border-2 border-dashed border-gray-300 rounded-lg bg-white p-6"
+              className="border-2 border-dashed border-gray-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-900 p-6"
               style={{ fontFamily: theme.fontFamily || 'inherit' }}
             >
               {formDesign.showHeader && (
@@ -403,7 +403,7 @@ export default function FormDesigner({ formDesign, theme, onUpdate }: FormDesign
                     {formDesign.headerText || 'Share Your Testimonial'}
                   </h2>
                   {formDesign.headerSubtext && (
-                    <p className="text-gray-600">{formDesign.headerSubtext}</p>
+                    <p className="text-gray-600 dark:text-gray-400">{formDesign.headerSubtext}</p>
                   )}
                 </div>
               )}
@@ -420,7 +420,7 @@ export default function FormDesigner({ formDesign, theme, onUpdate }: FormDesign
                     key={field.id}
                     className={formDesign.layout === 'single' ? 'w-full' : ''}
                   >
-                    <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
                       {field.label}
                       {field.required && <span className="text-red-500 ml-1">*</span>}
                     </label>

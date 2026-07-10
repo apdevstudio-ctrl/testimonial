@@ -35,8 +35,8 @@ export default function DocsPlaygroundPage() {
 
   return (
     <div className="min-h-full flex flex-col">
-      <header className="border-b border-zinc-200 bg-white px-6 sm:px-10 py-6">
-        <p className="text-sm font-medium text-indigo-600 mb-1">Documentation</p>
+      <header className="border-b border-zinc-200 bg-white dark:bg-slate-900 px-6 sm:px-10 py-6">
+        <p className="text-sm font-medium text-indigo-600 dark:text-indigo-400 mb-1">Documentation</p>
         <h1 className="text-2xl sm:text-3xl font-bold text-zinc-900">Interactive playground</h1>
         <p className="text-zinc-600 mt-2 max-w-2xl">
           Tune theme, layout, and animation. The preview updates instantly — copy the embed snippet when ready.
@@ -44,7 +44,7 @@ export default function DocsPlaygroundPage() {
       </header>
 
       <div className="flex-1 flex flex-col xl:flex-row min-h-0">
-        <aside className="xl:w-80 shrink-0 border-b xl:border-b-0 xl:border-r border-zinc-200 bg-white p-6 space-y-5 overflow-y-auto">
+        <aside className="xl:w-80 shrink-0 border-b xl:border-b-0 xl:border-r border-zinc-200 bg-white dark:bg-slate-900 p-6 space-y-5 overflow-y-auto">
           <div>
             <label className="text-sm font-semibold text-zinc-900 block mb-3">Theme</label>
             <div className="grid grid-cols-2 gap-2">
@@ -70,7 +70,7 @@ export default function DocsPlaygroundPage() {
             <select
               value={layout}
               onChange={(e) => setLayout(e.target.value as WidgetCustomizeConfig['layout'])}
-              className="w-full border border-zinc-300 rounded-lg px-3 py-2.5 text-sm bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+              className="w-full border border-zinc-300 rounded-lg px-3 py-2.5 text-sm bg-white dark:bg-slate-900 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
             >
               {LAYOUTS.map((l) => (
                 <option key={l} value={l}>
@@ -85,7 +85,7 @@ export default function DocsPlaygroundPage() {
             <select
               value={animation}
               onChange={(e) => setAnimation(e.target.value as WidgetCustomizeConfig['animationStyle'])}
-              className="w-full border border-zinc-300 rounded-lg px-3 py-2.5 text-sm bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+              className="w-full border border-zinc-300 rounded-lg px-3 py-2.5 text-sm bg-white dark:bg-slate-900 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
             >
               <option value="none">None</option>
               <option value="subtle">Subtle</option>
@@ -113,14 +113,14 @@ export default function DocsPlaygroundPage() {
 
           <Link
             href="/examples"
-            className="block text-center text-sm font-medium text-indigo-600 hover:text-indigo-700 py-2"
+            className="block text-center text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 py-2"
           >
             Browse full examples →
           </Link>
         </aside>
 
         <section className="flex-1 min-w-0 bg-zinc-100 p-4 sm:p-6 overflow-auto">
-          <div className="playground-preview rounded-2xl border border-zinc-200 overflow-hidden bg-white shadow-sm min-h-[560px]">
+          <div className="playground-preview rounded-2xl border border-zinc-200 overflow-hidden bg-white dark:bg-slate-900 shadow-sm min-h-[560px]">
             <WallOfLove
               key={`${theme}-${layout}-${animation}`}
               testimonials={DEMO_TESTIMONIALS}

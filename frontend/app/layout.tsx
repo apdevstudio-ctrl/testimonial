@@ -119,7 +119,7 @@ export default function RootLayout({
   const initialLocale = resolveLocale(cookies().get(LOCALE_COOKIE)?.value)
 
   return (
-    <html lang={initialLocale}>
+    <html lang={initialLocale} suppressHydrationWarning>
       <head>
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png" />
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon.png" />
@@ -129,6 +129,11 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="application-name" content="TestiFlow" />
         <meta name="msapplication-TileColor" content="#4f46e5" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem('testiflow_theme');if(t!=='light'&&t!=='dark'){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}var r=document.documentElement;r.classList.toggle('dark',t==='dark');r.style.colorScheme=t;}catch(e){}})();`,
+          }}
+        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -143,7 +148,7 @@ export default function RootLayout({
           />
         ) : null}
       </head>
-      <body className="bg-gray-50">
+      <body className="bg-gray-50 text-gray-900 dark:bg-slate-950 dark:text-gray-100">
         <AppProviders initialLocale={initialLocale}>
           <ToastProvider>
             <AuthProvider>

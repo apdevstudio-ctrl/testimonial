@@ -55,7 +55,7 @@ export default function ContactPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Navigation */}
-      <nav className="bg-white border-b border-gray-200">
+      <nav className="bg-white dark:bg-slate-900 border-b border-gray-200 dark:border-slate-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <Link href="/" className="flex-shrink-0">
@@ -78,8 +78,8 @@ export default function ContactPage() {
 
       <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">Contact Us</h1>
-          <p className="text-lg text-gray-600">
+          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">Contact Us</h1>
+          <p className="text-lg text-gray-600 dark:text-gray-400">
             Have a question? We&apos;d love to hear from you. Send us a message and we&apos;ll respond as soon as possible.
           </p>
         </div>
@@ -87,7 +87,7 @@ export default function ContactPage() {
         <Card>
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 <User className="h-4 w-4 inline mr-2" />
                 Name *
               </label>
@@ -103,7 +103,7 @@ export default function ContactPage() {
             </div>
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 <Mail className="h-4 w-4 inline mr-2" />
                 Email *
               </label>
@@ -119,7 +119,7 @@ export default function ContactPage() {
             </div>
 
             <div>
-              <label htmlFor="mobile" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="mobile" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 <Phone className="h-4 w-4 inline mr-2" />
                 Mobile Number *
               </label>
@@ -135,7 +135,7 @@ export default function ContactPage() {
             </div>
 
             <div>
-              <label htmlFor="question" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="question" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 <MessageSquare className="h-4 w-4 inline mr-2" />
                 Question / Message *
               </label>
@@ -147,7 +147,7 @@ export default function ContactPage() {
                 value={formData.question}
                 onChange={(e) => setFormData({ ...formData, question: e.target.value })}
                 placeholder="Tell us how we can help you..."
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 resize-none"
+                className="w-full px-4 py-3 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 resize-none"
               />
             </div>
 
@@ -164,10 +164,10 @@ export default function ContactPage() {
           </form>
         </Card>
 
-        <div className="mt-8 text-center text-gray-600">
+        <div className="mt-8 text-center text-gray-600 dark:text-gray-400">
           <p className="text-sm">
             Or email us directly at{' '}
-            <a href="mailto:apdevstudion@gmail.com" className="text-indigo-600 hover:text-indigo-700 font-medium">
+            <a href="mailto:apdevstudion@gmail.com" className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 font-medium">
               apdevstudion@gmail.com
             </a>
           </p>

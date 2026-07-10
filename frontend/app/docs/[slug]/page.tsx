@@ -32,24 +32,32 @@ export default function DocPage({ params }: Props) {
 
   return (
     <article className="max-w-3xl mx-auto px-6 sm:px-10 py-10 lg:py-14">
-      <p className="text-sm font-medium text-indigo-600 mb-2">Documentation</p>
-      <h1 className="text-3xl sm:text-4xl font-bold text-zinc-900 tracking-tight mb-3">{doc.title}</h1>
-      <p className="text-lg text-zinc-600 mb-10 pb-10 border-b border-zinc-200">{doc.description}</p>
+      <p className="text-sm font-medium text-indigo-600 dark:text-indigo-400 mb-2">Documentation</p>
+      <h1 className="text-3xl sm:text-4xl font-bold text-zinc-900 dark:text-white tracking-tight mb-3">
+        {doc.title}
+      </h1>
+      <p className="text-lg text-zinc-600 dark:text-zinc-400 mb-10 pb-10 border-b border-zinc-200 dark:border-zinc-800">
+        {doc.description}
+      </p>
       <DocMarkdown content={doc.content} />
 
-      <nav className="mt-16 pt-8 border-t border-zinc-200 flex flex-col sm:flex-row justify-between gap-4">
+      <nav className="mt-16 pt-8 border-t border-zinc-200 dark:border-zinc-800 flex flex-col sm:flex-row justify-between gap-4">
         {prev ? (
           <Link href={`/docs/${prev.slug}`} className="group text-sm">
-            <span className="text-zinc-500 block mb-1">Previous</span>
-            <span className="font-medium text-indigo-600 group-hover:underline">← {prev.title}</span>
+            <span className="text-zinc-500 dark:text-zinc-400 block mb-1">Previous</span>
+            <span className="font-medium text-indigo-600 dark:text-indigo-400 group-hover:underline">
+              ← {prev.title}
+            </span>
           </Link>
         ) : (
           <span />
         )}
         {next ? (
           <Link href={`/docs/${next.slug}`} className="group text-sm text-right sm:ml-auto">
-            <span className="text-zinc-500 block mb-1">Next</span>
-            <span className="font-medium text-indigo-600 group-hover:underline">{next.title} →</span>
+            <span className="text-zinc-500 dark:text-zinc-400 block mb-1">Next</span>
+            <span className="font-medium text-indigo-600 dark:text-indigo-400 group-hover:underline">
+              {next.title} →
+            </span>
           </Link>
         ) : null}
       </nav>

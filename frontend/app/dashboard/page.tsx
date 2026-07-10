@@ -141,8 +141,8 @@ export default function Dashboard() {
       )}
       <div className="flex justify-between items-center mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Sites</h1>
-          <p className="text-gray-600 mt-1">Manage your testimonial collection sites</p>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Sites</h1>
+          <p className="text-gray-600 dark:text-gray-400 mt-1">Manage your testimonial collection sites</p>
         </div>
         <Button onClick={() => setIsCreateModalOpen(true)}>
           <Plus className="h-5 w-5 mr-2" />
@@ -159,9 +159,9 @@ export default function Dashboard() {
       ) : sites.length === 0 ? (
         <Card>
           <div className="text-center py-12">
-            <Globe className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">No sites yet</h3>
-            <p className="text-gray-600 mb-6">Get started by creating your first site</p>
+            <Globe className="h-12 w-12 text-gray-400 dark:text-gray-500 mx-auto mb-4" />
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">No sites yet</h3>
+            <p className="text-gray-600 dark:text-gray-400 mb-6">Get started by creating your first site</p>
             <Button onClick={() => setIsCreateModalOpen(true)}>
               <Plus className="h-5 w-5 mr-2" />
               Create Your First Site
@@ -171,17 +171,17 @@ export default function Dashboard() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {sites.map((site) => (
-            <Card key={site._id} className="hover:shadow-lg transition-shadow">
+            <Card key={site._id} className="hover:shadow-lg dark:hover:shadow-none dark:hover:border-slate-600 transition-all">
               <div className="flex justify-between items-start mb-4">
                 <div className="flex-1">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-1">{site.name}</h3>
-                  <p className="text-sm text-gray-500 font-mono">{site.siteId}</p>
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">{site.name}</h3>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 font-mono">{site.siteId}</p>
                 </div>
                 <span
                   className={`px-2 py-1 text-xs font-medium rounded-full ${
                     site.isActive
-                      ? 'bg-green-100 text-green-800'
-                      : 'bg-gray-100 text-gray-800'
+                      ? 'bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300'
+                      : 'bg-gray-100 text-gray-800 dark:bg-slate-800 dark:text-gray-300'
                   }`}
                 >
                   {site.isActive ? 'Active' : 'Inactive'}
@@ -194,7 +194,7 @@ export default function Dashboard() {
                     href={`https://${site.domain}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-sm text-indigo-600 hover:text-indigo-700 flex items-center"
+                    className="text-sm text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 flex items-center"
                   >
                     <Globe className="h-4 w-4 mr-1" />
                     {site.domain}
@@ -203,12 +203,12 @@ export default function Dashboard() {
                 </div>
               )}
 
-              <div className="flex items-center text-sm text-gray-500 mb-4">
+              <div className="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-4">
                 <Calendar className="h-4 w-4 mr-1" />
                 Created {formatDate(site.createdAt)}
               </div>
 
-              <div className="flex items-center gap-2 pt-4 border-t border-gray-200">
+              <div className="flex items-center gap-2 pt-4 border-t border-gray-200 dark:border-slate-700">
                 <Link href={`/sites/${site.siteId}`} className="flex-1">
                   <Button variant="primary" className="w-full">
                     <Settings className="h-4 w-4 mr-2" />
@@ -239,7 +239,7 @@ export default function Dashboard() {
       >
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Site Name <span className="text-red-500">*</span>
             </label>
             <Input
@@ -251,7 +251,7 @@ export default function Dashboard() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               Domain (optional)
             </label>
             <Input
@@ -259,7 +259,7 @@ export default function Dashboard() {
               onChange={(e) => setNewSite({ ...newSite, domain: e.target.value })}
               placeholder="example.com"
             />
-            <p className="mt-1 text-sm text-gray-500">
+            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
               Your website domain
             </p>
           </div>

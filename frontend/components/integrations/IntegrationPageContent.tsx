@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { Copy, Check, ArrowRight } from 'lucide-react';
 import { useState } from 'react';
 import Button from '@/components/ui/Button';
+import { AuthCtaLink } from '@/components/auth/AuthCtaLink';
 import type { IntegrationPlatform } from '@/lib/integrations/platforms';
 import { getWallIframeEmbed } from '@/lib/embed/snippets';
 
@@ -29,27 +30,27 @@ export default function IntegrationPageContent({ platform }: Props) {
 
   return (
     <article className="min-h-screen bg-white">
-      <header className="border-b border-gray-100 bg-gradient-to-b from-indigo-50/80 to-white">
+      <header className="border-b border-gray-100 dark:border-slate-800 bg-gradient-to-b from-indigo-50/80 to-white dark:to-slate-950">
         <div className="max-w-3xl mx-auto px-4 py-16 sm:py-20">
-          <Link href="/integrations" className="text-sm text-indigo-600 hover:text-indigo-700 font-medium">
+          <Link href="/integrations" className="text-sm text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 font-medium">
             ← All integrations
           </Link>
           <span className="text-4xl mt-4 block">{platform.icon}</span>
-          <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mt-4 tracking-tight">
+          <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mt-4 tracking-tight">
             {platform.headline}
           </h1>
-          <p className="text-lg text-gray-600 mt-4">{platform.description}</p>
-          <Link href="/signup" className="inline-block mt-8">
+          <p className="text-lg text-gray-600 dark:text-gray-400 mt-4">{platform.description}</p>
+          <AuthCtaLink className="inline-block mt-8">
             <Button size="lg">
               Start free trial
               <ArrowRight className="h-4 w-4 ml-2" />
             </Button>
-          </Link>
+          </AuthCtaLink>
         </div>
       </header>
 
       <section className="max-w-3xl mx-auto px-4 py-12">
-        <h2 className="text-xl font-semibold text-gray-900 mb-6">How to integrate</h2>
+        <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">How to integrate</h2>
         <ol className="space-y-8">
           {platform.steps.map((step, i) => (
             <li key={step.title} className="flex gap-4">
@@ -57,8 +58,8 @@ export default function IntegrationPageContent({ platform }: Props) {
                 {i + 1}
               </span>
               <div>
-                <h3 className="font-semibold text-gray-900">{step.title}</h3>
-                <p className="text-gray-600 mt-1 text-sm leading-relaxed">{step.body}</p>
+                <h3 className="font-semibold text-gray-900 dark:text-white">{step.title}</h3>
+                <p className="text-gray-600 dark:text-gray-400 mt-1 text-sm leading-relaxed">{step.body}</p>
               </div>
             </li>
           ))}
@@ -77,8 +78,8 @@ export default function IntegrationPageContent({ platform }: Props) {
       </section>
 
       <section className="max-w-3xl mx-auto px-4 pb-16">
-        <h2 className="text-xl font-semibold text-gray-900 mb-4">Sample embed code</h2>
-        <p className="text-sm text-gray-600 mb-4">
+        <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Sample embed code</h2>
+        <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
           Replace <code className="bg-gray-100 px-1 rounded">your-site-id</code> with your site ID from the
           dashboard.
         </p>

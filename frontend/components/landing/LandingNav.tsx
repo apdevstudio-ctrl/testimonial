@@ -4,6 +4,8 @@ import Link from 'next/link';
 import { Moon, Sun } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import LanguageSwitcher from '@/components/i18n/LanguageSwitcher';
+import { AuthCtaLink } from '@/components/auth/AuthCtaLink';
+import { useAuth } from '@/contexts/AuthContext';
 import { useI18n } from '@/contexts/I18nProvider';
 
 interface LandingNavProps {
@@ -13,6 +15,8 @@ interface LandingNavProps {
 
 export default function LandingNav({ darkMode, onToggleDark }: LandingNavProps) {
   const { t } = useI18n();
+  const { isAuthenticated, isLoading } = useAuth();
+  const showDashboard = !isLoading && isAuthenticated;
 
   return (
     <nav
@@ -53,15 +57,21 @@ export default function LandingNav({ darkMode, onToggleDark }: LandingNavProps) 
             >
               {darkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
             </button>
-            <Link href="/signin" className={`hidden sm:block text-sm ${darkMode ? 'text-slate-300' : 'text-gray-600'}`}>
-              {t('nav.signIn')}
-            </Link>
+            {showDashboard ? (
+              <Link href="/dashboard" className={`hidden sm:block text-sm ${darkMode ? 'text-slate-300' : 'text-gray-600'}`}>
+                Dashboard
+              </Link>
+            ) : (
+              <Link href="/signin" className={`hidden sm:block text-sm ${darkMode ? 'text-slate-300' : 'text-gray-600'}`}>
+                {t('nav.signIn')}
+              </Link>
+            )}
             <LanguageSwitcher darkMode={darkMode} compact />
-            <Link href="/signup">
+            <AuthCtaLink>
               <Button variant="primary" size="sm">
-                {t('nav.startFree')}
+                {showDashboard ? 'Dashboard' : t('nav.startFree')}
               </Button>
-            </Link>
+            </AuthCtaLink>
           </div>
         </div>
       </div>
