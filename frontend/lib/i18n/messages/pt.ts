@@ -18,6 +18,8 @@ const pt: Messages = {
   },
   hero: {
     badge: 'Infraestrutura Wall of Love para SaaS moderno',
+    productHunt: 'Estamos no Product Hunt',
+    productHuntCta: 'Apoie-nos no Product Hunt',
     title: 'Prova social que',
     titleHighlight: 'converte',
     subtitle:

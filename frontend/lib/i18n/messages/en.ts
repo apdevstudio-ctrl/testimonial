@@ -19,6 +19,8 @@ const en = {
   },
   hero: {
     badge: 'Wall of Love infrastructure for modern SaaS',
+    productHunt: "We're on Product Hunt",
+    productHuntCta: 'Support us on Product Hunt',
     title: 'Social proof that',
     titleHighlight: 'converts',
     subtitle:

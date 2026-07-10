@@ -32,16 +32,41 @@ export default function LandingHero({ darkMode, onCopyScript, copied }: LandingH
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="grid lg:grid-cols-2 gap-10 lg:gap-14 items-center">
           <div className="max-w-xl">
-            <span
-              className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium mb-6 ${
-                darkMode
-                  ? 'bg-indigo-500/10 text-indigo-300 border border-indigo-500/20'
-                  : 'bg-indigo-100 text-indigo-700'
-              }`}
-            >
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              {t('hero.badge')}
-            </span>
+            <div className="flex flex-wrap items-center gap-2 mb-6">
+              <span
+                className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium ${
+                  darkMode
+                    ? 'bg-indigo-500/10 text-indigo-300 border border-indigo-500/20'
+                    : 'bg-indigo-100 text-indigo-700'
+                }`}
+              >
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                {t('hero.badge')}
+              </span>
+              <a
+                href={
+                  process.env.NEXT_PUBLIC_PRODUCTHUNT_URL?.trim() ||
+                  'https://www.producthunt.com/products/testiflow'
+                }
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-sm font-medium transition-colors ${
+                  darkMode
+                    ? 'bg-[#da552f]/15 text-[#ff8a65] border border-[#da552f]/30 hover:bg-[#da552f]/25'
+                    : 'bg-[#fff1eb] text-[#da552f] border border-[#da552f]/25 hover:bg-[#ffe4d6]'
+                }`}
+                aria-label={t('hero.productHuntCta')}
+              >
+                <svg viewBox="0 0 40 40" className="h-4 w-4 shrink-0" aria-hidden="true">
+                  <circle cx="20" cy="20" r="20" fill="#DA552F" />
+                  <path
+                    d="M22.67 20H17.5v-5.5h5.17a2.75 2.75 0 0 1 0 5.5zm0-9H13.5v18h4V24.5h5.17a6.75 6.75 0 1 0 0-13.5z"
+                    fill="#fff"
+                  />
+                </svg>
+                {t('hero.productHunt')}
+              </a>
+            </div>
             <h1
               className={`text-4xl sm:text-5xl lg:text-[3.25rem] font-bold tracking-tight mb-5 leading-[1.08] ${
                 darkMode ? 'text-white' : 'text-gray-900'

@@ -18,6 +18,8 @@ const hi: Messages = {
   },
   hero: {
     badge: 'आधुनिक SaaS के लिए Wall of Love इन्फ्रास्ट्रक्चर',
+    productHunt: 'हम Product Hunt पर हैं',
+    productHuntCta: 'Product Hunt पर हमें सपोर्ट करें',
     title: 'सोशल प्रूफ जो',
     titleHighlight: 'कन्वर्ट करे',
     subtitle:
