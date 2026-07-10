@@ -78,7 +78,7 @@ export default function EmbedStudio({ siteId, publicSlug, flowType }: EmbedStudi
         </div>
       </div>
 
-      <div className="flex gap-1 p-1 bg-gray-100 rounded-lg mb-4">
+      <div className="flex gap-1 p-1 bg-gray-100 dark:bg-slate-800 rounded-lg mb-4">
         {tabs.map((t) => {
           const Icon = t.icon;
           return (
@@ -87,11 +87,13 @@ export default function EmbedStudio({ siteId, publicSlug, flowType }: EmbedStudi
               type="button"
               onClick={() => setTab(t.id)}
               className={`flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-md text-sm font-medium transition-colors ${
-                tab === t.id ? 'bg-white dark:bg-slate-900 text-indigo-600 dark:text-indigo-400 shadow-sm' : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:text-white'
+                tab === t.id
+                  ? 'bg-white dark:bg-slate-950 text-indigo-600 dark:text-indigo-300 shadow-sm'
+                  : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white'
               }`}
             >
-              <Icon className="h-4 w-4" />
-              {t.label}
+              <Icon className="h-4 w-4 shrink-0" />
+              <span>{t.label}</span>
             </button>
           );
         })}
@@ -104,7 +106,7 @@ export default function EmbedStudio({ siteId, publicSlug, flowType }: EmbedStudi
             <select
               value={theme}
               onChange={(e) => setTheme(e.target.value as WidgetThemePreset)}
-              className="w-full rounded-lg border border-gray-300 dark:border-slate-600 px-3 py-2 text-sm"
+              className="w-full rounded-lg border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-gray-900 dark:text-gray-100 px-3 py-2 text-sm"
             >
               {WIDGET_THEME_LIST.map((t) => (
                 <option key={t.id} value={t.id}>
@@ -118,7 +120,7 @@ export default function EmbedStudio({ siteId, publicSlug, flowType }: EmbedStudi
             <select
               value={layout}
               onChange={(e) => setLayout(e.target.value as typeof layout)}
-              className="w-full rounded-lg border border-gray-300 dark:border-slate-600 px-3 py-2 text-sm"
+              className="w-full rounded-lg border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-gray-900 dark:text-gray-100 px-3 py-2 text-sm"
             >
               <option value="grid">Grid</option>
               <option value="carousel">Carousel</option>
@@ -130,7 +132,7 @@ export default function EmbedStudio({ siteId, publicSlug, flowType }: EmbedStudi
       )}
 
       {tab === 'wall' && (
-        <div className="mb-4 rounded-lg border border-indigo-100 bg-indigo-50/50 p-3 text-sm text-indigo-900">
+        <div className="mb-4 rounded-lg border border-indigo-100 dark:border-indigo-500/30 bg-indigo-50/50 dark:bg-indigo-950/40 p-3 text-sm text-indigo-900 dark:text-indigo-200">
           Preview:{' '}
           <code className="text-xs">{`${baseUrl}/embed/w/${siteId}?theme=${theme}&layout=${layout}`}</code>
         </div>
