@@ -25,7 +25,7 @@ export default function ExamplesPage() {
       <main className="max-w-6xl mx-auto px-4 py-16">
         <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-3">Public demo walls</h1>
         <p className="text-lg text-gray-600 dark:text-gray-400 mb-12 max-w-2xl">
-          Every preset is a real embed configuration. Open a demo, copy the snippet, or use it on your site.
+          Sample layouts. The quotes on these pages are not TestiFlow customers. Open a preset, then create your own wall with real quotes.
         </p>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">

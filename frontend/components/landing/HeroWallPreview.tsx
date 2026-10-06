@@ -17,6 +17,9 @@ export default function HeroWallPreview() {
         <p className="text-white/75 text-xs mt-0.5">Live on your site</p>
       </div>
 
+      <p className="px-5 -mt-1 pb-3 text-center text-[11px] text-white/70">
+        Sample layout. These people are not TestiFlow customers.
+      </p>
       <div className="px-4 pb-5 grid grid-cols-2 gap-3">
         {PREVIEW_ITEMS.map((t) => {
           const initials = (t.author?.name || 'A')
@@ -37,11 +40,9 @@ export default function HeroWallPreview() {
                 boxShadow: '0 8px 24px rgb(0 0 0 / 0.12)',
               }}
             >
-              {t.verified && (
-                <span className="self-start text-[9px] font-bold uppercase tracking-wide px-2 py-0.5 rounded-full bg-emerald-400/20 text-emerald-100 mb-2">
-                  Verified
-                </span>
-              )}
+              <span className="self-start text-[9px] font-bold uppercase tracking-wide px-2 py-0.5 rounded-full bg-white/15 text-white/80 mb-2">
+                Sample
+              </span>
               <div className="flex gap-0.5 mb-2 text-amber-300 text-xs" aria-hidden>
                 {'★★★★★'}
               </div>

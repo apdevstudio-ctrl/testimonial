@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { authenticate } from '@/lib/middleware/auth';
-import { getSubscriptionGate, ensureSubscriptionDefaults } from '@/lib/services/subscriptionAccess';
+import { getSubscriptionGate, ensureSubscriptionDefaults, userCanHideBranding } from '@/lib/services/subscriptionAccess';
 
 export const dynamic = 'force-dynamic';
 
@@ -23,6 +23,7 @@ export async function GET(req: NextRequest) {
       planStartDate: user.planStartDate,
       planExpiryDate: user.planExpiryDate,
       lemonSqueezySubscriptionStatus: user.lemonSqueezySubscriptionStatus,
+      canHideBranding: userCanHideBranding(user),
     });
   } catch {
     return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });

@@ -56,9 +56,9 @@ const screens = [
       <div className="p-4 min-h-[200px] bg-slate-50">
         <div className="grid grid-cols-3 gap-2 mb-3">
           {[
-            { l: 'Wall views', v: '2.4k' },
-            { l: 'Impressions', v: '8.1k' },
-            { l: 'Submissions', v: '142' },
+            { l: 'Wall views', v: 'Sample' },
+            { l: 'Impressions', v: 'Sample' },
+            { l: 'Submissions', v: 'Sample' },
           ].map((s) => (
             <div key={s.l} className="bg-white rounded-lg p-2 border text-center">
               <div className="text-lg font-bold text-indigo-600">{s.v}</div>
@@ -83,7 +83,7 @@ const screens = [
       <div className="p-4 space-y-2 min-h-[200px] bg-slate-50">
         <div className="bg-white border rounded-lg p-3 text-xs">
           <span className="text-[10px] font-semibold text-violet-600 uppercase">AI headline</span>
-          <p className="mt-1 text-gray-700">&ldquo;Doubled our signup conversion&rdquo;</p>
+          <p className="mt-1 text-gray-700">&ldquo;Sample headline&rdquo;</p>
           <div className="flex gap-1 mt-2">
             {['conversion', 'saas', 'verified'].map((tag) => (
               <span key={tag} className="px-2 py-0.5 bg-violet-50 text-violet-700 rounded-full text-[10px]">
@@ -102,12 +102,12 @@ export default function ProductScreens({ darkMode = false }: ProductScreensProps
     <section className={`py-20 ${darkMode ? 'bg-slate-950' : 'bg-white'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-14">
-          <p className="text-sm font-semibold text-indigo-600 mb-2">PRODUCT TOUR</p>
+          <p className="text-sm font-semibold text-indigo-600 mb-2">SAMPLE DASHBOARD</p>
           <h2 className={`text-3xl md:text-4xl font-bold mb-3 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
-            Built for marketers and developers
+            What you do after the first quote
           </h2>
           <p className={`max-w-2xl mx-auto ${darkMode ? 'text-slate-400' : 'text-gray-600'}`}>
-            Screenshots from the real dashboard — embed, customize, analyze, and enrich in one place.
+            Sample dashboard. The numbers below are placeholders, not TestiFlow usage.
           </p>
         </div>
 

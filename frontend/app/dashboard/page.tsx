@@ -11,6 +11,7 @@ import Input from '@/components/ui/Input';
 import { useToast } from '@/components/ui/Toast';
 import { CardSkeleton } from '@/components/ui/LoadingSkeleton';
 import OnboardingWizard, { isOnboardingComplete } from '@/components/onboarding/OnboardingWizard';
+import { advanceFunnel, trackClarity } from '@/lib/analytics/clarity';
 
 interface Site {
   _id: string;
@@ -112,6 +113,8 @@ export default function Dashboard() {
       }
 
       const site = await response.json();
+      trackClarity('site_created', { source: 'dashboard' });
+      advanceFunnel('site_created');
       setSites([...sites, site]);
       setIsCreateModalOpen(false);
       setNewSite({ name: '', domain: '' });
@@ -160,8 +163,8 @@ export default function Dashboard() {
         <Card>
           <div className="text-center py-12">
             <Globe className="h-12 w-12 text-gray-400 dark:text-gray-500 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">No sites yet</h3>
-            <p className="text-gray-600 dark:text-gray-400 mb-6">Get started by creating your first site</p>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">No wall yet</h3>
+            <p className="text-gray-600 dark:text-gray-400 mb-6">Paste one real quote to see it on a page. The embed comes after that.</p>
             <Button onClick={() => setIsCreateModalOpen(true)}>
               <Plus className="h-5 w-5 mr-2" />
               Create Your First Site

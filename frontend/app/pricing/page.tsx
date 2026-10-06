@@ -2,11 +2,11 @@
 
 import { useEffect, useState } from 'react';
 import { Check } from 'lucide-react';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import Button from '@/components/ui/Button';
 import { useAuth } from '@/contexts/AuthContext';
 import { SIX_MONTH_DISPLAY_USD, YEARLY_DISPLAY_USD } from '@/lib/subscription/constants';
+import { trackClarity } from '@/lib/analytics/clarity';
 
 function readHasToken() {
   try {
@@ -39,11 +39,15 @@ export default function PricingPage() {
   ];
 
   const goTrial = () => {
-    router.push(loggedIn || readHasToken() ? '/dashboard' : '/signup');
+    const destination = loggedIn || readHasToken() ? '/dashboard' : '/signup';
+    trackClarity('pricing_cta', { plan: 'trial', destination });
+    router.push(destination);
   };
 
   const goPaid = () => {
-    router.push(loggedIn || readHasToken() ? '/subscribe' : '/signup');
+    const destination = loggedIn || readHasToken() ? '/subscribe' : '/signup';
+    trackClarity('pricing_cta', { plan: 'paid', destination });
+    router.push(destination);
   };
 
   const plans = [
@@ -51,7 +55,7 @@ export default function PricingPage() {
       title: 'Trial',
       price: 'Free',
       period: '30 days',
-      note: 'Full product access. No card required to start.',
+      note: 'Full product access for 30 days. No card required. “Powered by TestiFlow” stays on until you pay.',
       onClick: goTrial,
       cta: loggedIn ? 'Go to dashboard' : 'Start free trial',
     },
@@ -59,7 +63,7 @@ export default function PricingPage() {
       title: 'One month',
       price: '$5',
       period: 'per month',
-      note: 'Billed monthly via Lemon Squeezy.',
+      note: '$60 if you stay a year. You can stop any month. Six months is a lower monthly rate.',
       onClick: goPaid,
       cta: loggedIn ? 'Continue to checkout' : 'Get started',
     },
@@ -67,7 +71,7 @@ export default function PricingPage() {
       title: '6 months',
       price: `$${SIX_MONTH_DISPLAY_USD}`,
       period: 'per 6 months',
-      note: 'Mid-term commitment, better rate than monthly.',
+      note: '$28 over 6 months is about $4.67 per month. Same features as monthly.',
       onClick: goPaid,
       cta: loggedIn ? 'Continue to checkout' : 'Get started',
     },
@@ -75,7 +79,7 @@ export default function PricingPage() {
       title: 'Yearly',
       price: `$${YEARLY_DISPLAY_USD}`,
       period: 'per year',
-      note: 'Best value. Final price follows your Lemon Squeezy product.',
+      note: '$100 per year is $8.33 per month. That is more than paying $5 each month.',
       onClick: goPaid,
       cta: loggedIn ? 'Continue to checkout' : 'Get started',
     },
@@ -87,8 +91,8 @@ export default function PricingPage() {
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">Simple, transparent pricing</h1>
           <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-            Start with a <strong>30-day trial</strong>, then choose monthly, 6-month, or yearly billing. Payments run
-            through Lemon Squeezy.
+            Start with a <strong>30-day trial</strong>. Six months is the lowest rate, about $4.67/month. The yearly plan
+            at $100 costs more than paying $5 each month.
           </p>
           {loggedIn ? (
             <p className="mt-4 text-sm text-indigo-600 dark:text-indigo-400">
@@ -130,36 +134,6 @@ export default function PricingPage() {
           ))}
         </div>
 
-        <div className="flex flex-wrap justify-center gap-4 mb-16">
-          {loggedIn ? (
-            <>
-              <Link href="/subscribe">
-                <Button variant="secondary" size="lg">
-                  Manage subscription
-                </Button>
-              </Link>
-              <Link href="/dashboard">
-                <Button variant="secondary" size="lg">
-                  Back to dashboard
-                </Button>
-              </Link>
-            </>
-          ) : (
-            <>
-              <Link href="/subscribe">
-                <Button variant="secondary" size="lg">
-                  Already signed up? Pay here
-                </Button>
-              </Link>
-              <Link href="/signin?next=/subscribe">
-                <Button variant="secondary" size="lg">
-                  Sign in to subscribe
-                </Button>
-              </Link>
-            </>
-          )}
-        </div>
-
         <div className="max-w-2xl mx-auto">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-8 text-center">Frequently asked questions</h2>
           <div className="space-y-6">
@@ -170,17 +144,25 @@ export default function PricingPage() {
               </p>
             </div>
             <div>
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">What payment methods do you accept?</h3>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Which plan costs less?</h3>
               <p className="text-gray-600 dark:text-gray-400">
-                Whatever Lemon Squeezy supports for your store (cards, etc.). Invoices and receipts are in the Lemon
-                Squeezy customer portal.
+                Monthly is $5, or $60 over a year. Six months is $28, about $4.67 per month. Yearly is $100, about
+                $8.33 per month. Every paid plan includes the same product. The TestiFlow link on your wall comes off
+                only after you pay.
+              </p>
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Does the wall stay up?</h3>
+              <p className="text-gray-600 dark:text-gray-400">
+                A published wall keeps loading. After the trial, the dashboard locks until you choose a paid plan.
+                During the trial, “Powered by TestiFlow” stays on the wall.
               </p>
             </div>
             <div>
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Can I cancel?</h3>
               <p className="text-gray-600 dark:text-gray-400">
-                Yes — manage or cancel from the billing portal. Access typically continues through the period you have
-                already paid for.
+                Yes. Manage or cancel from the billing portal. Access continues through the period you have already
+                paid for.
               </p>
             </div>
           </div>

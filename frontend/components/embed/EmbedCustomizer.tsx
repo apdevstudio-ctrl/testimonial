@@ -28,10 +28,24 @@ export default function EmbedCustomizer({ siteId, initial, onSave }: EmbedCustom
     mergeCustomize({ ...DEFAULT_CUSTOMIZE, ...initial })
   );
   const [saving, setSaving] = useState(false);
+  const [canHideBranding, setCanHideBranding] = useState(false);
 
   useEffect(() => {
-    if (initial) setConfig(mergeCustomize({ ...DEFAULT_CUSTOMIZE, ...initial }));
-  }, [initial]);
+    if (initial) {
+      const next = mergeCustomize({ ...DEFAULT_CUSTOMIZE, ...initial });
+      if (!canHideBranding) next.hideBranding = false;
+      setConfig(next);
+    }
+  }, [initial, canHideBranding]);
+
+  useEffect(() => {
+    const token = localStorage.getItem('auth_token');
+    if (!token) return;
+    fetch('/api/subscription/status', { headers: { Authorization: `Bearer ${token}` } })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => setCanHideBranding(Boolean(data?.canHideBranding)))
+      .catch(() => setCanHideBranding(false));
+  }, []);
 
   const preview = useMemo(
     () => (
@@ -53,7 +67,7 @@ export default function EmbedCustomizer({ siteId, initial, onSave }: EmbedCustom
   const handleSave = async () => {
     setSaving(true);
     try {
-      await onSave(config);
+      await onSave({ ...config, hideBranding: canHideBranding ? config.hideBranding : false });
       showToast('Widget customization saved', 'success');
     } catch {
       showToast('Failed to save', 'error');
@@ -165,12 +179,21 @@ export default function EmbedCustomizer({ siteId, initial, onSave }: EmbedCustom
           <label className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
             <input
               type="checkbox"
-              checked={config.hideBranding}
-              onChange={(e) => update('hideBranding', e.target.checked)}
+              checked={canHideBranding && config.hideBranding}
+              disabled={!canHideBranding}
+              onChange={(e) => {
+                if (!canHideBranding) return;
+                update('hideBranding', e.target.checked);
+              }}
               className="rounded border-gray-300 dark:border-slate-600"
             />
             Hide &ldquo;Powered by TestiFlow&rdquo;
           </label>
+          {!canHideBranding && (
+            <p className="text-xs text-gray-500 dark:text-gray-400">
+              The TestiFlow link stays on during the trial. It comes off on a paid plan.
+            </p>
+          )}
 
           <Button onClick={handleSave} disabled={saving} className="w-full">
             {saving ? 'Saving…' : 'Save customization'}

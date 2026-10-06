@@ -8,7 +8,6 @@ export const DEMO_TESTIMONIALS: WallTestimonial[] = [
     type: 'text',
     text: 'TestiFlow doubled our signup conversion. The Wall of Love embed took 2 minutes to set up.',
     rating: 5,
-    verified: true,
     author: { name: 'Sarah Chen', company: 'TechStart', position: 'Founder' },
   },
   {
@@ -16,8 +15,6 @@ export const DEMO_TESTIMONIALS: WallTestimonial[] = [
     type: 'text',
     text: 'Finally a testimonial tool that feels premium. Our customers love recording video reviews.',
     rating: 5,
-    verified: true,
-    sourceLabel: 'Product Hunt',
     author: { name: 'Michael Rodriguez', company: 'DesignCo', position: 'CEO' },
   },
   {
@@ -32,7 +29,6 @@ export const DEMO_TESTIMONIALS: WallTestimonial[] = [
     type: 'text',
     text: 'Developer-friendly embeds with iframe auto-resize. Works perfectly on our Next.js site.',
     rating: 5,
-    verified: true,
     author: { name: 'Alex Kumar', company: 'DevStack', position: 'CTO' },
   },
   {
@@ -54,7 +50,6 @@ export const DEMO_TESTIMONIALS: WallTestimonial[] = [
     type: 'text',
     text: 'We switched from a competitor and saved money while getting better widgets.',
     rating: 5,
-    verified: true,
     author: { name: 'Lisa Park', company: 'Nomad Tools', position: 'Founder' },
   },
   {

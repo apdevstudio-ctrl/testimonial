@@ -118,7 +118,7 @@ export default function LiveDemoGallery({ darkMode = false, id = 'demo' }: LiveD
               title={preset.title}
               subtitle={preset.subtitle}
               compact
-              customize={{ animationStyle: 'spring', hideBranding: true }}
+              customize={{ animationStyle: 'spring', hideBranding: false }}
             />
           </div>
         </div>

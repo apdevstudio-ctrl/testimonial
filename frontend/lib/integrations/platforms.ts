@@ -55,7 +55,7 @@ export const INTEGRATION_PLATFORMS: IntegrationPlatform[] = [
     icon: '⚛️',
     headline: 'React testimonial widget integration',
     description:
-      'Load TestiFlow via script tag or iframe. Full React SDK coming soon—iframe works in any CRA or Vite app today.',
+      'Load TestiFlow with an iframe. That is the supported React install today.',
     steps: [
       { title: 'Add script to index.html', body: 'Place the embed.js script in public/index.html or use useEffect to inject it.' },
       { title: 'Mount display', body: 'Call TestimonialWidget.displayTestimonials(containerId, options) after load.' },

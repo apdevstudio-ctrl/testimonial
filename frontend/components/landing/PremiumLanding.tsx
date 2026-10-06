@@ -3,10 +3,9 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
 import Link from 'next/link';
 import {
-  ArrowRight, Check, Zap, Shield, Palette, BarChart3, Layout, Sparkles, X,
+  ArrowRight, Check, Zap, Shield, Palette, X,
 } from 'lucide-react';
 import Button from '@/components/ui/Button';
-import { useToast } from '@/components/ui/Toast';
 import { useI18n } from '@/contexts/I18nProvider';
 import { useTheme } from '@/contexts/ThemeProvider';
 import { SIX_MONTH_DISPLAY_USD, YEARLY_DISPLAY_USD } from '@/lib/subscription/constants';
@@ -20,9 +19,7 @@ export default function PremiumLanding() {
   const { isDark, toggleTheme } = useTheme();
   const darkMode = isDark;
   const trialHref = useAuthCtaHref('/signup', '/dashboard');
-  const [copied, setCopied] = useState(false);
   const [showExitPopup, setShowExitPopup] = useState(false);
-  const { showToast } = useToast();
   const { t } = useI18n();
   const exitIntentRef = useRef(false);
 
@@ -37,21 +34,11 @@ export default function PremiumLanding() {
     return () => document.removeEventListener('mouseleave', handleMouseLeave);
   }, []);
 
-  const copyScript = () => {
-    navigator.clipboard.writeText('<script src="https://testiflow.site/embed.js" async></script>');
-    setCopied(true);
-    showToast(t('toast.scriptCopied'), 'success');
-    setTimeout(() => setCopied(false), 2000);
-  };
-
   const features = useMemo(
     () => [
       { icon: Zap, title: t('features.oneLineEmbed'), description: t('features.oneLineEmbedDesc'), color: 'from-yellow-400 to-orange-500' },
       { icon: Shield, title: t('features.moderation'), description: t('features.moderationDesc'), color: 'from-green-400 to-emerald-500' },
       { icon: Palette, title: t('features.themes'), description: t('features.themesDesc'), color: 'from-purple-400 to-pink-500' },
-      { icon: BarChart3, title: t('features.analytics'), description: t('features.analyticsDesc'), color: 'from-blue-400 to-cyan-500' },
-      { icon: Layout, title: t('features.layouts'), description: t('features.layoutsDesc'), color: 'from-indigo-400 to-purple-500' },
-      { icon: Sparkles, title: t('features.ai'), description: t('features.aiDesc'), color: 'from-red-400 to-rose-500' },
     ],
     [t]
   );
@@ -71,18 +58,18 @@ export default function PremiumLanding() {
         name: t('pricing.monthly'),
         price: '$5',
         period: t('pricing.perMo'),
-        features: [t('pricing.featUnlimited'), t('pricing.featVideoText'), t('pricing.featCustomWidgets'), 'Lemon Squeezy'],
+        features: [t('pricing.featUnlimited'), t('pricing.featVideoText'), t('pricing.featCustomWidgets'), t('pricing.featAnalytics')],
         cta: t('pricing.getStarted'),
-        popular: false,
+        popular: true,
         href: trialHref,
       },
       {
         name: t('pricing.sixMonths'),
         price: `$${SIX_MONTH_DISPLAY_USD}`,
         period: t('pricing.per6Mo'),
-        features: [t('pricing.featEverythingMonthly'), t('pricing.featBetterValue'), t('pricing.featOneInvoice'), t('pricing.featPriority')],
+        features: [t('pricing.featEverythingMonthly'), t('pricing.featBetterValue'), t('pricing.featOneInvoice'), t('pricing.featAllFeatures')],
         cta: t('pricing.getStarted'),
-        popular: true,
+        popular: false,
         href: trialHref,
       },
       {
@@ -102,7 +89,7 @@ export default function PremiumLanding() {
     <div className={`min-h-screen transition-colors ${darkMode ? 'bg-slate-950 text-white' : 'bg-white'}`}>
       <LandingNav darkMode={darkMode} onToggleDark={toggleTheme} />
 
-      <LandingHero darkMode={darkMode} onCopyScript={copyScript} copied={copied} />
+      <LandingHero darkMode={darkMode} />
 
       <LiveDemoGallery darkMode={darkMode} />
 
@@ -115,7 +102,7 @@ export default function PremiumLanding() {
               {t('features.title')}
             </h2>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-3 gap-6">
             {features.map((f) => {
               const Icon = f.icon;
               return (
@@ -198,6 +185,8 @@ export default function PremiumLanding() {
             <Link href="/docs" className={darkMode ? 'text-slate-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'}>{t('nav.docs')}</Link>
             <Link href="/examples" className={darkMode ? 'text-slate-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'}>{t('nav.examples')}</Link>
             <Link href="/integrations" className={darkMode ? 'text-slate-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'}>{t('nav.integrations')}</Link>
+            <Link href="/vs/senja" className={darkMode ? 'text-slate-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'}>Vs Senja</Link>
+            <Link href="/wall-of-love" className={darkMode ? 'text-slate-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'}>Wall of Love</Link>
           </div>
         </div>
       </footer>

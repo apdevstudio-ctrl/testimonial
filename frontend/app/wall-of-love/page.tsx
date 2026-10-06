@@ -19,7 +19,7 @@ export default function WallOfLoveProductPage() {
             TestiFlow
           </Link>
           <AuthCtaLink className="text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300">
-            Start free trial
+            Start building a wall
           </AuthCtaLink>
         </div>
       </nav>
@@ -30,10 +30,11 @@ export default function WallOfLoveProductPage() {
           Wall of Love
         </div>
         <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 dark:text-white tracking-tight max-w-3xl mx-auto">
-          Your best testimonials, in one beautiful wall
+          A Wall of Love is a page of approved customer quotes
         </h1>
         <p className="text-xl text-gray-600 dark:text-gray-400 mt-6 max-w-2xl mx-auto">
-          Publish approved reviews to a public page and embed it anywhere with auto-resizing iframe code.
+          Put the sentences your customers already sent you on one page, then embed that page on Framer, Webflow, or
+          Next.js. Approve every quote before it is public.
         </p>
         <AuthCtaLink className="inline-flex items-center mt-10 px-8 py-4 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700">
           Create your wall

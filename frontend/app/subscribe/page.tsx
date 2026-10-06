@@ -7,6 +7,7 @@ import Button from '@/components/ui/Button';
 import { useToast } from '@/components/ui/Toast';
 import { useAuth } from '@/contexts/AuthContext';
 import { SIX_MONTH_DISPLAY_USD, YEARLY_DISPLAY_USD } from '@/lib/subscription/constants';
+import { trackClarity } from '@/lib/analytics/clarity';
 
 const plans = [
   { id: 'monthly' as const, title: 'One month', price: '$5', period: 'per month', blurb: 'Billed every month' },
@@ -15,14 +16,14 @@ const plans = [
     title: '6 months',
     price: `$${SIX_MONTH_DISPLAY_USD}`,
     period: 'per 6 months',
-    blurb: 'Better value than monthly',
+    blurb: 'About $4.67 per month. Same product as monthly.',
   },
   {
     id: 'yearly' as const,
     title: 'Yearly',
     price: `$${YEARLY_DISPLAY_USD}`,
     period: 'per year',
-    blurb: 'Best value — set exact price in Lemon Squeezy',
+    blurb: '$8.33 per month. Monthly at $5 costs less over a year.',
   },
 ];
 
@@ -38,6 +39,7 @@ export default function SubscribePage() {
       router.push('/signin?next=/subscribe');
       return;
     }
+    trackClarity('checkout_started', { plan });
     setLoading(plan);
     try {
       const res = await fetch('/api/subscription/checkout', {
@@ -70,8 +72,8 @@ export default function SubscribePage() {
         <div className="text-center mb-12">
           <h1 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-3">Choose a plan</h1>
           <p className="text-slate-600 dark:text-slate-400 max-w-xl mx-auto">
-            New accounts get a <strong>30-day free trial</strong>. After the trial, pick a paid plan to keep using the
-            dashboard, sites, and analytics.
+            New accounts get a <strong>30-day free trial</strong>. After the trial, pick a paid plan to keep editing.
+            Published walls stay online. Six months is the lowest rate. The $100 yearly plan costs more than $5/month.
           </p>
           {!authLoading && isAuthenticated ? (
             <p className="mt-4 text-sm text-indigo-600 dark:text-indigo-400">

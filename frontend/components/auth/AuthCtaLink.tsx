@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import type { ReactNode, ComponentProps, MouseEvent } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
+import { trackClarity } from '@/lib/analytics/clarity';
 
 type LinkProps = Omit<ComponentProps<typeof Link>, 'href'>;
 
@@ -56,6 +57,7 @@ export function AuthCtaLink({
     // Resolve at click time so we never follow a stale /signup href
     const loggedIn = isAuthenticated || hasStoredSession(token);
     const href = loggedIn ? authedHref : guestHref;
+    trackClarity('landing_cta', { destination: href, logged_in: loggedIn ? 'true' : 'false' });
     e.preventDefault();
     router.push(href);
   };

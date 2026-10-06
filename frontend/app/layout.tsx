@@ -4,6 +4,7 @@ import './globals.css'
 import { ToastProvider } from '@/components/ui/Toast'
 import DashboardLayout from '@/components/layout/DashboardLayout'
 import { AuthProvider } from '@/contexts/AuthContext'
+import ClarityTracker from '@/components/analytics/ClarityTracker'
 import AppProviders from '@/components/providers/AppProviders'
 import { LOCALE_COOKIE, resolveLocale } from '@/lib/i18n/config'
 import { getMetadataBase, getSiteUrl } from '@/lib/seo/siteUrl'
@@ -76,6 +77,8 @@ export const metadata: Metadata = {
 }
 
 const ahrefsKey = process.env.NEXT_PUBLIC_AHREFS_WEB_ANALYTICS_KEY?.trim()
+const clarityProjectId = process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID?.trim()
+const clarityId = clarityProjectId && /^[a-z0-9]+$/i.test(clarityProjectId) ? clarityProjectId : ''
 
 function structuredDataJsonLd() {
   const site = getSiteUrl()
@@ -147,11 +150,19 @@ export default function RootLayout({
             async
           />
         ) : null}
+        {clarityId ? (
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","${clarityId}");`,
+            }}
+          />
+        ) : null}
       </head>
       <body className="bg-gray-50 text-gray-900 dark:bg-slate-950 dark:text-gray-100">
         <AppProviders initialLocale={initialLocale}>
           <ToastProvider>
             <AuthProvider>
+              <ClarityTracker />
               <DashboardLayout>
                 {children}
               </DashboardLayout>

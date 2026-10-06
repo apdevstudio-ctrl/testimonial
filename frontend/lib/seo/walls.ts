@@ -32,7 +32,16 @@ export async function getPublicWallSites(): Promise<PublicWallSite[]> {
     .select('siteId name publicSlug wallSettings updatedAt')
     .lean();
 
-  return sites.map((s) => ({
+  const counts = await Testimonial.aggregate<{ _id: string; n: number }>([
+    { $match: { isPublished: true } },
+    { $group: { _id: '$siteId', n: { $sum: 1 } } },
+    { $match: { n: { $gte: 3 } } },
+  ]);
+  const eligible = new Set(counts.map((row) => row._id));
+
+  return sites
+    .filter((s) => eligible.has(s.siteId))
+    .map((s) => ({
     siteId: s.siteId,
     name: s.name,
     publicSlug: s.publicSlug || normalizePublicSlug(s.name, s.siteId),

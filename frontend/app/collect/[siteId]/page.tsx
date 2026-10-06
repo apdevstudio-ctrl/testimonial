@@ -28,7 +28,11 @@ export default function CollectPage() {
           Use the button below to leave a video or text testimonial. Thank you!
         </p>
       </div>
-      <p className="text-xs text-gray-400 mt-auto pb-4">Powered by TestiFlow</p>
+      <p className="text-xs text-gray-400 mt-auto pb-4">
+        <a href="https://www.testiflow.site/?utm_source=collect&utm_medium=form" className="hover:text-gray-600">
+          Powered by TestiFlow
+        </a>
+      </p>
     </div>
   );
 }

@@ -5,14 +5,14 @@ import { getSiteUrl } from '@/lib/seo/siteUrl';
 const site = getSiteUrl();
 
 export const metadata: Metadata = {
-  title: 'TestiFlow — Embeddable Social Proof & Wall of Love',
+  title: 'TestiFlow — Put customer quotes on your site',
   description:
-    'Collect video and text testimonials, publish SEO-indexable walls, and embed premium widgets on any website. Developer-friendly, one script, every stack.',
+    'Paste the testimonials you already have. Publish a Wall of Love and embed it on Framer, Webflow, or Next.js. 30 days free.',
   alternates: { canonical: '/' },
   openGraph: {
-    title: 'TestiFlow — Embeddable Social Proof & Wall of Love',
+    title: 'TestiFlow — Put customer quotes on your site',
     description:
-      'Collect video and text testimonials, publish SEO walls, and embed premium widgets on any site.',
+      'Paste the testimonials you already have. Publish a Wall of Love and embed it on Framer, Webflow, or Next.js.',
     url: site,
     siteName: 'TestiFlow',
     type: 'website',
@@ -20,9 +20,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'TestiFlow — Embeddable Social Proof & Wall of Love',
+    title: 'TestiFlow — Put customer quotes on your site',
     description:
-      'Collect video and text testimonials, publish SEO walls, and embed premium widgets on any site.',
+      'Paste the testimonials you already have. Publish a Wall of Love and embed it on Framer, Webflow, or Next.js.',
     images: ['/logo.png'],
   },
   robots: { index: true, follow: true },

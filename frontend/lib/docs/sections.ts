@@ -265,7 +265,7 @@ The dashboard customizer controls:
 - Border radius and card shadow
 - Spacing between cards
 - Animation style (subtle, spring, glow)
-- Hide "Powered by TestiFlow" branding
+- Hide "Powered by TestiFlow" on a paid plan. Trial walls keep the link.
 
 Saved to \`widgetCustomization\` on your site model and applied to iframe embeds.`,
   },

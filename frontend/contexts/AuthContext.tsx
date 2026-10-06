@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
+import { advanceFunnel, identifyClarityUser, trackClarity } from '@/lib/analytics/clarity';
 
 interface User {
   _id: string;
@@ -117,6 +118,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setToken(data.access_token);
       setUser(data.user);
       localStorage.setItem('auth_token', data.access_token);
+      identifyClarityUser(data.user?._id);
+      trackClarity('logged_in', { method: 'email' });
+      advanceFunnel('authenticated');
       redirectAfterAuth();
     } catch (error: any) {
       throw error;
@@ -150,6 +154,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setToken(data.access_token);
       setUser(data.user);
       localStorage.setItem('auth_token', data.access_token);
+      identifyClarityUser(data.user?._id);
+      trackClarity('signed_up', { method: 'email' });
+      advanceFunnel('authenticated');
       redirectAfterAuth();
     } catch (error: any) {
       throw error;
@@ -230,6 +237,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             setToken(data.access_token);
             setUser(data.user);
             localStorage.setItem('auth_token', data.access_token);
+            identifyClarityUser(data.user?._id);
+            trackClarity('auth_google', { method: 'google' });
+            advanceFunnel('authenticated');
             redirectAfterAuth();
             resolve();
           } catch (error: any) {

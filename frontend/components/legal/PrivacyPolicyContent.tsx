@@ -108,7 +108,11 @@ export default function PrivacyPolicyContent() {
         <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-3">10. Cookies &amp; Similar Technologies</h2>
         <p className="leading-relaxed">
           We may use cookies and similar technologies for authentication, preferences, security, and analytics. You can
-          control cookies through your browser settings; disabling some cookies may affect functionality.
+          control cookies through your browser settings; disabling some cookies may affect functionality. When enabled,
+          Microsoft Clarity records pages visited, clicks, and session replays on this site so we can see how the
+          product is used. After you sign in, that session is labeled with an account id and events such as signup,
+          site created, quote added, and the last page before you leave. Your email address is not sent to Clarity.
+          Clarity&apos;s own privacy policy applies to data it processes.
         </p>
       </section>
 

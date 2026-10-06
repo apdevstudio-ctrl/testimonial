@@ -3,6 +3,7 @@ import connectDB from '@/lib/db/mongoose';
 import Site from '@/lib/models/Site';
 import { authenticate } from '@/lib/middleware/auth';
 import { requireActiveSubscription } from '@/lib/middleware/subscriptionGate';
+import { userCanHideBranding } from '@/lib/services/subscriptionAccess';
 
 export async function GET(
   req: NextRequest,
@@ -52,7 +53,23 @@ export async function PUT(
     }
 
     const body = await req.json();
+    if (!userCanHideBranding(user)) {
+      if (body?.wallSettings && typeof body.wallSettings === 'object') {
+        body.wallSettings.hideBranding = false;
+      }
+      if (body?.widgetCustomization && typeof body.widgetCustomization === 'object') {
+        body.widgetCustomization.hideBranding = false;
+      }
+    }
     Object.assign(site, body);
+    if (!userCanHideBranding(user)) {
+      if (site.wallSettings) site.wallSettings.hideBranding = false;
+      if (site.widgetCustomization && typeof site.widgetCustomization === 'object') {
+        (site.widgetCustomization as { hideBranding?: boolean }).hideBranding = false;
+      }
+      site.markModified('wallSettings');
+      site.markModified('widgetCustomization');
+    }
     await site.save();
 
     return NextResponse.json(site);

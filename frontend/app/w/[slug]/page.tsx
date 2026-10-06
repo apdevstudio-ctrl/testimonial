@@ -6,6 +6,7 @@ import {
   WALL_REVALIDATE_SECONDS,
 } from '@/lib/seo/walls';
 import WallViewer from '@/components/wall/WallViewer';
+import { shouldHideBranding } from '@/lib/wall/branding';
 import type { WidgetThemePreset } from '@/lib/widgetThemes';
 import type { Metadata } from 'next';
 
@@ -60,6 +61,8 @@ export default async function PublicWallPage({ params }: PageProps) {
     })),
   };
 
+  const hideBranding = await shouldHideBranding(site);
+
   return (
     <>
       <script
@@ -75,7 +78,8 @@ export default async function PublicWallPage({ params }: PageProps) {
         subtitle={site.wallSettings?.subtitle}
         columns={site.testimonialDisplay?.columns ?? 3}
         customize={{
-          hideBranding: site.wallSettings?.hideBranding,
+          ...(site.widgetCustomization as object),
+          hideBranding,
         }}
       />
     </>

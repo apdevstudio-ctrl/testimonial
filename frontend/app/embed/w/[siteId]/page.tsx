@@ -5,6 +5,7 @@ import Testimonial from '@/lib/models/Testimonial';
 import WallViewer from '@/components/wall/WallViewer';
 import type { WidgetThemePreset } from '@/lib/widgetThemes';
 import type { WidgetCustomizeConfig } from '@/lib/widget/customizer';
+import { shouldHideBranding } from '@/lib/wall/branding';
 import { WALL_REVALIDATE_SECONDS } from '@/lib/seo/walls';
 
 export const revalidate = WALL_REVALIDATE_SECONDS;
@@ -37,6 +38,8 @@ export default async function EmbedWallPage({ params, searchParams }: PageProps)
     site.wallSettings?.layout ||
     'grid') as WidgetCustomizeConfig['layout'];
 
+  const hideBranding = await shouldHideBranding(site);
+
   return (
     <WallViewer
       siteId={site.siteId}
@@ -48,8 +51,8 @@ export default async function EmbedWallPage({ params, searchParams }: PageProps)
       columns={site.testimonialDisplay?.columns ?? 3}
       compact
       customize={{
-        hideBranding: site.wallSettings?.hideBranding,
         ...(site.widgetCustomization as object),
+        hideBranding,
       }}
     />
   );

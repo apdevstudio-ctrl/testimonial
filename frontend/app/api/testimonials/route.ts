@@ -7,6 +7,46 @@ import { authenticate } from '@/lib/middleware/auth';
 import { requireActiveSubscription } from '@/lib/middleware/subscriptionGate';
 import Site from '@/lib/models/Site';
 
+async function createOwnedTestimonial(req: NextRequest) {
+  const user = await authenticate(req);
+  const denied = await requireActiveSubscription(user);
+  if (denied) return denied;
+  await connectDB();
+
+  const body = await req.json();
+  const siteId = typeof body.siteId === 'string' ? body.siteId : '';
+  const text = typeof body.text === 'string' ? body.text.trim() : '';
+  const authorName = typeof body.authorName === 'string' ? body.authorName.trim() : '';
+  const authorPosition = typeof body.authorPosition === 'string' ? body.authorPosition.trim() : '';
+  const authorCompany = typeof body.authorCompany === 'string' ? body.authorCompany.trim() : '';
+
+  if (!siteId || !text || !authorName) {
+    return NextResponse.json({ message: 'siteId, text, and authorName are required' }, { status: 400 });
+  }
+
+  const site = await Site.findOne({ siteId, userId: user._id.toString() });
+  if (!site) {
+    return NextResponse.json({ message: 'Site not found' }, { status: 404 });
+  }
+
+  const testimonial = new Testimonial({
+    siteId,
+    type: 'text',
+    text,
+    rating: 5,
+    author: {
+      name: authorName,
+      position: authorPosition || undefined,
+      company: authorCompany || undefined,
+    },
+    isApproved: true,
+    isPublished: true,
+    verified: false,
+  });
+  await testimonial.save();
+  return NextResponse.json(testimonial, { status: 201 });
+}
+
 export async function OPTIONS(req: NextRequest) {
   return new NextResponse(null, {
     status: 204,
@@ -20,6 +60,10 @@ export async function OPTIONS(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   try {
+    const contentType = req.headers.get('content-type') || '';
+    if (contentType.includes('application/json')) {
+      return createOwnedTestimonial(req);
+    }
     await connectDB();
 
     const formData = await req.formData();

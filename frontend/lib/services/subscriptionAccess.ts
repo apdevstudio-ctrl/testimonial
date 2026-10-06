@@ -119,6 +119,14 @@ function paidPlanIsActive(user: IUser, now: Date): boolean {
   return true;
 }
 
+/** Branding removal is a paid feature. Trial and expired accounts keep the TestiFlow link. */
+export function userCanHideBranding(user: IUser, now: Date = new Date()): boolean {
+  if (user.role === 'admin') return true;
+  ensureSubscriptionDefaults(user);
+  syncExpiredState(user, now);
+  return paidPlanIsActive(user, now);
+}
+
 export function userHasFullAccess(user: IUser, now: Date = new Date()): boolean {
   if (user.role === 'admin') return true;
   ensureSubscriptionDefaults(user);

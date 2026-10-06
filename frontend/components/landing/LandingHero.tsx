@@ -1,6 +1,6 @@
 'use client';
 
-import { ArrowRight, Play, Code2 } from 'lucide-react';
+import { ArrowRight, Play } from 'lucide-react';
 import Button from '@/components/ui/Button';
 import BrowserFrame from '@/components/ui/BrowserFrame';
 import HeroWallPreview from '@/components/landing/HeroWallPreview';
@@ -9,11 +9,9 @@ import { useI18n } from '@/contexts/I18nProvider';
 
 interface LandingHeroProps {
   darkMode: boolean;
-  onCopyScript: () => void;
-  copied: boolean;
 }
 
-export default function LandingHero({ darkMode, onCopyScript, copied }: LandingHeroProps) {
+export default function LandingHero({ darkMode }: LandingHeroProps) {
   const { t } = useI18n();
 
   return (
@@ -43,29 +41,6 @@ export default function LandingHero({ darkMode, onCopyScript, copied }: LandingH
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                 {t('hero.badge')}
               </span>
-              <a
-                href={
-                  process.env.NEXT_PUBLIC_PRODUCTHUNT_URL?.trim() ||
-                  'https://www.producthunt.com/products/testiflow'
-                }
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-sm font-medium transition-colors ${
-                  darkMode
-                    ? 'bg-[#da552f]/15 text-[#ff8a65] border border-[#da552f]/30 hover:bg-[#da552f]/25'
-                    : 'bg-[#fff1eb] text-[#da552f] border border-[#da552f]/25 hover:bg-[#ffe4d6]'
-                }`}
-                aria-label={t('hero.productHuntCta')}
-              >
-                <svg viewBox="0 0 40 40" className="h-4 w-4 shrink-0" aria-hidden="true">
-                  <circle cx="20" cy="20" r="20" fill="#DA552F" />
-                  <path
-                    d="M22.67 20H17.5v-5.5h5.17a2.75 2.75 0 0 1 0 5.5zm0-9H13.5v18h4V24.5h5.17a6.75 6.75 0 1 0 0-13.5z"
-                    fill="#fff"
-                  />
-                </svg>
-                {t('hero.productHunt')}
-              </a>
             </div>
             <h1
               className={`text-4xl sm:text-5xl lg:text-[3.25rem] font-bold tracking-tight mb-5 leading-[1.08] ${
@@ -94,20 +69,6 @@ export default function LandingHero({ darkMode, onCopyScript, copied }: LandingH
                 </Button>
               </a>
             </div>
-            <button
-              type="button"
-              onClick={onCopyScript}
-              className={`inline-flex items-center gap-2 text-xs sm:text-sm font-mono px-4 py-2.5 rounded-lg border transition-colors max-w-full ${
-                darkMode
-                  ? 'border-slate-700 bg-slate-900/50 text-slate-300 hover:border-indigo-500'
-                  : 'border-gray-200 bg-white text-gray-600 hover:border-indigo-300 shadow-sm'
-              }`}
-            >
-              <Code2 className="h-4 w-4 shrink-0" />
-              <span className="truncate">
-                {copied ? t('hero.copied') : '<script src="https://testiflow.site/embed.js" async></script>'}
-              </span>
-            </button>
           </div>
 
           <div className="w-full min-w-0 lg:max-w-none">
