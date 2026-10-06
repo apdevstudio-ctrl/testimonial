@@ -76,9 +76,10 @@ export const metadata: Metadata = {
     : {}),
 }
 
+const CLARITY_PROJECT_ID_FALLBACK = 'ytleqxqw7f'
 const ahrefsKey = process.env.NEXT_PUBLIC_AHREFS_WEB_ANALYTICS_KEY?.trim()
-const clarityProjectId = process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID?.trim()
-const clarityId = clarityProjectId && /^[a-z0-9]+$/i.test(clarityProjectId) ? clarityProjectId : ''
+const clarityFromEnv = process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID?.trim() ?? ''
+const clarityId = /^[a-z0-9]+$/i.test(clarityFromEnv) ? clarityFromEnv : CLARITY_PROJECT_ID_FALLBACK
 
 function structuredDataJsonLd() {
   const site = getSiteUrl()
