@@ -121,9 +121,8 @@ let TestimonialWidgetClass: any;
       const scripts = document.getElementsByTagName('script');
       for (let i = 0; i < scripts.length; i++) {
         const src = scripts[i].src;
-        if (src.includes('script.js')) {
-          // Handle both /script.js and /api/script.js
-          return src.replace(/\/api\/script\.js$/, '').replace(/\/script\.js$/, '');
+        if (src && (src.includes('embed.js') || src.includes('script.js'))) {
+          return src.replace(/\/embed\.js.*$/, '').replace(/\/api\/script\.js.*$/, '').replace(/\/script\.js.*$/, '');
         }
       }
       return window.location.origin;
@@ -1556,7 +1555,7 @@ let TestimonialWidgetClass: any;
   const scriptTag = document.currentScript as HTMLScriptElement;
   if (scriptTag && scriptTag.dataset.siteId) {
     const siteId = scriptTag.dataset.siteId;
-    const apiUrl = scriptTag.dataset.apiUrl;
+    const apiUrl = scriptTag.dataset.apiUrl || bootApiUrl;
     new TestimonialWidget(siteId, apiUrl);
   } else {
     // Fallback: Check for script tags with data-site-id (for dynamically loaded scripts)
@@ -1567,7 +1566,7 @@ let TestimonialWidgetClass: any;
       if (scriptEl.dataset.siteId && !scriptEl.dataset.initialized) {
         scriptEl.dataset.initialized = 'true';
         const siteId = scriptEl.dataset.siteId;
-        const apiUrl = scriptEl.dataset.apiUrl;
+        const apiUrl = scriptEl.dataset.apiUrl || bootApiUrl;
         new TestimonialWidget(siteId, apiUrl);
       }
     });
