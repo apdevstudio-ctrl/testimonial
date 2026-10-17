@@ -191,14 +191,17 @@ function initAutoRender(opts) {
         if (!el.id)
             el.id = `testiflow-wall-${siteId.slice(0, 8)}-${index}`;
         const widget = new opts.TestimonialWidget(siteId, apiUrl);
-        const layout = (el.dataset.layout || el.dataset.testiflowLayout || 'grid');
-        const limit = parseInt(el.dataset.limit || el.dataset.testiflowLimit || '12', 10);
-        widget.displayTestimonials(el.id, {
-            layout,
-            limit: isNaN(limit) ? 12 : limit,
-            showRating: true,
-            showAuthor: true,
-        });
+        const displayOptions = {};
+        const explicitLayout = el.dataset.layout || el.dataset.testiflowLayout;
+        const explicitLimit = el.dataset.limit || el.dataset.testiflowLimit;
+        if (explicitLayout)
+            displayOptions.layout = explicitLayout;
+        if (explicitLimit) {
+            const limit = parseInt(explicitLimit, 10);
+            if (!isNaN(limit))
+                displayOptions.limit = limit;
+        }
+        widget.displayTestimonials(el.id, displayOptions);
     });
     const collectNodes = document.querySelectorAll('[data-testiflow-collect]');
     collectNodes.forEach((el) => {
@@ -229,13 +232,15 @@ let TestimonialWidgetClass;
 (function () {
     'use strict';
     class TestimonialWidget {
-        constructor(siteId, apiUrl) {
+        constructor(siteId, apiUrl, options) {
             this.config = null;
             this.shadowRoot = null;
             this.siteId = siteId;
             this.apiUrl = apiUrl || this.detectApiUrl();
             this.sessionId = this.generateSessionId();
-            this.init();
+            if (options?.mountButton !== false) {
+                this.init();
+            }
         }
         detectApiUrl() {
             const scripts = document.getElementsByTagName('script');
@@ -1311,22 +1316,30 @@ let TestimonialWidgetClass;
                             card.style.boxShadow = getShadowStyle(cardStyle.shadow || 'medium');
                         };
                     }
+                    const authorStyle = displayConfig?.authorStyle;
+                    const quoteColor = cardStyle.textColor || '#111827';
+                    const authorColor = authorStyle?.textColor || quoteColor;
+                    const avatarSize = authorStyle?.avatarSize || '48px';
+                    const avatarBorder = cardStyle.borderColor || '#e5e7eb';
+                    const renderAvatar = showAvatar && authorStyle?.showAvatar !== false;
+                    const renderCompany = showCompany && authorStyle?.showCompany !== false;
+                    const renderPosition = showCompany && authorStyle?.showPosition !== false;
                     // Author info - Shadcn style
                     if (showAuthor && testimonial.author) {
                         const authorDiv = document.createElement('div');
                         authorDiv.style.cssText = 'display: flex; align-items: center; gap: 12px; margin-bottom: 16px;';
-                        if (showAvatar) {
+                        if (renderAvatar) {
                             if (testimonial.author.avatar) {
                                 const avatar = document.createElement('img');
                                 avatar.src = testimonial.author.avatar;
-                                avatar.style.cssText = 'width: 48px; height: 48px; border-radius: 50%; object-fit: cover; border: 2px solid #e5e7eb;';
+                                avatar.style.cssText = `width: ${avatarSize}; height: ${avatarSize}; border-radius: 50%; object-fit: cover; border: 2px solid ${avatarBorder};`;
                                 authorDiv.appendChild(avatar);
                             }
                             else {
                                 const avatarPlaceholder = document.createElement('div');
                                 avatarPlaceholder.style.cssText = `
-                  width: 48px;
-                  height: 48px;
+                  width: ${avatarSize};
+                  height: ${avatarSize};
                   border-radius: 50%;
                   background: ${this.config?.theme.primaryColor || '#667eea'};
                   display: flex;
@@ -1335,7 +1348,8 @@ let TestimonialWidgetClass;
                   color: white;
                   font-weight: 600;
                   font-size: 18px;
-                  border: 2px solid #e5e7eb;
+                  border: 2px solid ${avatarBorder};
+                  flex-shrink: 0;
                 `;
                                 avatarPlaceholder.textContent = testimonial.author.name ? testimonial.author.name.charAt(0).toUpperCase() : '?';
                                 authorDiv.appendChild(avatarPlaceholder);
@@ -1343,17 +1357,17 @@ let TestimonialWidgetClass;
                         }
                         const authorInfo = document.createElement('div');
                         const name = document.createElement('div');
-                        name.style.cssText = 'font-weight: 600; font-size: 16px; color: #111827;';
+                        name.style.cssText = `font-weight: 600; font-size: 16px; color: ${authorColor};`;
                         name.textContent = testimonial.author.name || 'Anonymous';
                         authorInfo.appendChild(name);
-                        if (showCompany && (testimonial.author.company || testimonial.author.position)) {
+                        const metaParts = [];
+                        if (renderPosition && testimonial.author.position)
+                            metaParts.push(testimonial.author.position);
+                        if (renderCompany && testimonial.author.company)
+                            metaParts.push(testimonial.author.company);
+                        if (metaParts.length > 0) {
                             const meta = document.createElement('div');
-                            meta.style.cssText = 'font-size: 14px; color: #6b7280; margin-top: 4px;';
-                            const metaParts = [];
-                            if (testimonial.author.position)
-                                metaParts.push(testimonial.author.position);
-                            if (testimonial.author.company)
-                                metaParts.push(testimonial.author.company);
+                            meta.style.cssText = `font-size: 14px; color: ${authorColor}; opacity: 0.72; margin-top: 4px;`;
                             meta.textContent = metaParts.join(' at ');
                             authorInfo.appendChild(meta);
                         }
@@ -1497,7 +1511,7 @@ let TestimonialWidgetClass;
                     else if (testimonial.text) {
                         const text = document.createElement('p');
                         text.textContent = testimonial.text;
-                        text.style.cssText = 'color: #374151; line-height: 1.6; margin-bottom: 16px;';
+                        text.style.cssText = `color: ${quoteColor}; line-height: 1.6; margin-bottom: 16px;`;
                         card.appendChild(text);
                     }
                     container.appendChild(card);
@@ -1558,244 +1572,16 @@ let TestimonialWidgetClass;
             }
         });
     }
-    // Helper function to display testimonials
+    // Uses the same display settings as TestimonialWidget.displayTestimonials
     window.displayTestimonials = async function (siteId, containerId, options) {
-        const apiUrl = options?.apiUrl || (() => {
-            const scripts = document.getElementsByTagName('script');
-            for (let i = 0; i < scripts.length; i++) {
-                const src = scripts[i].src;
-                if (src.includes('script.js')) {
-                    // Handle both /script.js and /api/script.js
-                    return src.replace(/\/api\/script\.js$/, '').replace(/\/script\.js$/, '');
-                }
-            }
-            return window.location.origin;
-        })();
-        try {
-            const response = await fetch(`${apiUrl}/api/testimonials?siteId=${siteId}&published=true`);
-            if (!response.ok) {
-                throw new Error('Failed to fetch testimonials');
-            }
-            const testimonials = await response.json();
-            const container = document.getElementById(containerId);
-            if (!container) {
-                console.error(`Container with ID "${containerId}" not found`);
-                return;
-            }
-            const layout = options?.layout || 'grid';
-            const limit = options?.limit || testimonials.length;
-            const showRating = options?.showRating !== false;
-            const showAuthor = options?.showAuthor !== false;
-            const limitedTestimonials = testimonials.slice(0, limit);
-            if (layout === 'grid') {
-                container.style.cssText = 'display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px;';
-            }
-            else if (layout === 'carousel') {
-                container.style.cssText = 'display: flex; overflow-x: auto; gap: 24px; padding: 20px 0; scroll-snap-type: x mandatory;';
-            }
-            else {
-                container.style.cssText = 'display: flex; flex-direction: column; gap: 24px;';
-            }
-            limitedTestimonials.forEach((testimonial) => {
-                const card = document.createElement('div');
-                card.style.cssText = `
-          background: white;
-          border-radius: 12px;
-          padding: 24px;
-          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-          ${layout === 'carousel' ? 'min-width: 300px; scroll-snap-align: start;' : ''}
-        `;
-                // Author info
-                if (showAuthor && testimonial.author) {
-                    const authorDiv = document.createElement('div');
-                    authorDiv.style.cssText = 'display: flex; align-items: center; gap: 12px; margin-bottom: 16px;';
-                    if (testimonial.author.avatar) {
-                        const avatar = document.createElement('img');
-                        avatar.src = testimonial.author.avatar;
-                        avatar.style.cssText = 'width: 48px; height: 48px; border-radius: 50%; object-fit: cover;';
-                        authorDiv.appendChild(avatar);
-                    }
-                    else {
-                        const avatarPlaceholder = document.createElement('div');
-                        avatarPlaceholder.style.cssText = `
-              width: 48px;
-              height: 48px;
-              border-radius: 50%;
-              background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              color: white;
-              font-weight: bold;
-              font-size: 18px;
-            `;
-                        avatarPlaceholder.textContent = testimonial.author.name ? testimonial.author.name.charAt(0).toUpperCase() : '?';
-                        authorDiv.appendChild(avatarPlaceholder);
-                    }
-                    const authorInfo = document.createElement('div');
-                    const name = document.createElement('div');
-                    name.style.cssText = 'font-weight: 600; font-size: 16px; color: #111827;';
-                    name.textContent = testimonial.author.name || 'Anonymous';
-                    authorInfo.appendChild(name);
-                    if (testimonial.author.company || testimonial.author.position) {
-                        const meta = document.createElement('div');
-                        meta.style.cssText = 'font-size: 14px; color: #6b7280; margin-top: 4px;';
-                        meta.textContent = [testimonial.author.position, testimonial.author.company].filter(Boolean).join(' at ');
-                        authorInfo.appendChild(meta);
-                    }
-                    authorDiv.appendChild(authorInfo);
-                    card.appendChild(authorDiv);
-                }
-                // Rating
-                if (showRating && testimonial.rating) {
-                    const ratingDiv = document.createElement('div');
-                    ratingDiv.style.cssText = 'display: flex; gap: 4px; margin-bottom: 16px;';
-                    for (let i = 1; i <= 5; i++) {
-                        const star = document.createElement('span');
-                        star.textContent = i <= testimonial.rating ? '★' : '☆';
-                        star.style.cssText = `color: ${i <= testimonial.rating ? '#fbbf24' : '#d1d5db'}; font-size: 20px;`;
-                        ratingDiv.appendChild(star);
-                    }
-                    card.appendChild(ratingDiv);
-                }
-                // Testimonial content
-                if (testimonial.type === 'video' && testimonial.videoUrl) {
-                    // Create video container with modern design
-                    const videoContainer = document.createElement('div');
-                    videoContainer.style.cssText = `
-            position: relative;
-            width: 100%;
-            margin-bottom: 16px;
-            border-radius: 12px;
-            overflow: hidden;
-            background: #000;
-            aspect-ratio: 16 / 9;
-            cursor: pointer;
-          `;
-                    const video = document.createElement('video');
-                    video.src = testimonial.videoUrl;
-                    video.controls = false; // We'll add custom controls
-                    video.style.cssText = `
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-          `;
-                    if (testimonial.videoThumbnail) {
-                        video.poster = testimonial.videoThumbnail;
-                    }
-                    // Create play button overlay
-                    const playOverlay = document.createElement('div');
-                    playOverlay.style.cssText = `
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(0, 0, 0, 0.3);
-            transition: background 0.3s ease;
-            z-index: 1;
-          `;
-                    const playButton = document.createElement('div');
-                    playButton.style.cssText = `
-            width: 64px;
-            height: 64px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.95);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: transform 0.2s ease, background 0.2s ease;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-          `;
-                    // Play icon (triangle)
-                    const playIcon = document.createElement('div');
-                    playIcon.style.cssText = `
-            width: 0;
-            height: 0;
-            border-left: 20px solid #667eea;
-            border-top: 12px solid transparent;
-            border-bottom: 12px solid transparent;
-            margin-left: 4px;
-          `;
-                    playButton.appendChild(playIcon);
-                    let isPlaying = false;
-                    playButton.onmouseenter = () => {
-                        if (!isPlaying) {
-                            playButton.style.transform = 'scale(1.1)';
-                            playButton.style.background = 'rgba(255, 255, 255, 1)';
-                        }
-                    };
-                    playButton.onmouseleave = () => {
-                        if (!isPlaying) {
-                            playButton.style.transform = 'scale(1)';
-                            playButton.style.background = 'rgba(255, 255, 255, 0.95)';
-                        }
-                    };
-                    // Play button click handler
-                    const handlePlay = () => {
-                        if (video.paused) {
-                            video.play();
-                            playOverlay.style.display = 'none';
-                            video.controls = true;
-                            isPlaying = true;
-                        }
-                        else {
-                            video.pause();
-                            playOverlay.style.display = 'flex';
-                            video.controls = false;
-                            isPlaying = false;
-                        }
-                    };
-                    playButton.onclick = (e) => {
-                        e.stopPropagation();
-                        handlePlay();
-                    };
-                    videoContainer.onclick = handlePlay;
-                    // Show overlay when video ends or pauses
-                    video.addEventListener('pause', () => {
-                        if (video.currentTime > 0) {
-                            playOverlay.style.display = 'flex';
-                            video.controls = false;
-                            isPlaying = false;
-                        }
-                    });
-                    video.addEventListener('ended', () => {
-                        playOverlay.style.display = 'flex';
-                        video.controls = false;
-                        isPlaying = false;
-                    });
-                    playOverlay.appendChild(playButton);
-                    videoContainer.appendChild(video);
-                    videoContainer.appendChild(playOverlay);
-                    card.appendChild(videoContainer);
-                }
-                else if (testimonial.text) {
-                    const text = document.createElement('p');
-                    text.textContent = testimonial.text;
-                    text.style.cssText = 'color: #374151; line-height: 1.6; margin-bottom: 16px;';
-                    card.appendChild(text);
-                }
-                container.appendChild(card);
-            });
-            if (limitedTestimonials.length === 0) {
-                const empty = document.createElement('div');
-                empty.style.cssText = 'text-align: center; padding: 40px; color: #6b7280;';
-                empty.textContent = 'No testimonials yet. Be the first to share your experience!';
-                container.appendChild(empty);
-            }
-        }
-        catch (error) {
-            console.error('Error displaying testimonials:', error);
-            const container = document.getElementById(containerId);
-            if (container) {
-                container.innerHTML = '<p style="color: #ef4444;">Failed to load testimonials. Please try again later.</p>';
-            }
-        }
+        const apiUrl = options?.apiUrl || bootApiUrl;
+        const widget = new TestimonialWidget(siteId, apiUrl, { mountButton: false });
+        await widget.displayTestimonials(containerId, {
+            layout: options?.layout,
+            limit: options?.limit,
+            showRating: options?.showRating,
+            showAuthor: options?.showAuthor,
+        });
     };
     // Store the class outside the IIFE
     TestimonialWidgetClass = TestimonialWidget;

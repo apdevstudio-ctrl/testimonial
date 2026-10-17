@@ -36,15 +36,16 @@ export function initAutoRender(opts: AutoRenderOptions): void {
     if (!el.id) el.id = `testiflow-wall-${siteId.slice(0, 8)}-${index}`;
 
     const widget = new opts.TestimonialWidget(siteId, apiUrl);
-    const layout = (el.dataset.layout || el.dataset.testiflowLayout || 'grid') as string;
-    const limit = parseInt(el.dataset.limit || el.dataset.testiflowLimit || '12', 10);
+    const displayOptions: Record<string, unknown> = {};
+    const explicitLayout = el.dataset.layout || el.dataset.testiflowLayout;
+    const explicitLimit = el.dataset.limit || el.dataset.testiflowLimit;
+    if (explicitLayout) displayOptions.layout = explicitLayout;
+    if (explicitLimit) {
+      const limit = parseInt(explicitLimit, 10);
+      if (!isNaN(limit)) displayOptions.limit = limit;
+    }
 
-    widget.displayTestimonials(el.id, {
-      layout,
-      limit: isNaN(limit) ? 12 : limit,
-      showRating: true,
-      showAuthor: true,
-    });
+    widget.displayTestimonials(el.id, displayOptions);
   });
 
   const collectNodes = document.querySelectorAll<HTMLElement>('[data-testiflow-collect]');

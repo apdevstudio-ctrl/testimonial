@@ -477,9 +477,12 @@ export default function TestimonialDisplayBuilder({ displayConfig, theme, onUpda
                     <div style={{ fontWeight: 600, fontSize: '16px', color: localConfig.authorStyle.textColor }}>
                       John Doe
                     </div>
-                    {localConfig.authorStyle.showPosition && localConfig.authorStyle.showCompany && (
-                      <div style={{ fontSize: '14px', color: '#6b7280', marginTop: '4px' }}>
-                        CEO at Example Corp
+                    {(localConfig.authorStyle.showPosition || localConfig.authorStyle.showCompany) && (
+                      <div style={{ fontSize: '14px', color: localConfig.authorStyle.textColor, opacity: 0.72, marginTop: '4px' }}>
+                        {[
+                          localConfig.authorStyle.showPosition ? 'CEO' : '',
+                          localConfig.authorStyle.showCompany ? 'Example Corp' : '',
+                        ].filter(Boolean).join(' at ')}
                       </div>
                     )}
                   </div>
