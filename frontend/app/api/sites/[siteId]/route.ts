@@ -62,6 +62,11 @@ export async function PUT(
       }
     }
     Object.assign(site, body);
+    if (body.testimonialDisplay) site.markModified('testimonialDisplay');
+    if (body.formDesign) site.markModified('formDesign');
+    if (body.pageDesign) site.markModified('pageDesign');
+    if (body.theme) site.markModified('theme');
+    if (body.button) site.markModified('button');
     if (!userCanHideBranding(user)) {
       if (site.wallSettings) site.wallSettings.hideBranding = false;
       if (site.widgetCustomization && typeof site.widgetCustomization === 'object') {

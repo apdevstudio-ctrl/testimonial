@@ -223,7 +223,7 @@ export default function TestimonialDisplayBuilder({ displayConfig, theme, onUpda
               </div>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Text Color</label>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Quote text color</label>
               <div className="flex gap-2">
                 <input
                   type="color"

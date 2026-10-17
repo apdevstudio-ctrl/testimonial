@@ -178,6 +178,7 @@ export default function VisualBuilder({ site, onUpdate }: VisualBuilderProps) {
     flowType: site.flowType || 'modal',
     formDesign: site.formDesign || defaultFormDesign,
     pageDesign: site.pageDesign,
+    testimonialDisplay: site.testimonialDisplay,
   };
 
   const [previewConfig, setPreviewConfig] = useState<Site>(defaultConfig);
@@ -220,6 +221,8 @@ export default function VisualBuilder({ site, onUpdate }: VisualBuilderProps) {
       },
       flowType: site.flowType || 'modal',
       formDesign: site.formDesign || defaultFormDesign,
+      pageDesign: site.pageDesign,
+      testimonialDisplay: site.testimonialDisplay,
     };
     setPreviewConfig(updatedConfig);
   }, [site]);
@@ -273,6 +276,12 @@ export default function VisualBuilder({ site, onUpdate }: VisualBuilderProps) {
       }
       if (updates.formDesign) {
         newConfig.formDesign = updates.formDesign;
+      }
+      if (updates.pageDesign) {
+        newConfig.pageDesign = updates.pageDesign;
+      }
+      if (updates.testimonialDisplay) {
+        newConfig.testimonialDisplay = updates.testimonialDisplay;
       }
       
       return newConfig;

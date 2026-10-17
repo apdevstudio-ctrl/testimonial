@@ -1353,7 +1353,8 @@ let TestimonialWidgetClass: any;
 
             const authorInfo = document.createElement('div');
             const name = document.createElement('div');
-            name.style.cssText = `font-weight: 600; font-size: 16px; color: ${authorColor};`;
+            name.style.cssText = 'font-weight: 600; font-size: 16px;';
+            name.style.setProperty('color', authorColor, 'important');
             name.textContent = testimonial.author.name || 'Anonymous';
             authorInfo.appendChild(name);
 
@@ -1362,7 +1363,8 @@ let TestimonialWidgetClass: any;
             if (renderCompany && testimonial.author.company) metaParts.push(testimonial.author.company);
             if (metaParts.length > 0) {
               const meta = document.createElement('div');
-              meta.style.cssText = `font-size: 14px; color: ${authorColor}; opacity: 0.72; margin-top: 4px;`;
+              meta.style.cssText = 'font-size: 14px; opacity: 0.72; margin-top: 4px;';
+              meta.style.setProperty('color', authorColor, 'important');
               meta.textContent = metaParts.join(' at ');
               authorInfo.appendChild(meta);
             }
@@ -1517,7 +1519,8 @@ let TestimonialWidgetClass: any;
           } else if (testimonial.text) {
             const text = document.createElement('p');
             text.textContent = testimonial.text;
-            text.style.cssText = `color: ${quoteColor}; line-height: 1.6; margin-bottom: 16px;`;
+            text.style.cssText = 'line-height: 1.6; margin-bottom: 16px;';
+            text.style.setProperty('color', quoteColor, 'important');
             card.appendChild(text);
           }
 
