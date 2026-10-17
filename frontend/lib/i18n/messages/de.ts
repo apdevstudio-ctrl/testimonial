@@ -55,7 +55,7 @@ const de: Messages = {
   pricing: {
     title: 'Einfache Preise',
     subtitle:
-      '30 Tage Test, ohne Karte. 6 Monate ist der niedrigste Preis, etwa 4,67 $/Monat. 100 $ jährlich kostet mehr als 5 $ im Monat.',
+      '30 Tage Test, ohne Karte. Jährlich ist der niedrigste Preis: 55 $, etwa 4,58 $/Monat.',
     popular: 'Beliebt',
     trial: 'Test',
     monthly: 'Monatlich',
@@ -79,7 +79,7 @@ const de: Messages = {
     featBetterValue: 'Entspricht 4,67 $/Monat',
     featOneInvoice: 'Eine Rechnung',
     featPriority: 'Priority-Support',
-    featLowestRate: '8,33 $/Monat, teurer als monatlich',
+    featLowestRate: 'Entspricht 4,58 $/Monat',
     featAnnual: 'Jährliche Abrechnung',
     featAllFeatures: 'Alle Funktionen',
     featBestTeams: 'Dieselben Funktionen wie monatlich',

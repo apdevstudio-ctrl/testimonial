@@ -55,7 +55,7 @@ const pt: Messages = {
   pricing: {
     title: 'Preços simples',
     subtitle:
-      'Teste de 30 dias, sem cartão. 6 meses é a menor taxa, cerca de US$ 4,67/mês. O anual de US$ 100 custa mais do que US$ 5 por mês.',
+      'Teste de 30 dias, sem cartão. O anual é a menor taxa: US$ 55, cerca de US$ 4,58/mês.',
     popular: 'Popular',
     trial: 'Teste',
     monthly: 'Mensal',
@@ -79,7 +79,7 @@ const pt: Messages = {
     featBetterValue: 'Equivalente a US$ 4,67/mês',
     featOneInvoice: 'Uma fatura',
     featPriority: 'Suporte prioritário',
-    featLowestRate: 'US$ 8,33/mês, mais caro que o mensal',
+    featLowestRate: 'Equivalente a US$ 4,58/mês',
     featAnnual: 'Cobrança anual',
     featAllFeatures: 'Todos os recursos',
     featBestTeams: 'Os mesmos recursos do mensal',

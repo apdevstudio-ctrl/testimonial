@@ -56,7 +56,7 @@ const es: Messages = {
   pricing: {
     title: 'Precios simples',
     subtitle:
-      'Prueba de 30 días, sin tarjeta. 6 meses es la tarifa más baja, unos $4.67/mes. El anual de $100 cuesta más que pagar $5 al mes.',
+      'Prueba de 30 días, sin tarjeta. El anual es la tarifa más baja: $55, unos $4.58/mes.',
     popular: 'Popular',
     trial: 'Prueba',
     monthly: 'Mensual',
@@ -80,7 +80,7 @@ const es: Messages = {
     featBetterValue: 'Equivalente a $4.67/mes',
     featOneInvoice: 'Una factura',
     featPriority: 'Soporte prioritario',
-    featLowestRate: '$8.33/mes, más caro que el mensual',
+    featLowestRate: '$4.58/mes equivalente',
     featAnnual: 'Facturación anual',
     featAllFeatures: 'Todas las funciones',
     featBestTeams: 'Las mismas funciones que el mensual',

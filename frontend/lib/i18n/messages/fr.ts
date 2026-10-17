@@ -55,7 +55,7 @@ const fr: Messages = {
   pricing: {
     title: 'Tarifs simples',
     subtitle:
-      'Essai de 30 jours, sans carte. 6 mois est le tarif le plus bas, environ 4,67 $/mois. L\'annuel à 100 $ coûte plus cher que 5 $ par mois.',
+      'Essai de 30 jours, sans carte. L\'annuel est le tarif le plus bas : 55 $, environ 4,58 $/mois.',
     popular: 'Populaire',
     trial: 'Essai',
     monthly: 'Mensuel',
@@ -79,7 +79,7 @@ const fr: Messages = {
     featBetterValue: 'Équivalent à 4,67 $/mois',
     featOneInvoice: 'Une facture',
     featPriority: 'Support prioritaire',
-    featLowestRate: '8,33 $/mois, plus cher que le mensuel',
+    featLowestRate: 'Équivalent à 4,58 $/mois',
     featAnnual: 'Facturation annuelle',
     featAllFeatures: 'Toutes les fonctions',
     featBestTeams: 'Les mêmes fonctions que le mensuel',

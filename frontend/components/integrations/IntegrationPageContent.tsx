@@ -29,8 +29,8 @@ export default function IntegrationPageContent({ platform }: Props) {
   };
 
   return (
-    <article className="min-h-screen bg-white">
-      <header className="border-b border-gray-100 dark:border-slate-800 bg-gradient-to-b from-indigo-50/80 to-white dark:to-slate-950">
+    <article className="min-h-screen bg-white dark:bg-slate-950">
+      <header className="border-b border-gray-100 dark:border-slate-800 bg-gradient-to-b from-indigo-50/80 to-white dark:from-indigo-950/30 dark:to-slate-950">
         <div className="max-w-3xl mx-auto px-4 py-16 sm:py-20">
           <Link href="/integrations" className="text-sm text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 font-medium">
             ← All integrations
@@ -66,9 +66,9 @@ export default function IntegrationPageContent({ platform }: Props) {
         </ol>
 
         {platform.tips && platform.tips.length > 0 && (
-          <div className="mt-10 rounded-xl bg-amber-50 border border-amber-100 p-4">
-            <p className="text-sm font-medium text-amber-900 mb-2">Tips</p>
-            <ul className="text-sm text-amber-800 list-disc list-inside space-y-1">
+          <div className="mt-10 rounded-xl bg-amber-50 border border-amber-100 p-4 dark:bg-amber-950/40 dark:border-amber-900">
+            <p className="text-sm font-medium text-amber-900 dark:text-amber-200 mb-2">Tips</p>
+            <ul className="text-sm text-amber-800 dark:text-amber-100 list-disc list-inside space-y-1">
               {platform.tips.map((tip) => (
                 <li key={tip}>{tip}</li>
               ))}
@@ -80,11 +80,11 @@ export default function IntegrationPageContent({ platform }: Props) {
       <section className="max-w-3xl mx-auto px-4 pb-16">
         <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Sample embed code</h2>
         <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-          Replace <code className="bg-gray-100 px-1 rounded">your-site-id</code> with your site ID from the
+          Replace <code className="bg-gray-100 dark:bg-slate-800 dark:text-gray-200 px-1 rounded">your-site-id</code> with your site ID from the
           dashboard.
         </p>
         <pre className="text-xs bg-gray-900 text-gray-100 p-4 rounded-xl overflow-x-auto mb-4">{sampleCode}</pre>
-        <Button variant="outline" onClick={copy}>
+        <Button variant="outline" className="bg-white dark:bg-slate-900" onClick={copy}>
           {copied ? <Check className="h-4 w-4 mr-2" /> : <Copy className="h-4 w-4 mr-2" />}
           Copy sample code
         </Button>

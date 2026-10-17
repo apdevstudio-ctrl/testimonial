@@ -57,7 +57,7 @@ const en = {
   pricing: {
     title: 'Simple pricing',
     subtitle:
-      '30-day trial, no card. Six months is the lowest rate, about $4.67/month. Yearly at $100 costs more than paying $5 each month.',
+      '30-day trial, no card. Yearly is the lowest rate at $55, about $4.58/month.',
     popular: 'Popular',
     trial: 'Trial',
     monthly: 'Monthly',
@@ -81,7 +81,7 @@ const en = {
     featBetterValue: '$4.67/mo equivalent',
     featOneInvoice: 'One invoice',
     featPriority: 'Priority support',
-    featLowestRate: '$8.33/mo, higher than monthly',
+    featLowestRate: '$4.58/mo equivalent',
     featAnnual: 'Annual billing',
     featAllFeatures: 'All features',
     featBestTeams: 'Same features as monthly',

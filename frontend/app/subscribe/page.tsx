@@ -23,7 +23,7 @@ const plans = [
     title: 'Yearly',
     price: `$${YEARLY_DISPLAY_USD}`,
     period: 'per year',
-    blurb: '$8.33 per month. Monthly at $5 costs less over a year.',
+    blurb: 'About $4.58 per month. Less than paying $5 each month.',
   },
 ];
 
@@ -73,7 +73,7 @@ export default function SubscribePage() {
           <h1 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-3">Choose a plan</h1>
           <p className="text-slate-600 dark:text-slate-400 max-w-xl mx-auto">
             New accounts get a <strong>30-day free trial</strong>. After the trial, pick a paid plan to keep editing.
-            Published walls stay online. Six months is the lowest rate. The $100 yearly plan costs more than $5/month.
+            Published walls stay online. Yearly is the lowest rate at $55.
           </p>
           {!authLoading && isAuthenticated ? (
             <p className="mt-4 text-sm text-indigo-600 dark:text-indigo-400">

@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 const rows = [
   ['Free', '30-day trial, then the dashboard locks. Published walls stay up.', '10 testimonials, 1 wall, 1 video'],
   ['First paid plan', '$5/month', '$12/month Standard'],
-  ['Cheapest way to pay', 'Six months at $28, about $4.67/month. Yearly at $100 is more expensive than monthly.', 'Annual billing on Famewall’s plans'],
+  ['Cheapest way to pay', 'Yearly at $55, about $4.58/month. Six months is $28, about $4.67/month.', 'Annual billing on Famewall’s plans'],
   ['Video', 'On paid plans', 'Capped on lower plans, unlimited higher up'],
   ['Multiple walls', 'One site at a time in the first-run flow. More sites can be created in the dashboard.', 'Plan limits: 1, 4, 15, or unlimited'],
   ['Agency workspaces', 'No', 'Business and Agency plans'],

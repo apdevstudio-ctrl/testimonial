@@ -55,7 +55,7 @@ const hi: Messages = {
   pricing: {
     title: 'सरल मूल्य',
     subtitle:
-      '30 दिन का ट्रायल, कार्ड नहीं. 6 महीने सबसे कम दर है, लगभग $4.67/माह. $100 का वार्षिक प्लान $5 मासिक से महँगा है.',
+      '30 दिन का ट्रायल, कार्ड नहीं. वार्षिक सबसे कम दर है: $55, लगभग $4.58/माह.',
     popular: 'लोकप्रिय',
     trial: 'ट्रायल',
     monthly: 'मासिक',
@@ -79,7 +79,7 @@ const hi: Messages = {
     featBetterValue: '$4.67/माह के बराबर',
     featOneInvoice: 'एक इनवॉइस',
     featPriority: 'प्राथमिकता सपोर्ट',
-    featLowestRate: '$8.33/माह, मासिक से महँगा',
+    featLowestRate: '$4.58/माह के बराबर',
     featAnnual: 'वार्षिक बिलिंग',
     featAllFeatures: 'सभी फ़ीचर्स',
     featBestTeams: 'मासिक जैसी ही सुविधाएँ',

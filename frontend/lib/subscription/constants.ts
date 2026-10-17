@@ -10,4 +10,4 @@ export type PlanType = 'trial' | 'monthly' | 'six_month' | 'yearly';
 
 /** Marketing display amounts (actual charge is your Lemon Squeezy variant price) */
 export const SIX_MONTH_DISPLAY_USD = 28;
-export const YEARLY_DISPLAY_USD = 100;
+export const YEARLY_DISPLAY_USD = 55;

@@ -79,7 +79,7 @@ export default function PricingPage() {
       title: 'Yearly',
       price: `$${YEARLY_DISPLAY_USD}`,
       period: 'per year',
-      note: '$100 per year is $8.33 per month. That is more than paying $5 each month.',
+      note: '$55 per year is about $4.58 per month. That is less than paying $5 each month.',
       onClick: goPaid,
       cta: loggedIn ? 'Continue to checkout' : 'Get started',
     },
@@ -91,8 +91,7 @@ export default function PricingPage() {
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">Simple, transparent pricing</h1>
           <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-            Start with a <strong>30-day trial</strong>. Six months is the lowest rate, about $4.67/month. The yearly plan
-            at $100 costs more than paying $5 each month.
+            Start with a <strong>30-day trial</strong>. Yearly is the lowest rate at $55, about $4.58/month.
           </p>
           {loggedIn ? (
             <p className="mt-4 text-sm text-indigo-600 dark:text-indigo-400">
@@ -146,8 +145,8 @@ export default function PricingPage() {
             <div>
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Which plan costs less?</h3>
               <p className="text-gray-600 dark:text-gray-400">
-                Monthly is $5, or $60 over a year. Six months is $28, about $4.67 per month. Yearly is $100, about
-                $8.33 per month. Every paid plan includes the same product. The TestiFlow link on your wall comes off
+                Monthly is $5, or $60 over a year. Six months is $28, about $4.67 per month. Yearly is $55, about
+                $4.58 per month. Every paid plan includes the same product. The TestiFlow link on your wall comes off
                 only after you pay.
               </p>
             </div>
